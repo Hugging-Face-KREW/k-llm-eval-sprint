@@ -11,7 +11,7 @@
 | 팀 | 벤치마크 | 데이터셋 | 팀 폴더 |
 |---|---|---|---|
 | A 베이직파이브 | KMMLU | [HAERAE-HUB/KMMLU](https://huggingface.co/datasets/HAERAE-HUB/KMMLU) | [team-a-kmmlu](teams/team-a-kmmlu) |
-| B 최재희야팀 | HRM8K | [HAERAE-HUB/HRM8K](https://huggingface.co/datasets/HAERAE-HUB/HRM8K) | [team-b-hrm8k](teams/team-b-hrm8k) |
+| B 최재희야 | HRM8K | [HAERAE-HUB/HRM8K](https://huggingface.co/datasets/HAERAE-HUB/HRM8K) | [team-b-hrm8k](teams/team-b-hrm8k) |
 | C 딸기라떼 | IFEval-Ko | [allganize/IFEval-Ko](https://huggingface.co/datasets/allganize/IFEval-Ko) | [team-c-ifeval-ko](teams/team-c-ifeval-ko) |
 | D STP즈 | KorMedMCQA, Ko-MuSR | [sean0042/KorMedMCQA](https://huggingface.co/datasets/sean0042/KorMedMCQA) | [team-d-kormedmcqa](teams/team-d-kormedmcqa) |
 
@@ -58,7 +58,7 @@
 | 3. 기여 | 이슈와 PR을 올리고 리뷰에 답한다 |
 | 4. 머지 | 메인테이너가 받아 준다 |
 
-모두의 목표는 3단계입니다. 머지는 메인테이너가 정하고, 프로그램이 끝난 뒤에 될 수도 있습니다.
+모두의 목표는 3단계입니다. 머지 여부는 메인테이너가 정하고, 프로그램이 끝난 뒤에 될 수도 있습니다.
 
 ## 질문과 약속
 
