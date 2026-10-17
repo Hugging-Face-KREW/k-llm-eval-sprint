@@ -11,6 +11,7 @@
 
 | 이름 | GitHub | 맡은 일 |
 |---|---|---|
+| 이준섭 | [@SubJeeLee](https://github.com/SubJeeLee) | IFEval-Ko 분석 및 이슈 초안 작성 |
 
 ## 문서
 
