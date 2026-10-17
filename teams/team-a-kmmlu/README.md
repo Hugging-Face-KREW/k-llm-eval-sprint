@@ -10,7 +10,8 @@
 첫 PR에서 자기 이름을 한 줄씩 추가합니다.
 
 | 이름 | GitHub | 맡은 일 |
-|---|---|---|
+| --- | --- | --- |
+| 김형래 | [hyeongrae-kim](https://github.com/hyeongrae-kim) | |
 
 ## 문서
 
