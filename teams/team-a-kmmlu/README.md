@@ -12,6 +12,7 @@
 | 이름 | GitHub | 맡은 일 |
 | --- | --- | --- |
 | 김형래 | [hyeongrae-kim](https://github.com/hyeongrae-kim) | |
+| 박건령 | GeonRyoung |     |
 
 ## 이번 주 팀 과제 (10/17 토까지)
 
