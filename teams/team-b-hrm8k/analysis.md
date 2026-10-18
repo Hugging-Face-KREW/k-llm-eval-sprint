@@ -2,7 +2,7 @@
 
 - 작성: B팀 최재희야 (정세엽, 김동우, 박현우)
 - 기준: 2026-10-16. 데이터 `HAERAE-HUB/HRM8K` 리비전 [`c360cab`](https://huggingface.co/datasets/HAERAE-HUB/HRM8K/tree/c360cabf8d733a82455565358b3dc965aab9ba8d), Lighteval [`c2af9e5`](https://github.com/huggingface/lighteval/tree/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14)
-- 10/10 팀 글을 바탕으로 원문, 코드, 데이터를 다시 확인해 고쳤다. 아래 실험 수치는 모델 없이 채점기만 돌려 얻었고, 재현 코드는 팀원 로컬(`hrm8k-experiments/`)에 있다. 필요하면 PR로 공유한다.
+- 10/10 팀 글을 바탕으로 원문, 코드, 데이터를 다시 확인해 고쳤다. 아래 실험 수치는 모델 없이 채점기만 돌려 얻었고, 재현 코드는 https://github.com/dw021213/hrm8k-lighteval-experiments (커밋 `c994677`)에 있다.
 
 ## 1. 한 줄 요약
 
@@ -148,7 +148,7 @@ HRM8K는 이 다섯 가지를 "`\boxed{N}`에 쓴 최종 답 하나를 기계적
 
 1. **정답(gold)**: float인 정수값은 정수 문자열로 바꾼다(`18.0`→`18`). int는 그대로 문자열로, KSM은 문자열 그대로 둔다. `float()`로 다시 바꾸지 않는다. `66071772829247409`가 `float`을 거치면 `…408`로 바뀐다.
 2. **정답 읽기**: 모든 정답을 `$…$`로 감싸 Lighteval의 `ExprExtractionConfig`와 `LatexExtractionConfig`로 읽는다. 이렇게 하면 KSM의 `-8\pi`, `\frac{1}{6}`, `e^2`까지 sympy 식이 된다.
-3. **예측 읽기**: `LatexExtractionConfig(boxed_match_priority=0)`로 `\boxed{}`를 가장 먼저 찾고, `ExprExtractionConfig`를 함께 쓴다(gsm8k 태스크와 같은 구성).
+3. **예측 읽기**: `LatexExtractionConfig(boxed_match_priority=0)`로 `\boxed{}`를 가장 먼저 찾고, `ExprExtractionConfig`를 함께 쓴다(gsm8k 태스크와 같은 구성). `\boxed{}`가 없으면 lm-eval처럼 마지막 숫자로 대체한다(10/18 세션 결정, 8번 8항).
 4. **비교**: Lighteval `compare_gold_target`(sympy 동치, `precision=5`)을 쓴다. 표기가 달라도 값이 같으면 맞고, 근사값은 틀린다.
 5. **MMMLU**: 보기 번호가 정수라 같은 지표를 쓴다. 프롬프트만 MMMLU 전용 문구로 한다.
 
@@ -238,8 +238,8 @@ HRM8K 자체는 중복이 없다. MMMLU 묶음만 기존 `openai_mmlu_kor`와 �
 4. **디코딩.** 논문은 T 0.7 샘플링, lm-eval은 greedy다. 제안은 greedy다(5-5). greedy에서는 모델이 풀이를 영어나 중국어로 바꾸거나(논문 부록 B), 작은 모델이 같은 문장을 반복해 2,048토큰을 다 채울 수 있다.
 5. **채팅 템플릿.** Lighteval은 instruct 모델이면 채팅 템플릿을 자동으로 켜고, lm-eval은 기본이 꺼져 있다. 비교할 때 어느 쪽인지 적어야 한다.
 6. **생성 길이와 stop.** 2,048토큰이 필요하고, `math` 태스크처럼 `"\n"`을 stop으로 쓰면 풀이가 잘린다.
-7. **`Language.KOREAN`을 쓰면 지표가 바로 죽는다.** Lighteval의 한국어 번역 문구에 `answer`(그리고 `and_word`, `or_word`)가 없어서 `MultilingualExtractiveMatchMetric(language=Language.KOREAN)`이 `AttributeError`를 낸다. PR #1179가 일부를 채우지만 머지되지 않았고 `and_word`는 빠져 있다. 당장은 English 설정으로 `\boxed{}` 위주 추출을 하게 되고, "정답:" 같은 한국어 앵커는 인식되지 않는다.
-8. **`\boxed{}`가 없을 때 숫자를 줍는 대체 규칙.** 연습 태스크를 SmolLM2-135M으로 돌렸더니, 모델이 문제 문장("하루에 5번")을 반복했는데 채점기가 그 숫자를 뽑아 정답(5)과 맞았다(가짜 정답). 대체 규칙을 끄면 형식을 안 지킨 답이 모두 0점이 되고, 켜면 가짜 정답이 생긴다.
+7. **`Language.KOREAN`을 쓰면 지표가 바로 죽는다.** Lighteval의 한국어 번역 문구에 `answer`(그리고 `and_word`, `or_word`)가 없어서 `MultilingualExtractiveMatchMetric(language=Language.KOREAN)`이 `AttributeError`를 낸다. PR #1179가 일부를 채우지만 머지되지 않았고 `and_word`는 빠져 있다. 당장은 English 설정으로 `\boxed{}` 위주 추출을 하게 되고, "정답:" 같은 한국어 앵커는 인식되지 않는다. 이 문제는 HRM8K 이슈와 분리해 별도 이슈 초안(`issue-draft-korean-literals.md`)으로 올린다.
+8. **`\boxed{}`가 없을 때 숫자를 줍는 대체 규칙.** 10/18 세션에서 lm-eval처럼 **마지막 숫자로 대체**하기로 정했다. 연습 태스크를 SmolLM2-135M으로 돌렸을 때 모델이 문제 문장("하루에 5번")을 반복했는데 채점기가 그 숫자를 뽑아 정답(5)과 맞은 사례가 있었다(가짜 정답). 그래서 검증 실행에서 대체 규칙이 쓰인 답의 수를 세어 함께 보고한다.
 9. **기준 수치가 출처마다 다르다.** 같은 모델이라도 논문 Table 3 상단, 논문 Table 9 K2K, 2저자 README 리더보드의 수치가 다르다.
 
    | 모델 | Table 9 K2K | Table 3 상단 / README | 차이 |
@@ -293,7 +293,8 @@ C팀 질문에 대한 멘토 답변 형식(`문항 key / 문제 유형 / 영향`
    - 5-4 사례표의 입력은 단위 테스트로 옮긴다.
 2. **종단 검증 (모델로 실행)**
    - 기준 모델은 Qwen2.5-1.5B-Instruct, K2K 조건, 5개 묶음 전체(8,011문항)다.
-   - 비교 대상은 논문 Table 9 K2K(28.13 / 20.69 / 8.64 / 18.51 / 3.78, 평균 15.95)다. 2저자 README 리더보드와 값이 같은 몇 안 되는 모델이고 크기도 작다.
+   - 1차 비교 대상은 **같은 모델을 같은 설정(한국어 프롬프트, greedy, 채팅 템플릿)으로 lm-eval `hrm8k`에 돌린 결과**다(10/18 멘토 피드백). 논문 수치는 영어 지시문과 temperature 0.7로 낸 결과라 우리 설정과 다르다. lm-eval은 `--apply_chat_template`으로 돌려 Lighteval과 조건을 맞춘다.
+   - 논문 Table 9 K2K(28.13 / 20.69 / 8.64 / 18.51 / 3.78, 평균 15.95)는 보조 참고로 본다. 2저자 README 리더보드와 값이 같은 몇 안 되는 모델이고 크기도 작다.
    - 보조로 Llama-3.2-1B-Instruct(7.28)를 돌린다.
    - 고정할 설정:
      - 프롬프트: lm-eval 한국어 지시문(5-5 제안)
@@ -302,7 +303,7 @@ C팀 질문에 대한 멘토 답변 형식(`문항 key / 문제 유형 / 영향`
      - greedy를 기본으로, 논문 설정(T 0.7, top_p 0.95)은 1회 추가
      - `hf_revision` `c360cab`, Lighteval 커밋
    - 함께 기록할 것: 답안의 한글 비율로 본 풀이 언어 분포, `\boxed{}` 안에 한국어 단위가 들어간 답의 수, `\boxed{}`가 없는 답의 수
-   - 판단 기준: 논문은 샘플링 단일 실행이라 완전한 일치는 기대하지 않는다. 묶음별 표준오차는 GSM8K ±1.2%p, MATH ±0.8%p, OMNI_MATH ±0.6%p, MMMLU ±1.8%p, KSM ±0.5%p다. 이 범위의 2배 안이면 일치로 보고, 벗어나면 원인을 기록한다.
+   - 판단 기준: lm-eval과는 같은 모델 출력에 두 채점기를 돌렸을 때, 채점 규칙 차이로 설명되는 문항(정답 파싱 236문항, 쉼표 등)을 빼면 판정이 모두 같아야 한다. 논문과는 설정이 달라 근사 비교만 하고, 묶음별 표준오차(GSM8K ±1.2%p, MATH ±0.8%p, OMNI_MATH ±0.6%p, MMMLU ±1.8%p, KSM ±0.5%p)의 2배를 넘으면 원인을 기록한다.
    - 1.5B 모델로도 8,011문항 × 최대 2,048토큰은 노트북 CPU로 오래 걸린다. GPU(vLLM 백엔드) 환경을 멘토와 확인한다.
 3. **집계 구조 검증**
    - 태스크 이름을 `hrm8k:gsm8k`처럼 붙이면 Lighteval이 `hrm8k:_average`로 묶음 단순 평균을 자동으로 낸다. 연습 태스크로 확인했다.
