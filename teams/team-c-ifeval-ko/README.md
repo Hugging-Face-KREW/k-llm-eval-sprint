@@ -11,6 +11,7 @@
 |---|---|---|
 |이준섭|[@SubJeeLee](https://github.com/SubJeeLee)| IFEval-Ko 분석 및 이슈 초안 작성 |
 |송예준|[@joony0905](https://github.com/joony0905/)|---|
+|김형준|[@kiimyjun](https://github.com/kiimyjun)||
 
 ## 이번 주 팀 과제 (10/17 토까지)
 
