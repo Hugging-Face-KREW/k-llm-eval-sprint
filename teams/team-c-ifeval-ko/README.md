@@ -7,11 +7,25 @@
 
 ## 팀원
 
-첫 PR에서 자기 이름을 한 줄씩 추가합니다.
-
 | 이름 | GitHub | 맡은 일 |
 |---|---|---|
-|김형준|kiimyjun| |
+|이준섭|[@SubJeeLee](https://github.com/SubJeeLee)| IFEval-Ko 분석 및 이슈 초안 작성 |
+|송예준|[@joony0905](https://github.com/joony0905/)|---|
+|김형준|[@kiimyjun](https://github.com/kiimyjun)||
+
+## 이번 주 팀 과제 (10/17 토까지)
+
+결과물은 팀 PR 1건입니다. 누가 PR을 올릴지는 팀에서 정합니다.
+
+1. [analysis.md](analysis.md)의 9개 항목을 모두 채웁니다. 10/10에 공유한 팀 글을 옮기면 대부분 채워집니다.
+2. 5번 공식 평가 방식에는 프롬프트, few-shot, 정답 추출, 정규화를 각각 어디서 확인했는지 링크와 함께 적습니다.
+3. 아래 팀 결정의 결론과 근거를 해당 번호 항목에 적습니다.
+4. 같은 PR에 `issue-draft.md`를 추가합니다. [templates/upstream-issue.md](../../templates/upstream-issue.md)를 복사해 영어로 채웁니다. 업스트림 게시는 10/18 세션에서 함께 다듬은 뒤에 합니다.
+5. 팀원 모두 읽고, 1명 이상 승인하면 머지합니다.
+
+| 이번 주 팀 결정 | 적을 곳 |
+|---|---|
+| 공식 채점기와 Lighteval의 판정을 같은 입력으로 비교하는 방법. 어떤 문항과 어떤 모델 응답으로 비교할지 | analysis.md 9번 |
 
 ## 문서
 
