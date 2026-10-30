@@ -13,9 +13,9 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 | 원본 논문 | Instruction-Following Evaluation for Large Language Models |
 | 저자 | Jeffrey Zhou, Tianjian Lu, Swaroop Mishra, Siddhartha Brahma, Sujoy Basu, Yi Luan, Denny Zhou, Le Hou |
 | 발표 연도 | arXiv. 2023-11-14 |
-| 논문 | https://arxiv.org/abs/2311.07911 |
-| **원본 IFEval 코드** | [Google Research — 논문의 영어 평가 코드](https://github.com/google-research/google-research/tree/master/instruction_following_eval) |
-| **IFEval-Ko 채점 코드** | [Allganize — 한국어 채점 기준 구현](https://huggingface.co/datasets/allganize/IFEval-Ko/tree/main/ifeval_ko) |
+| 논문 | [원본 논문](https://arxiv.org/abs/2311.07911) |
+| **원본 IFEval 코드** | [Google Research IFEval — 논문의 영어 평가 코드](https://github.com/google-research/google-research/tree/master/instruction_following_eval) |
+| **IFEval-Ko 채점 코드** | [Allganize IFEval-Ko — 한국어 채점 기준 구현](https://huggingface.co/datasets/allganize/IFEval-Ko/tree/main/ifeval_ko) |
 | **기여 대상** | [Hugging Face Lighteval — IFEval-Ko를 연결할 평가 도구](https://github.com/huggingface/lighteval) |
 | **팀 작업 저장소** | [Hugging-Face-KREW/lighteval — 구현과 팀 리뷰를 진행할 포크](https://github.com/Hugging-Face-KREW/lighteval) |
 
@@ -35,7 +35,7 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 | 모델 입력 | **`prompt`** | **`prompt`** |
 | 채점 정보 | **`instruction_id_list`**, **`kwargs`** | **`instruction_id_list`**, **`kwargs`** |
 
-문항 수와 config·split은 [영어 데이터셋 카드](https://huggingface.co/datasets/google/IFEval)와 [Ko 데이터셋 카드](https://huggingface.co/datasets/allganize/IFEval-Ko)를 기준으로 한다. `train`이라는 이름의 split을 평가에 사용하며, 해당 문항으로 모델을 학습시키는 것은 아니다. 영어와 Ko는 문항 구성이 다르므로 두 전체 점수를 직접적인 언어 능력 차이로 해석하지 않는다.
+문항 수와 config·split의 출처는 [영어 데이터셋 카드](https://huggingface.co/datasets/google/IFEval)와 [Ko 데이터셋 카드](https://huggingface.co/datasets/allganize/IFEval-Ko)다. `train`은 공개 데이터의 split 이름이다. 이번 task에서는 이 split의 문항을 평가에 사용하며 모델을 학습시키는 설정을 의미하지 않는다. 데이터 제작 과정의 few-shot과 실제 모델 평가의 0-shot도 구분한다.
 
 ### **3.2. 필드**
 
@@ -46,20 +46,14 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 | **`instruction_id_list`** | 해당 응답에서 검사할 instruction 유형의 목록 |
 | **`kwargs`** | 각 instruction에 대응하는 키워드, 횟수, 비교 조건 등의 파라미터 |
 
-`instruction_id_list[i]`와 `kwargs[i]`는 같은 조건을 가리킨다. 아래 요청문은 요약이고 JSON은 필요한 필드만 발췌한 예시이며, 실제 평가에서는 원본 행을 사용한다.
-
 ### **3.3. 예시 1 — key 3345**
 
 프롬프트의 핵심 조건은 ‘강도’를 최소 두 번 사용하고, bullet 두 개를 작성하며, 지정 금지어를 사용하지 않는 것이다. 그러나 첫 번째 검사 파라미터에는 **`robber`**가 남아 있었다.
 
-```
+```json
 {
   "key": 3345,
-  "instruction_id_list": [
-    "keywords:frequency",
-    "detectable_format:number_bullet_lists",
-    "keywords:forbidden_words"
-  ],
+  "instruction_id_list": ["keywords:frequency", "detectable_format:number_bullet_lists", "keywords:forbidden_words"],
   "kwargs": [
     {"keyword": "robber", "frequency": 2, "relation": "at least"},
     {"num_bullets": 2},
@@ -74,15 +68,12 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 
 수수께끼에 답하되 20단어 미만으로 작성하고 이중 꺾쇠괄호 제목을 포함하도록 요구하는 문항이다.
 
-문항 조건의 예시이며, 통제 응답을 사용한 비교 결과는 8.2절에 별도로 기록한다.
+[실험: key 3442](evidence/checker-audit/README.md#확인할-대표-사례)
 
-```
+```json
 {
   "key": 3442,
-  "instruction_id_list": [
-    "length_constraints:number_words",
-    "detectable_format:title"
-  ],
+  "instruction_id_list": ["length_constraints:number_words", "detectable_format:title"],
   "kwargs": [
     {"num_words": 20, "relation": "less than"},
     {}
@@ -100,12 +91,12 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 | --- | --- |
 | 영어 IFEval 데이터 | Apache-2.0 |
 | IFEval-Ko 데이터 | Apache-2.0, 원본 라이선스를 따름 |
-| Ko **`instructions.py`** | Google Research의 Apache-2.0 저작권·라이선스 헤더 유지 |
-| 기여 대상 LightEval | 저장소 최상위 LICENSE: MIT |
-
-데이터 접근은 2026-10-17 확인 시 별도 승인 게이트가 없었다. [데이터셋 카드](https://huggingface.co/datasets/allganize/IFEval-Ko)의 라이선스와 [Ko 코드 헤더](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/instructions.py), [Lighteval LICENSE](https://github.com/huggingface/lighteval/blob/main/LICENSE)를 각각 확인하며, 코드를 가져올 때는 원저작권·라이선스 표기를 유지한다. 모델 가중치의 접근·이용 조건은 데이터셋과 별도로 확인한다.
+| Ko [**`instructions.py`**](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/instructions.py) | Google Research의 Apache-2.0 저작권·라이선스 헤더 유지 |
+| 기여 대상 LightEval | 저장소 최상위 [LICENSE](https://github.com/huggingface/lighteval/blob/main/LICENSE): MIT |
 
 ---
+
+<a id="official-evaluation"></a>
 
 ## **5. 공식 평가 방식**
 
@@ -113,9 +104,9 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 
 영어 Harness와 Ko task YAML 모두  **`doc_to_text: prompt`**, **`output_type: generate_until`**, **`num_fewshot: 0`**을 사용한다.
 
-논문에서 등장하는 few-shot prompting은 평가 대상 모델에게 예시를 주는 설정이 아니라, 데이터 제작 중 프롬프트를 필터링하고 재작성하는 과정이다.
+논문에서 등장하는 few-shot prompting은 평가 대상 모델에게 예시를 주는 설정이 아닌 데이터 제작 중 프롬프트를 필터링하고 재작성하는 과정이다.
 
-[영어 Harness YAML](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/ifeval/ifeval.yaml)과 [Ko task YAML](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/ifeval_ko.yaml)의 생성 설정은 아래와 같다. 이는 실행 구현의 설정이며, 논문의 모든 API 생성 조건과 같다고 단정하지 않는다.
+확인한 [영어 Harness YAML](https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/ifeval/ifeval.yaml)과 [Ko task YAML](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/ifeval_ko.yaml)의 생성 설정은 아래와 같다. 이는 실행 구현의 설정이다.
 
 | 항목 | 영어 Harness | Ko reference |
 | --- | --- | --- |
@@ -135,7 +126,7 @@ IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램�
 → prompt-level / instruction-level 집계
 ```
 
-객관식 정답을 추출하는 대신 생성한 답변 전체를 검사한다. Ko YAML의 `doc_to_target: 0`은 숫자 0이 정답이라는 뜻이 아니다. [Ko `utils.py`](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/utils.py)의 채점 경로를 기준으로, 프레임워크의 답변 추출·후처리도 비교 범위에 포함한다.
+프레임워크의 답변 추출·후처리도 [Ko `utils.py`](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/main/ifeval_ko/utils.py)의 채점 경로와 비교할 평가 범위에 포함한다.
 
 ### **5.3. Strict와 loose**
 
@@ -152,7 +143,7 @@ instruction별 loose = 후보 중 하나라도 해당 checker를 통과
 prompt-level loose = 모든 instruction의 loose가 True
 ```
 
-이 후보 생성과 집계 방식 자체를 LightEval에서도 유지해야 한다.
+이 후보 생성과 집계 방식 자체를 Lighteval에서도 유지해야 한다.
 
 ### **5.4. 네 가지 지표**
 
@@ -163,7 +154,7 @@ prompt-level loose = 모든 instruction의 loose가 True
 | **`prompt_level_loose_acc`** | 모든 instruction을 loose로 통과한 문항의 비율 |
 | **`inst_level_loose_acc`** | 전체 개별 instruction 중 loose 통과 비율 |
 
-전체 문항 수를 $N$, 문항 $i$에 포함된 instruction 수를 $m_i$라고 할 때, prompt-level 점수는 전체 문항 중 모든 instruction을 충족한 문항의 비율로 계산한다. instruction-level 점수는 전체 instruction 수 $\sum m_i$를 기준으로 통과한 instruction의 비율을 산출한다. 따라서 문항별 통과율을 단순 평균하는 방식과는 차이가 있다. 네 가지 평가 지표 모두 점수가 높을수록 좋은 성능을 의미한다.
+전체 문항 수를 $N$, 문항 $i$의 instruction 수를 $m_i$라고 할 때, prompt-level은 모든 instruction을 통과한 문항 수를 $N$으로 나눈다. instruction-level은 통과한 instruction 수를 $\sum_i m_i$로 나눈다. 문항별 instruction 통과율을 단순 평균하지 않는다. 예를 들어 한 문항의 3개 조건은 모두 통과하고 다른 문항의 1개 조건은 실패하면 instruction 점수는 $3/4=0.75$, prompt 점수는 $1/2=0.5$다. 네 지표 모두 값이 높을수록 지시 준수율이 높다.
 
 ### **5.5. 논문 보고 수치**
 
@@ -174,57 +165,72 @@ prompt-level loose = 모든 instruction의 loose가 True
 | GPT-4 | 76.89 | 83.57 | 79.30 | 85.37 |
 | PaLM 2 S | 43.07 | 55.76 | 46.95 | 59.11 |
 
-각 결과는 2023년 11월과 8월에 수집된 응답을 바탕으로 산출되었다. 해당 수치는 당시 영어 IFEval의 성능을 보여주는 참고 자료로, 한국어 데이터나 다른 모델의 목표 점수로 직접 활용하기에는 적절하지 않다. IFEval-Ko의 성능을 수치로 비교하려면 동일한 모델과 데이터, 평가 설정에서 얻은 결과를 별도로 확보해야 한다.
+위 수치는 2023년 11월·8월 응답으로 산출한 영어 IFEval 참고값이다. 한국어 기준 점수나 이식의 합격 기준으로 사용하지 않으며 동일 모델·데이터·설정의 별도 결과가 필요하다.
+
+[Allganize 데이터셋 카드](https://huggingface.co/datasets/allganize/IFEval-Ko)의 한국어 점수·그래프는 제작자의 외부 결과다. `Strict Accuracy (%)`의 prompt/instruction 구분, loose 점수·실행 revision이 충분히 공개되지 않아 이식 검증값으로 쓰지 않는다. 실제 실행·첨부 계획은 [design.md](design.md)에 둔다.
 
 ---
 
-## **6. 기존 구현과 이번 구현 범위**
+## **6. 기존 구현과 Ko 이식의 근거**
 
-| 구현 | 이번 작업에서의 역할 |
+| 구현 | 역할 |
 | --- | --- |
-| Google Research IFEval | 원본 방법론·영어 reference 코드 |
-| EleutherAI lm-evaluation-harness | 기존 영어 evaluator 비교 및 모델 실행 reference |
-| Allganize IFEval-Ko | **한국어 채점 동작의 직접적인 reference** |
-| Hugging-Face-KREW/lighteval | **실제 이식·기여 대상** |
+| Google Research IFEval | 원본 방법론·영어 코드의 배경 |
+| lm-evaluation-harness | 고정한 영어 evaluator 비교 기준 |
+| Allganize IFEval-Ko | 한국어 채점 동작의 직접적인 reference |
+| Hugging-Face-KREW/lighteval | 이식 대상과 기존 영어·French metric 경로 |
 
-원저자 코드는 **`instruction_following_eval/`**, Harness의 영어 task는 **`lm_eval/tasks/ifeval/`**, Ko 코드는 Hugging Face 저장소의 **`ifeval_ko/`**에 있다.
+### **6.1. French는 재사용하고 Ko는 변경이 필요한 이유**
 
-이번 구현 범위는 아래 원칙을 확정한다.
+**French 통합은 기존 채점 규칙을 재사용했고, Ko는 한국어 허용 문구·길이 계산·정규화 규칙을 변경했다.** French [PR #505](https://github.com/huggingface/lighteval/pull/505)의 [리뷰](https://github.com/huggingface/lighteval/pull/505#discussion_r1924874919)와 [작성자 답변](https://github.com/huggingface/lighteval/pull/505#discussion_r1925047054), [고정 task 코드](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/multilingual/tasks/french.py#L28-L40)에서 기존 `ifeval_metrics` 재사용을 확인했다. 이는 해당 통합의 선택이며 모든 영어 규칙이 프랑스어에 적합하다는 보증은 아니다.
 
-- Ko의 데이터·문자열 검사·단어/문장 수·strict/loose 동작을 유지한다.
-- LightEval에 옮기는 과정에서 원본과 달라진 부분은 수정한다.
-- 원본 Ko의 기준을 바꾸는 개선은 기본 구현과 분리한다.
-- 데이터 오류와 평가 기준에 관한 관찰은 Known Issues로 남긴다.
-- 제작자 제보는 초안을 공유해 멘토 검토 후 진행한다.
+Ko의 변경은 [제작자 설명](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/README_Ko.md)과 [utility](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions_util.py)에 근거한다. 아래는 같은 합성 응답을 기존 Lighteval metric·French 어댑터·영어 harness·원본 Ko에 전달한 대표 결과다. 영어 metric을 쓰는 세 경로의 판정은 같았고 strict·loose 모두 아래와 같았다.
 
-즉 코드 구조를 LightEval에 맞게 바꾸는 것은 가능하지만, 그 과정에서 **`split()`**을 다른 기준으로 교체하거나 특정 key의 검사 단어를 고치지는 않는다.
-
-## **7. 중복 확인: 검색한 키워드와 결과**
-
-### **7.1. 검색 기록**
-
-검색 대상은 **`Hugging-Face-KREW/lighteval`**, **`huggingface/lighteval`**, **`EleutherAI/lm-evaluation-harness`**다. 조회 시점에 반환된 범위만 기록한다.
-
-| 검색 | 대상 | 결과 |
+| case ID · 조건·응답 | 기존 영어 경로 | 원본 Ko |
 | --- | --- | --- |
-| **`"IFEval-Ko" OR "ifeval_ko" OR "allganize/IFEval-Ko"`** | 세 저장소의 issue | 결과 반환 없음 |
-| 동일 검색어 | 세 저장소의 PR, all 상태 | 결과 반환 없음 |
-| **`IFEval Korean`** | 세 저장소의 issue | 결과 반환 없음 |
-| **`IFEval in:title`** | upstream LightEval PR | 기존 영어 IFEval 관련 PR 확인 |
+| `word_comma_lt2` · 사과,배,포도 / 2단어 미만 | 3단어 → 실패 | 1단어 → 통과 |
+| `sentence_no_space_ge2` · 첫 문장입니다.둘째 문장입니다. / 2문장 이상 | 1문장 → 실패 | 2문장 → 통과 |
+| `ko_fixed_choice` · 제 답변은 예입니다. / 고정 선택 문구 | 실패 | 통과 |
+| `nfd_keyword` · keyword=가, 응답=U+1100 U+1161 | 실패 | 응답 NFC 후 통과 |
 
-정확한 **`IFEval-Ko`** 명칭은 GitHub issue 검색에서도 위 세 저장소 범위에서 0건이 반환되었다.
+따라서 데이터 주소만 Ko로 바꾸면 원본과 다른 점수가 나올 수 있다. 공통 채점 루프·동일한 형식 검사·집계는 재사용하되 Ko의 checker·utility·고정 문구·NFC·kwargs 처리를 연결해야 한다. 이는 계산 규칙의 차이를 확인한 것으로 모델 성능이나 실제 French 데이터 전체의 평가 결과가 아니다. [언어별 상세 대조군](evidence/analysis-details.md#language-controls)에 추가 사례와 해석 범위를 보존했다.
+
+### **6.2. 보존 범위와 구현 인계**
+
+원본 Ko의 데이터·채점 동작을 보존하고, 번역 오류·채점 정책 개선은 별도 Known Issues로 다룬다. 제작자가 열거한 수정 클래스 7개 중 `KeySentenceChecker`는 registry에 미등록이며, 영어 전용 조건도 데이터에서 미사용일 뿐 registry에는 남아 있다. [클래스별 조사와 등록 현황](evidence/analysis-details.md#ko-classes)에 상세 수치를 정리했다.
+
+구조 A/B, Doc 변환, metric·Inspect 경로, 예외와 fallback 보존 방식은 [설계 문서](design.md#task-structure)로 이관했다. 이식의 판단 기준은 고정 Allganize 코드와 같은 저장 응답의 판정 일치이며, 새 API나 Ko task가 이미 구현됐다는 뜻은 아니다.
 
 ---
 
-### **7.2. 관련 선행 작업**
+## **7. 중복 확인과 관련 선행 작업**
 
-- [Lighteval PR #268](https://github.com/huggingface/lighteval/pull/268): 영어 IFEval 데이터 저장소 변경.
-- [Lighteval PR #791](https://github.com/huggingface/lighteval/pull/791)·[#792](https://github.com/huggingface/lighteval/pull/792): IFEval 평가 전 reasoning 태그 처리.
-- [Lighteval PR #1013](https://github.com/huggingface/lighteval/pull/1013): IFEval NLTK import 문제 수정.
+### **7.1. 검색 일자·대상·검색어**
 
-위 PR들은 IFEval-Ko의 중복 구현 사례가 아니라, 기존 평가 방식과 전처리, 의존성 관련 작업을 참고하기 위해 조사했다.
+**2026-10-30(KST)**에 아래 20개 조회를 수행했다. PR은 all, issue는 open·closed 범위이며 조회당 최대 50개를 반환했다.
 
-[Allganize Community Discussion #2](https://huggingface.co/datasets/allganize/IFEval-Ko/discussions/2)에서는 `prompt_to_repeat`, `section_spliter` 등의 번역 오류가 제보되었고, 제작자가 이를 수정했다는 답변을 남겼다. 이를 보면 데이터 오류는 제작자에게 직접 제보할 수 있으며, 다만 key 3345의 수정 여부는 별도로 확인해야 한다.
+| 대상·범위 | 검색어 | 조회 수 | 해당 조회에서 확인한 결과 |
+| --- | --- | --- | --- |
+| Lighteval upstream·팀 포크·harness의 PR 및 issue | `"IFEval-Ko" OR "ifeval_ko" OR "allganize/IFEval-Ko"` | 6 | 각 조회에서 결과 0건 |
+| Lighteval upstream·harness의 PR 및 issue | `IFEval Korean` | 4 | 각 조회에서 결과 0건 |
+| Lighteval upstream·harness의 PR | `IFEval multilingual` | 2 | 다국어·의존성 관련 선행 PR 확인 |
+| GitHub 전체 PR·issue, 전체 PR | `"IFEval-Ko"`(PR·issue), `"ifeval_ko"`(PR) | 3 | 팀 분석 PR과 NeMo-Skills의 Ko 통합 등 확인 |
+| Lighteval upstream PR, Lighteval upstream·harness PR | `IFEval 한국어`, `IFEval Korea` | 3 | 각 조회에서 결과 0건 |
+| Lighteval upstream·harness의 issue | `"allganize"` | 2 | 각 조회에서 결과 0건 |
+
+반환 범위에서는 Lighteval·harness 메인테이너의 Ko checker 변경 지시를 찾지 못했다. 중복 구현·관련 발언의 완전한 부재를 증명하는 결과는 아니며, 조회 20회와 통합 점검 20문항은 별개다.
+
+### **7.2. 관련 선행 작업과 발언의 범위**
+
+| 참고 기록 | 확인한 내용 | 해석의 한계 |
+| --- | --- | --- |
+| [Lighteval French PR #505](https://github.com/huggingface/lighteval/pull/505)의 [리뷰](https://github.com/huggingface/lighteval/pull/505#discussion_r1924874919) 및 [작성자 답변](https://github.com/huggingface/lighteval/pull/505#discussion_r1925047054) | 중복 metric을 기존 IFEval에서 import할 수 있는지 질문했고 작성자가 재정의가 없다고 확인. 2025-01-23 병합 | French 전체 채점의 언어적 정확성 보증이 아님 |
+| [NeMo-Skills PR #1375](https://github.com/NVIDIA-NeMo/Skills/pull/1375)의 [리뷰](https://github.com/NVIDIA-NeMo/Skills/pull/1375#discussion_r3189945909) | Ko 평가기를 외부 패키지로 분리해 재사용한 [참고 사례](https://github.com/NVIDIA-NeMo/Skills/pull/1375#discussion_r3195884717) | 다른 프레임워크의 유지보수 사례이며 이번 Lighteval 설계의 승인 근거는 아님 |
+| [Allganize Community Discussion #2](https://huggingface.co/datasets/allganize/IFEval-Ko/discussions/2) | `prompt_to_repeat`, `section_spliter` 등의 데이터 오류 제보와 제작자 수정 답변 | Ko engine 구조 변경의 지시가 아님. key 3345 등 이번 사례가 수정됐다는 뜻도 아님 |
+
+영어 IFEval의 [데이터 저장소 변경 PR #268](https://github.com/huggingface/lighteval/pull/268), [reasoning 전처리 PR #791](https://github.com/huggingface/lighteval/pull/791)·[#792](https://github.com/huggingface/lighteval/pull/792), [NLTK 수정 PR #1013](https://github.com/huggingface/lighteval/pull/1013)도 참고했다. Ko 중복 구현 사례와는 구분한다.
+
+PR·discussion은 분석 기준일의 참고 기록이다. Ko 변경의 직접 근거는 **고정 Allganize 코드와 동일 응답의 실제 판정 차이**이며 다른 프로젝트의 설계 사례를 Lighteval 메인테이너의 승인으로 해석하지 않는다.
 
 ---
 
@@ -232,217 +238,176 @@ prompt-level loose = 모든 instruction의 loose가 True
 
 ### **8.1. 핵심 난점**
 
-첫째, 같은 prompt를 사용해도 kwargs 순서·필터링·fallback 처리에서 판정이 달라질 수 있다. reference의 입력 처리까지 비교해야 한다. 예를 들어 Ko evaluator는 **`if v`**로 kwargs를 걸러내므로, 이를 별도 검증 없이 다른 조건으로 바꾸는 것은 피한다.
+checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. kwargs·instruction 순서, NFC·loose 후보, 집계, 의존성·난수·예외 처리까지 원본 Ko와 맞춰야 한다. 세부 입력 계약과 회귀 테스트는 [설계 문서](design.md#input-contract)에 정리했다.
 
-둘째, checker 직접 호출과 실제 evaluator 호출은 전처리 경로가 다를 수 있다. 후보 생성, 빈 응답 처리, 최종 응답 추출, 집계까지 포함한 테스트가 필요하다.
+### **8.2. 실제 evaluator로 확인한 Known Issues**
 
-셋째, 원본 Ko에서 어색해 보이는 결과라도 이번 목표에서는 재현해야 한다. 개선 의견은 남기되 reference가 실패시키는 입력을 새 구현만 성공시키는 방식으로 변경하지 않는다.
+판정 표기는 **strict / loose** 순서다. 원본 Ko 구현의 의도된 adaptation, 지시문·검사 조건 불일치, 채점 정책에 관한 관찰을 구분한다. 데이터 오류가 보여도 기본 이식에서는 원본 조건을 유지한다.
 
-넷째, 버전과 난수·언어 판별 의존성 등 실행 조건을 고정해야 한다. 재현되지 않는 항목은 예외로 감추지 않고 원인과 조건을 기록한다.
+#### **8.2.1. 문자열 정합성과 고정 선택지**
 
-### **8.2. 기존 실험에서 확인한 Known Issues**
-
-아래는 현재까지의 실험 결과이다. (점수는 strict / loose 순으로 표기)
-key 3345는 영문과 국문 각각에 맞는 응답 사용,
-
-나머지 문항은 두 evaluator 모두 동일한 한국어 응답을 넣어 테스트했다.
-
-이 표의 Original은 기존 실험의 영어 IFEval evaluator, Ko는 Allganize IFEval-Ko evaluator를 가리킨다. 새로 구현할 Lighteval-Ko와의 비교 결과가 아니다. 모델 간 성능 비교가 아니라 통제 입력에 대한 평가기 동작을 비교한 기록이다.
-
-**근거 자료 보완 필요:** 해당 실험의 입력·실행 스크립트·원본 결과와 영어 evaluator의 저장소·commit을 PR에 연결해야 한다. 아래 수치는 기존 작성자가 정리한 기록이며, 이번 문서 보완 과정에서 재실행하지 않았다.
-
-| Key | 문제 유형 | 기존 실험의 영향 | 이번 처리 |
+| key | 문제 유형 | 고정 응답의 실제 결과 | 구현에서의 처리 |
 | --- | --- | --- | --- |
-| 3345 | DATA: ‘강도’/**`robber`** 불일치 | 영어 응답 2회 → 통과/통과, Ko의 ‘강도’ 응답에서 robber 0회 → 실패/실패. keyword만 바꾼 대조군은 통과/통과 | 원본 조건 유지, 제보 초안 작성 후 멘토 검토 |
-| 3442 | 평가 기준: 쉼표·공백 경계 | 공백 없는 목록에서 Original 20, Ko 18. **`<20`**에서 실패/실패 ↔ 통과/통과 | Ko 공백 기준 유지, 차이를 문서화 |
-| 349 | 평가 기준: 인용 기호 **`>`**  | Original 39, Ko 40. **`<40`**에서 통과/통과 ↔ 실패/실패 | Markdown 제거 규칙을 추가하지 않고 분석·제안 |
-| 136 | 평가 기준: bullet·loose 조합 | 내용 99개에 bullet 9개. Original 99, Ko 108. Ko는 기호·줄 배치에 따라 실패/통과 또는 실패/실패 | 기존 변환·집계 방식 재현, 대조군 보존 |
+| 3345 | 데이터: ‘강도’와 `robber` | `robber_full`: 영어 robber 응답 통과/통과, Ko 강도 응답 실패/실패. Ko keyword만 강도로 바꾼 별도 override는 통과/통과 | 원본 kwargs 보존. 언어별 서로 다른 응답을 사용한 사례임을 명시 |
+| 1203 | 데이터: ‘평화’와 `peace` | 전쟁 8회·평화 10회 응답에서 index 0은 통과, index 1은 실패해 전체 실패/실패. 전쟁 8회·peace 10회는 Ko 전체 통과/통과 | 반복 `keywords:frequency`를 index로 구별. 원본과 keyword override 대조군 분리 |
+| 2142 | 데이터: ‘포식자’와 `predatory` | 포식자 2회는 실패/실패, predatory 2회는 통과/통과. Ko keyword override에서 포식자 2회 통과·1회 실패 | 원본 keyword 보존. 제보는 별도 초안 |
+| 227 | 데이터·checker 허용 문구 불일치 | prompt의 ‘내 대답은 …’ 3종 모두 Ko 실패/실패. checker의 ‘제 답변은 …’ 3종 모두 Ko 통과/통과. 영어 3종은 Ko 실패/실패 | Ko 허용 옵션과 strip 후 포함 검사를 보존. OR fallback으로 허용 범위를 확대하지 않음 |
 
-NFC나 한국어 목록 처리처럼 원본 Ko에 이미 포함된 adaptation은 유지 대상이며, 그 자체를 새 오류로 분류하지 않는다.
+1203·2142·227은 신규 17건(원본 데이터 조건 14건·명시적 메모리 override 3건)으로 실제 영어·Ko evaluator의 full·isolated strict/loose를 실행했다. 모든 사전 기대값과 일치했다. override는 원본 데이터 수정이나 제작자가 승인한 해결책이 아니다. 검사 단어·고정 선택 문구와 판정 경로는 Ko checker와 Ko evaluator를 기준으로 했다.
 
-### **8.3. 영향 범위 집계 — 추가 작업**
+#### **8.2.2. 부등호 번역 불일치**
 
-현재까지는 위 key들에서 발생한 판정 차이를 실험한 상태이며, 전체 데이터셋에서 해당 규칙이 적용되는 문항 수나 실제 모델 평가 점수에 미치는 영향은 아직 확인하지 못했다.
+고정 데이터에서 **14문항(단어 수 6개·문장 수 8개)**의 ‘N 이하/이내’와 `relation="less than"`의 불일치를 확인했다. 각 문항에 N−1·N·N+1 길이의 저장 응답을 넣은 **42건을 영어·Ko 각각 실행**했다. 양쪽 counter의 실측 길이와 대상 instruction의 full·isolated strict/loose 판정이 모두 기대값과 일치했다. 정확히 N에서 14문항 모두 대상 조건이 실패했고 Ko 전체 판정도 N−1 통과, N·N+1 실패였다.
 
-이후 IFEval-Ko의 revision을 고정하고 다음 항목을 집계할 예정이다.
+| 대표 key | 응답 길이 | Ko 대상·문항 전체 strict / loose |
+| --- | --- | --- |
+| 1092 | 299단어 | 통과 / 통과 |
+| 1092 | 300단어 | 실패 / 실패 |
+| 1092 | 301단어 | 실패 / 실패 |
+| 1268 | 5문장 | 통과 / 통과 |
+| 1268 | 6문장 | 실패 / 실패 |
+| 1268 | 7문장 | 실패 / 실패 |
 
-- `length_constraints:number_words`가 포함된 문항 수
-- 해당 문항 중 bullet·강조 instruction이 함께 포함된 문항 수
-- 키워드 빈도 instruction이 포함된 문항 수
-- 실제 테스트에서 판정 차이가 확인된 고유 key 수
+이는 `<N`의 원본 동작을 재현한 결과다. 지시문을 ‘미만’으로 고칠지 검사 조건을 `≤N`으로 바꿀지는 제작자가 의도한 명세의 결정이며, 기본 이식에서는 `<N`을 유지한다. key 3739는 ‘3문장 이하’ 뒤에 ‘단 1문장 또는 2문장’이라는 보충 조건이 있어 추가 불일치에서 제외했다.
 
-다만 특정 규칙이 적용되는 문항이 모두 평가 결과에 영향을 받는 것은 아니다. Markdown은 별도의 형식 지시가 없어도 응답에 포함될 수 있으므로, instruction 간 교집합만으로 전체 영향 범위를 판단하기도 어렵다.
+14문항의 key와 대상 instruction은 다음과 같다. index는 0부터 세며, 행 순번과 구분한다.
 
-추가 실험은 대표 사례와 규칙별 적용 범위를 확인하는 수준으로 진행하고, 그 결과를 2주 차 보고서에 정리한 뒤 Lighteval 구현에 집중할 계획이다.
+| key | instruction index | Ko 지시문 표현 | 실제 조건 |
+| --- | --- | --- | --- |
+| 164 | 0 | 300단어 이하 | `<300` |
+| 340 | 1 | 30단어 이하 | `<30` |
+| 1092 | 0 | 300단어 이하 | `<300` |
+| 1879 | 1 | 600단어 이하 | `<600` |
+| 2243 | 0 | 150단어 이하 | `<150` |
+| 3415 | 0 | 200단어 이하 | `<200` |
+| 286 | 1 | 10문장 이하 | `<10` |
+| 1268 | 0 | 6문장 이하 | `<6` |
+| 1381 | 0 | 10문장 이하 | `<10` |
+| 2266 | 0 | 7문장 이하 | `<7` |
+| 2674 | 0 | 10문장 이하 | `<10` |
+| 2780 | 0 | 6문장 이내 | `<6` |
+| 3041 | 0 | 7문장 이하 | `<7` |
+| 3691 | 0 | 10문장 이하 | `<10` |
+
+문항의 원본 필드는 고정 Ko 데이터와 고정 영어 데이터, 실제 비교 연산은 원본 checker를 기준으로 대조했다.
+
+#### **8.2.3. 단어 수·Markdown 정책에 관한 관찰**
+
+다음은 같은 한국어 응답을 영어·Ko에 전달한 사례다. 원본 86건 중 아래 4개 입력을 포함해, 3345의 원본·override까지 **6개 입력을 양쪽에 재실행했고 과거 결과 행 전체와 일치**했다.
+
+| key · case ID | 대상 조건의 실제 결과 | 관찰과 처리 |
+| --- | --- | --- |
+| 3442 · `comma_boundary_compact` | 영어 20단어: 실패/실패, Ko 18단어: 통과/통과 (`<20`) | 영어 정규식·Ko 공백 분리의 차이. 원본 Ko 유지 |
+| 349 · `markdown_quote_valid_highlights_349` | 영어 39단어: 통과/통과, Ko 40단어: 실패/실패 (`<40`) | `>`를 임의로 제거하는 규칙을 추가하지 않음 |
+| 136 · `markdown_star_balanced_136` | 영어 99단어: 통과/통과, Ko 108단어: 실패/통과 | `*` 제거 후보와 줄 배치 때문에 loose가 달라짐 |
+| 136 · `markdown_dash_persistent_136` | 영어 통과/통과, Ko 실패/실패 | `-`는 loose에서 일괄 제거하지 않음 |
+
+위 판정은 실제 evaluator의 strict/loose 결과다. 실측 단어 수는 checker의 counter 진단으로 별도 확인했으며 두 종류의 확인을 구분했다. NFC나 한국어 공백 기준처럼 원본 Ko에 이미 있는 adaptation 자체를 새 데이터 오류로 분류하지 않는다.
+
+### **8.3. 규칙 적용 범위와 확인한 판정 차이**
+
+분모는 **고정 Ko 342문항, 영어 541문항**이다. 같은 ID가 한 문항에 반복될 수 있어 고유 key 수와 instruction 발생 횟수를 구분했다.
+
+| 규칙 | Ko 고유 문항 수 | Ko instruction 발생 횟수 | 영어 고유 문항 수 |
+| --- | --- | --- | --- |
+| 단어 수 | 34 | 36 | 50 |
+| 문장 수 | 28 | 31 | 46 |
+| 키워드 빈도 | 23 | 25 | 39 |
+| bullet 수 | 24 | 24 | 31 |
+| 강조 수 | 38 | 38 | 48 |
+
+| 문항 집합의 교집합 | Ko 고유 key 수 | 영어 고유 key 수 |
+| --- | --- | --- |
+| 단어 수 ∩ bullet | 2 | 3 |
+| 단어 수 ∩ 강조 | 8 | 8 |
+| 단어 수 ∩ (bullet ∪ 강조) | 10 | 11 |
+| 단어 수 ∩ bullet ∩ 강조 | 0 | 0 |
+
+고정 Ko 데이터의 instruction 목록을 ID별로 집계하고, 고유 key 집합의 교집합을 계산했다. 반복 instruction ID도 발생 횟수에는 각각 포함했다. Ko 단어 수∩bullet은 key `136, 2284`다. 적용 문항 수는 오류 수나 모델 점수 변화량이 아니다. Markdown은 별도 형식 지시가 없어도 응답에 포함될 수 있어 교집합만으로 전체 영향을 판단할 수 없다.
+
+기존 86건 중 `dataset` 범주 46건에서 대상 strict 또는 loose 판정이 영어·Ko 사이에서 달랐던 고유 key는 **6개: 136, 349, 1242, 3345, 3442, 3739**다. 이는 저장된 테스트 입력에 한정한 집계이며 합성·override를 제외했다. 3345처럼 언어별 응답이 다른 사례도 포함하므로, 동일 문자열에 대한 순수 checker 차이 6개라고 해석하지 않는다. key 3739의 문장 분리 차이와 부등호 번역 오류 제외 판단도 서로 다른 내용이다.
+
+전체 모델 응답에서 판정이 얼마나 달라지는지, 총점에 얼마나 영향을 주는지는 미측정이다. 이번 분석은 적용 범위·대표 반례·원본 판정 근거를 확보한 범위에서 마무리하고 Lighteval 연결과 동등성 검증에 집중한다.
 
 ---
 
-## **9. 검증 계획: 모델 조사, 선정 근거, 비교 방법과 완료 기준**
+## **9. 검증 계획과 현재 확보한 자료**
 
-### **9.1. 검증에 사용할 모델 조사**
+### **9.1. 모델 후보와 현재 상태**
 
-IFEval-Ko의 채점기는 문항에 포함된 instruction과 모델 응답을 받아 준수 여부를 판정한다. 따라서 모델 선정에서는 한국어 응답 생성, 실행 환경, 모델·토크나이저 버전 고정, 평가 도구와의 연결을 함께 살펴본다. 아래는 이번 구현 검증을 위해 검토한 후보이다.
-
-| 모델 ID | 규모 | 조사 내용 | 이번 검증에서의 용도 |
-| --- | --- | --- | --- |
-| `HuggingFaceTB/SmolLM2-135M-Instruct` | 0.135B | 소형 instruction 모델이다. 공식 카드에서는 주로 영어를 이해하고 생성한다고 설명한다. | 설치·로딩·출력 저장 등 실행 경로 점검 |
-| `Qwen/Qwen2.5-0.5B-Instruct` | 0.5B | 한국어를 포함한 다국어 지원과 Transformers 실행 예제가 제공된다. | 자원이 부족할 때 사용할 경량 대안 |
-| `Qwen/Qwen2.5-1.5B-Instruct` | 약 1.54B | 한국어 지원이 명시된 instruction 모델이다. 공식 tokenizer의 chat template를 이용한 생성 예제가 제공된다. | **통합 실행과 전체 평가의 우선 후보** |
-| `google/gemma-3-1b-it` | 1B | 소형 instruction 모델로, Hugging Face에서 사용 조건 동의가 필요하다. | 다른 모델 계열의 응답으로 확인할 때 사용할 보조 후보 |
-| `LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct` | 2.4B | 영어·한국어 bilingual 모델이다. 공식 예제는 `trust_remote_code=True`를 사용하며, 권장 system prompt도 제시한다. | 한국어 모델의 응답을 추가 검증할 때 사용할 후보 |
-| `google/gemma-3-4b-it` | 4B | Allganize의 IFEval-Ko README에 실행 예시 모델로 등장한다. 모델 접근 조건과 텍스트 생성 경로의 호환성을 확인해야 한다. | 공식 실행 예시를 참고한 추가 통합 검증 |
-| `Qwen/Qwen2.5-3B-Instruct`, `Qwen/Qwen2.5-7B-Instruct` | 3B / 7B | 같은 Qwen2.5 instruction 계열의 더 큰 모델이다. | 주 모델 검증 이후 자원이 확보되면 검토 |
-| `meta-llama/Llama-3.2-1B-Instruct` | 1B급 | 공식 지원 언어 목록에 한국어가 포함되어 있지 않다. | 한국어 주 검증 모델로는 우선순위를 낮춤 |
-| `Qwen/Qwen3-0.6B` | 0.6B | thinking / non-thinking 전환을 지원한다. 사용 시 해당 모드와 최종 응답 추출 범위를 추가로 고정해야 한다. | 이번 기본 검증에서는 보류 |
-
-우선 주 모델 한 개로 전체 경로를 검증하고, 필요할 때 다른 계열의 모델을 추가한다. 모델 카드에 나오는 영어 IFEval 점수나 실행 조건이 충분히 공개되지 않은 외부 점수는 후보를 조사하는 참고 자료로만 사용한다.
-
-### **9.2. 현재 사용한 모델과 본 평가 후보**
-
-현재 실행 해본 모델은 `HuggingFaceTB/SmolLM2-135M-Instruct`다. 작성자의 개발 환경에서 `batch_size=1`로 ARC Easy 10문항을 실행해보았다.
-
-본 초안은 **SmolLM2를 환경 점검용으로 두고, `Qwen/Qwen2.5-1.5B-Instruct`를 IFEval-Ko 통합 실행과 전체 평가의 우선 후보로 제안한다.** 팀의 최종 모델과 GPU·backend·dtype·revision은 리뷰 및 확정 후 기록에 반영한다.
-
-| 구분 | 모델 | 현재 상태 |
+| 역할 | 모델 | 현재 상태 |
 | --- | --- | --- |
-| 기존 환경 점검 | `HuggingFaceTB/SmolLM2-135M-Instruct` | 작성자의 ARC Easy 소규모 실행 기록 있음 |
-| IFEval-Ko 주 검증 | `Qwen/Qwen2.5-1.5B-Instruct` | 초안의 우선 후보. 팀 합의와 실행 환경 확인 필요 |
+| 환경 점검 | `HuggingFaceTB/SmolLM2-135M-Instruct` | `batch_size=1`로 ARC Easy 10문항 실행. IFEval-Ko 결과는 아님 |
+| 통합·전체 평가 우선 후보 | `Qwen/Qwen2.5-1.5B-Instruct` | 한국어 지원·공식 chat template를 검토한 후보. 팀 채택 미확정 |
 | 경량 대안 | `Qwen/Qwen2.5-0.5B-Instruct` | 주 후보의 실행 부담이 클 때 검토 |
-| 다른 계열의 추가 검증 | Gemma 3 1B 또는 EXAONE 3.5 2.4B | 기본 검증 이후 선택적으로 진행 |
 
-Qwen2.5-1.5B-Instruct를 우선 검토하는 이유는 한국어 지원이 명시되어 있고, instruction tuning과 공식 chat template를 갖추고 있기 때문이다. [공식 모델 카드](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)에 명시된 1.54B 규모의 모델을 기준으로 먼저 실행 경로를 정리한 뒤, 소규모 실행에서 메모리 사용량과 응답 생성 시간을 측정해 전체 평가 가능 여부를 판단한다.
+[Qwen 공식 모델 카드](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)의 1.54B 모델을 우선 제안하되 모델·tokenizer revision·backend·dtype·실행 환경·20개 key는 팀 확정이 필요하다. [추가 후보 조사](evidence/analysis-details.md#extra-models)는 보조 자료로 옮겼으며 이번 문서 정리에서 모델 카드를 재조회하지 않았다.
 
-이번 작업에서는 높은 점수를 내는 모델보다 **같은 조건으로 응답을 생성하고 보관할 수 있는 모델**이 필요하다. 외부에 동일 모델의 IFEval-Ko 점수가 없어도, 저장한 응답을 원본 Ko evaluator로 채점하면 이식 구현과 비교할 기준값을 얻을 수 있다.
+### **9.2. 비교 방법과 합격 기준**
 
-Qwen3는 thinking 설정과 응답 추출 규칙, EXAONE은 remote code와 system prompt를 추가로 확인해야 한다. 첫 통합 실행은 기존 초안의 Qwen2.5를 중심으로 진행하고, 다른 모델의 설정은 후속 검증에서 다룬다.
+같은 고정 문항·응답을 원본 Ko와 새 Lighteval-Ko에 전달한다. 모델 응답은 한 번 생성해 저장하고 `(key, instruction_index, instruction_id)`별 판정과 집계를 비교한다. **등록 task 구현 → 저장 응답 회귀 → 고정 20문항 통합 → 전체 split 평가** 순으로 진행하며 상세 실행 절차는 [설계 문서](design.md#validation-plan)에 둔다.
 
-### **9.3. 기존 검증 기록과 근거 자료 확인**
-
-기존 작성자가 정리한 보고서에는 영어 IFEval과 Allganize IFEval-Ko evaluator를 각각 대상으로 한 86개 테스트가 기록되어 있다. 구성은 다음과 같다. 원본 실행 자료와 코드 revision은 아직 이 PR에 포함되지 않았으므로, 8.2절의 근거 자료를 연결한 뒤 확인할 항목이다.
-
-| 테스트 구분 | 각 evaluator의 테스트 수 |
+| 비교 항목 | 제안하는 합격 기준 |
 | --- | --- |
-| 실제 데이터셋 조건 | 46 |
-| 메모리 override | 2 |
-| 합성 fixture | 38 |
-| **합계** | **86** |
+| 입력 대응 | key·instruction 순서·kwargs 대응 유지 |
+| 개별 판정 | instruction별·prompt별 strict/loose Boolean 일치율 100% |
+| 집계 | 분자·분모 일치, 네 지표 절대 오차 `1e-12` 이하 |
+| 안정성·회귀 | 정상·실패·경계 입력 충족, 누락·미처리 예외 없음, 기존 영어 task 판정 유지 |
 
-이 수치는 evaluator 동작을 확인한 테스트 건수다. 모델 성능 평가와는 구분하며, 테스트 건수와 고유 dataset key 수도 별도로 집계한다. 메모리 override와 합성 fixture는 실제 데이터셋을 그대로 사용한 결과와 구분해 표시한다.
+100%는 모델 정답률이 아닌 **두 evaluator의 판정 일치율**이다. 같은 예외가 나와도 해당 입력의 채점 검증은 미완료로 기록한다. 네 지표의 실제 비교 점수는 아직 미측정이다.
 
-해당 기록에는 Lighteval evaluator의 실행 결과가 포함되어 있지 않다. 기존 영어·한국어 비교에서 확보한 사례를 바탕으로 **원본 Ko evaluator와 새로 구현한 Lighteval-Ko를 비교하는 회귀 테스트**를 구성해볼 필요가 있다.
+<a id="verification-status"></a>
 
-언어별로 의도된 차이가 있는 기존 영어·한국어 평가 결과를 그대로 일치 기준으로 사용하지 않는다.
+### **9.3. 현재까지 확보한 검증 자료**
 
-### **9.4. 비교 방법: 생성과 채점을 분리**
+#### **9.3.1. 기존 86건의 구성과 실행 방식**
 
-검증의 중심은 동일한 입력에 대한 두 Ko evaluator의 판정 일치다.
+기존 입력·양쪽 결과의 case ID·순서·입력 hash와 고정 source 대응을 확인했다. 실제 데이터 조건 46건, 메모리 override 2건, 합성 fixture 38건으로 **각 evaluator당 86건**이며 고유 데이터 86문항이나 모델 생성 86회를 뜻하지 않는다.
 
-```mermaid
-flowchart TD
-    A["고정한 IFEval-Ko 문항<br/>instruction · kwargs"]
-    B["한 번 생성해 저장한 응답"]
+실제 조건의 고유 key는 11개다: `127, 136, 349, 1127, 1237, 1242, 1480, 3073, 3345, 3442, 3739`. 고정 source·데이터 21개 파일과 실제 import module hash를 대조했고, 원본 `InputExample`과 strict/loose 함수를 직접 호출했다. 전체 instruction의 full, 대상 조건의 isolated, checker 진단을 구분했으며 전체 task/model CLI나 새 Lighteval-Ko 실행은 아니다.
 
-    A --> C["동일한 입력 구성"]
-    B --> C
+직접 비교한 reference는 [영어 evaluator](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/utils.py)와 [Ko evaluator](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/utils.py)다. [자료 안내·재현 방법](evidence/checker-audit/README.md)과 아래 원본 파일을 함께 확인할 수 있다.
 
-    C --> D["원본 Ko evaluator"]
-    C --> E["Lighteval-Ko"]
+| 자료 | 파일 |
+| --- | --- |
+| 86건의 입력·저장 응답 | [cases.json](evidence/checker-audit/cases.json) |
+| 실행 코드 | [영어 runner](evidence/checker-audit/run_original.py), [Ko runner](evidence/checker-audit/run_ko.py), [공통 runtime](evidence/checker-audit/audit_runtime.py), [비교 스크립트](evidence/checker-audit/compare.py) |
+| 원시·비교 결과 | [영어 86건](evidence/checker-audit/original_results.json), [Ko 86건](evidence/checker-audit/ko_results.json), [results.json](evidence/checker-audit/results.json) |
+| 재현 정보 | [provenance.json](evidence/checker-audit/provenance.json), [requirements.lock.txt](evidence/checker-audit/requirements.lock.txt), [SHA256SUMS](evidence/checker-audit/SHA256SUMS) |
 
-    D --> F["평가 결과 비교"]
-    E --> F
+#### **9.3.2. 후속 실행과 미완료 항목**
 
-    F --> G["Instruction별<br/>Strict / Loose 판정 비교"]
-    G --> H["Prompt-level<br/>Strict / Loose 판정 비교"]
-    H --> I["4개 Aggregate Metric 비교"]
-```
-
-모델 응답은 한 번 생성해 저장하고 양쪽 채점에 재사용한다. 두 도구에서 응답을 따로 생성하면 생성 결과의 차이까지 섞이므로 채점기 비교는 저장된 응답을 기준으로 진행한다.
-
-응답을 전달하는 비교 코드에서는 공백·Markdown·한국어 문자를 임의로 정리하지 않는다. 원본 응답을 보관한 상태에서 각 evaluator가 정해진 전처리를 수행하도록 한다. 원본 Ko 구현은 strict와 loose 진입 시 NFC를 적용하고, loose에서는 변환 후보마다 instruction을 검사한다. 이 처리 순서도 비교 대상에 포함한다.
-
-판정은 `(key, instruction_index, instruction_id)` 단위로 맞춘다. 한 문항에 같은 종류의 instruction이 여러 번 등장하는 경우에도 각각의 kwargs와 판정을 구별할 수 있도록 순서를 보존한다. 원본 kwargs와 evaluator에 실제 전달된 kwargs를 함께 기록하고, 반복 실행에서 판정이 달라지는 사례는 의존성·난수 사용·실행 순서를 먼저 확인한다.
-
-Lighteval 쪽에서는 checker 함수만 따로 호출하는 테스트와 함께, **실제 등록된 task의 문항 변환·scorer 연결·집계 경로**도 확인한다. 공통 비교 코드가 양쪽 결과를 대신 계산하는 방식은 피하고, 각 구현이 반환한 결과를 독립적으로 수집한다.
-
-### **9.5. 단계별 실행 계획**
-
-| 단계 | 실행 내용 | 완료 확인 |
+| 자료 | 입력 수·비교 경로 | 확인한 결과·제한 |
 | --- | --- | --- |
-| 1. reference와 환경 고정 | Ko 데이터·채점 코드 revision, Harness·Lighteval commit, 모델·tokenizer revision과 의존성 기록 | 실행 조건을 다시 구성할 수 있는 manifest 확보 |
-| 2. 전체 문항 로딩·구조 확인 | 모든 문항의 key, prompt, instruction 순서, kwargs 대응, 필수 필드 확인 | 누락·중복·연결 오류를 확인하고 처리 상태 기록 |
-| 3. 고정 응답 회귀 테스트 | 기존 반례와 정상·실패·경계 입력을 두 Ko evaluator로 채점 | 테스트별 예상 동작 확인 및 instruction·prompt 판정 일치 |
-| 4. 소규모 모델 통합 실행 | 고정한 20개 문항을 대상으로 생성·저장·재채점 수행 | chat template, scorer 연결, 종료 조건, 잘림, 메모리와 실행 오류 확인 |
-| 5. 주 모델 전체 평가 | 고정 revision의 전체 문항 응답을 생성·저장하고 양쪽에서 재채점 | 전체 key 처리, 네 지표와 불일치 목록 확보 |
-| 6. 기존 영어 task 회귀 확인 | 영어 IFEval의 고정 입력 테스트를 변경 전후 비교 | 공통 코드 변경으로 인한 의도하지 않은 판정 변화 없음 |
+| 기준 환경 최소 재실행 | 3건 × 영어·Ko | 양쪽 6개 결과가 같은 쪽의 과거 전체 결과 행과 일치. 86건 전체 재실행 아님 |
+| 부등호 경계값 | 14문항 × 3길이 = 42건 × 영어·Ko | 실측 길이·full/isolated 대상 판정·Ko 전체 판정 모두 기대값 일치 |
+| Known Issue | 신규 17건＋과거 재실행 6건 = 23건 × 영어·Ko | 신규 기대값·과거 전체 결과 행 일치. 고유 key 7개 |
+| metric 재사용 첫 비교 | 합성 11건 × 기존 영어 metric·French 어댑터·harness·Ko | 기대값 충족. 영어 계열과 Ko 차이 5건·4유형 |
+| 언어별 추가 대조 | 별도 합성 23건 × 위 네 경로 | 기대값 충족. 영어 계열과 Ko 차이 10건 |
+| 통합 20문항 | 새 등록 task와 원본 Ko | **문항 선정·실행 대기** |
+| 새 Lighteval-Ko 동등성 | 개별 판정·네 지표 비교 | **미수행·미측정** |
 
-20문항은 통합 실행을 점검하기 위한 표본이다. 선택한 key 목록을 저장하고 길이·키워드·형식·복수 instruction 사례가 포함되도록 구성한다. checker별 세부 동작은 별도의 고정 응답 테스트로 확인한다.
+부등호·Known Issue 실행은 evaluator당 65건, 양쪽 합계 **130개 case 실행**이며 실제 함수 호출 수는 더 많다. Known Issue 23건과 언어별 합성 23건은 별도 입력 집합이다. French 어댑터는 합성 입력으로만 확인했으며 실제 French 데이터 전체나 별도 French reference와의 동등성을 검증한 것은 아니다. [상세 대조군·실행 범위](evidence/analysis-details.md#language-controls)에 기록을 보존했다.
 
-고정 응답 테스트에는 통과·실패 사례가 모두 필요하다. 특히 다음 내용을 포함한다.
+#### **9.3.3. 첨부 범위와 재현 조건**
 
-| 확인할 동작 | 입력 구성 |
+이번 첨부는 **기존 86건**의 입력·코드·원시 결과·revision·환경 정보다. 콘솔 로그 전체와 후속 42건·Known Issue 23건·metric 재사용 11건·언어 대조군 23건의 원본 자료는 포함하지 않았다. 보조 문서의 상세 표도 원본 실행 파일의 추가 첨부를 뜻하지 않는다.
+
+[자료 README](evidence/checker-audit/README.md)에 복원·재현 명령을 정리했고 가상환경·캐시·source 전체는 제외했다. 기존 실행 환경과 원본 보존 확인은 [보조 기록](evidence/analysis-details.md#reference-environment)에 둔다. 이번 문서 정리에서는 평가를 재실행하지 않았다.
+
+### **9.4. 구현·후속 검증으로의 인계**
+
+구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·고정 20개 key를 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안 초안은 [issue-draft.md](issue-draft.md)이며 데이터셋 제작자에게 보내는 오류 제보와 구분한다.
+
+---
+
+## **10. 고정 revision과 공개 출처**
+
+| 대상 | revision·공개 출처 |
 | --- | --- |
-| 기본 판정 | 조건을 충족하는 응답과 위반하는 응답 |
-| 경계값 | 길이·빈도 조건의 경계 바로 아래, 경계값, 바로 위 |
-| 빈 응답 | 빈 문자열, 공백·줄바꿈만 있는 응답 |
-| 한국어 전처리 | NFC/NFD, 조사 결합, 띄어쓰기 차이를 포함한 응답 |
-| loose 변환 | `*`, 첫 줄·마지막 줄, 한 줄 응답, 변환 후 빈 후보 |
-| 복수 instruction | 서로 다른 loose 후보에서 각각 통과하는 조건 조합 |
-| kwargs 처리 | 원본 데이터 조건과 별도로 표시한 override·오류 입력 |
-| 집계 | instruction 수가 서로 다른 문항들의 통과·실패 조합 |
+| 영어 lm-evaluation-harness | [`d6de81643928d653435c431bae19945d41d32520`](https://github.com/EleutherAI/lm-evaluation-harness/commit/d6de81643928d653435c431bae19945d41d32520) |
+| 영어 google/IFEval 데이터 | [`966cd89545d6b6acfd7638bc708b98261ca58e84`](https://huggingface.co/datasets/google/IFEval/tree/966cd89545d6b6acfd7638bc708b98261ca58e84) |
+| Allganize Ko 코드·데이터 | [`54199e3801116897697babf341865741dcd06fc8`](https://huggingface.co/datasets/allganize/IFEval-Ko/tree/54199e3801116897697babf341865741dcd06fc8) |
+| 진단한 Lighteval | [`c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14`](https://github.com/Hugging-Face-KREW/lighteval/commit/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14) |
 
-모든 checker가 항상 True 또는 항상 False를 반환하는 잘못된 구현도 실패하도록 예상 결과를 지정한다. 원본 동작과 사람이 기대하는 판정이 다른 사례는 Known Issues에 분리해 기록하고, 이식 검증의 비교 기준은 고정한 원본 구현으로 유지한다.
-
-### **9.6. 생성 설정과 재현 기록**
-
-현재 확인한 Allganize task 설정은 `train` split, 0-shot, sampling 비활성화, `temperature: 0.0`, `max_gen_toks: 1280`을 사용한다. 종료 문자열은 `<end_of_turn>`과 `<|im_end|>`다. 이를 출발점으로 삼되, 실제 실행에서는 고정한 revision의 설정과 선택한 backend에 전달된 값을 함께 기록한다.
-
-| 항목 | 기록·고정할 내용 |
-| --- | --- |
-| 데이터 | `allganize/IFEval-Ko`, revision, config, split, 실제 로딩한 key 목록과 문항 수 |
-| 기준 코드 | Allganize `ifeval_ko` 코드 revision, lm-evaluation-harness commit |
-| 이식 코드 | Lighteval commit, task 이름, 변경 파일 |
-| 모델 | 전체 모델 ID, 모델·tokenizer revision, dtype, 양자화 여부 |
-| 실행 환경 | CPU/GPU, 메모리, backend, Python·PyTorch·Transformers 및 채점 의존성 버전 |
-| 프롬프트 | 원본 prompt, few-shot 수, system prompt, chat template, 최종 렌더링된 입력 |
-| 생성 | sampling 여부, seed, 최대 생성 토큰, EOS token ID, stop 문자열과 처리 방식 |
-| 응답 | 생성 token ID, 원본 출력, 채점에 전달한 응답, 생성 길이, 종료 사유 |
-| 재현 자료 | 실행 명령, 설정 파일, 입력·응답 파일 hash, 실행 로그 |
-
-공식 데이터 카드에는 `default` config의 `train` split이 342문항으로 표시되어 있다. 전체 평가의 분모와 완료 여부는 최종 고정 revision을 실제로 로딩한 결과로 결정한다.
-
-chat template는 한 번만 적용하고, 모델 입력과 채점할 assistant 응답의 경계를 확인한다. backend의 EOS·stop 처리와 evaluator 자체 전처리를 구분해 기록한다. Qwen 공식 예제처럼 생성된 토큰에서 입력 토큰 구간을 제외하는 처리도 확인 대상이다.
-
-최대 생성 길이에 도달한 응답은 잘림 여부를 표시한 채 양쪽에서 동일하게 채점한다. 길이 상한을 늘리는 실험은 별도의 설정과 결과로 남긴다. 반면 OOM·timeout 등으로 생성 자체가 실패한 문항은 실패 응답으로 치환하거나 분모에서 조용히 제외하지 않고 실행 오류로 기록한다.
-
-소규모 실행에서 확인한 메모리 사용량과 생성 시간을 기준으로 전체 실행 환경을 결정한다. 모델이나 backend를 바꾸면 변경 사유와 새 설정을 남기고, 모델별·설정별 응답 파일을 분리한다.
-
-### **9.7. 비교 수치와 합격 기준**
-
-모델 성능은 다음 네 지표로 보고한다. prompt-level은 모든 instruction을 통과한 문항 수를 전체 문항 수로 나누고, instruction-level은 통과 instruction 수를 전체 instruction 수로 나눈다. 원본 구현도 instruction별 판정 목록을 합쳐 instruction-level 점수를 계산한다.
-
-| 지표 | 원본 Ko evaluator | Lighteval-Ko | 차이 |
-| --- | --- | --- | --- |
-| `prompt_level_strict_acc` | 측정 후 기재 | 측정 후 기재 | 측정 후 기재 |
-| `inst_level_strict_acc` | 측정 후 기재 | 측정 후 기재 | 측정 후 기재 |
-| `prompt_level_loose_acc` | 측정 후 기재 | 측정 후 기재 | 측정 후 기재 |
-| `inst_level_loose_acc` | 측정 후 기재 | 측정 후 기재 | 측정 후 기재 |
-
-총점만 같아도 문항별 불일치가 상쇄되었을 수 있다. 따라서 합격 여부는 개별 판정과 분모를 먼저 비교한 뒤 집계 점수로 확인한다.
-
-| 검증 항목 | 제안하는 합격 기준 |
-| --- | --- |
-| 문항·instruction 대응 | 동일 key 목록, instruction 순서, kwargs 대응 유지 |
-| instruction별 strict / loose | 고정 응답 테스트와 전체 평가 응답에서 판정 일치율 100% |
-| prompt-level strict / loose | 모든 비교 대상 문항의 Boolean 일치 |
-| 집계 분자·분모 | 통과 문항 수, 전체 문항 수, 통과 instruction 수, 전체 instruction 수 일치 |
-| 네 집계 지표 | 원시 집계값 일치. 부동소수점 비교는 절대 오차 `1e-12` 이하를 제안 |
-| 회귀 테스트 | 정상·실패·경계 입력의 예상 결과 충족 |
-| 실행 안정성 | 미처리 import·schema·scorer 연결 오류와 누락 응답 없음 |
-| 기존 영어 task | 공통 코드 변경 전후 고정 입력의 판정 유지 |
-
-여기서 **100%는 모델의 정답률이 아니라 두 evaluator의 판정 일치율**이다. 기준 evaluator에서 실패한 응답은 Lighteval에서도 같은 조건으로 실패해야 한다. 이 기준이 보장하는 범위는 실제 실행한 테스트와 저장된 응답 집합이다.
-
-원본 evaluator 자체에서 예외가 발생한 문항은 입력과 예외 내용을 남기고 Known Issues로 분리한다. 양쪽에서 같은 예외가 발생해도 해당 문항의 채점 검증은 미완료로 처리한다. 전체 문항에 대한 처리 방침이 정리되기 전에는 전체 평가 완료로 표시하지 않는다.
-
-
-팀 PR에 포함할 업스트림 제안 초안은 [issue-draft.md](issue-draft.md)에 정리한다. 팀·멘토 검토를 거쳐 10/18 세션 이후 게시하며, 데이터셋 제작자에게 보내는 오류 제보와는 별개다.
+공개 코드별 링크와 상세 조사 표는 [분석 보조 자료](evidence/analysis-details.md#public-sources)에 보존했다.
