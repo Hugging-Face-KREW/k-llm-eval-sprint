@@ -11,7 +11,7 @@
 The authors added a [`kormedmcqa` task][harness-task] to lm-evaluation-harness themselves in March 2024 (PR #1530; now version 3.0 after #3842).
 Reproduction status: in July 2025, lm-eval did not reproduce the paper's open-model scores (Qwen2.5-1.5B: 23.56 vs 37.92, [lm-eval #3103][harness-3103]) because answer extraction was missing. #3842 ports the Appendix B regex. Our pass criterion is agreement with lm-eval v3.0.
 
-**I would like to implement this task with my team and submit a PR.** We would add four tasks (`doctor`, `nurse`, `pharm`, `dentist`) on the `test` split (3,009 questions in total) and report accuracy for each.
+**I would like to implement this task with my team (@naha0106-tech, @minmin-129, @eotjd613) and submit a PR.** We would add four tasks (`doctor`, `nurse`, `pharm`, `dentist`) on the `test` split (3,009 questions in total) and report accuracy for each.
 
 For the first version, we propose generative evaluation with 5-shot examples from the `fewshot` split, matching lm-evaluation-harness (prompt, stop sequences and `extract_choice` from paper Appendix B). CoT is out of scope.
 
