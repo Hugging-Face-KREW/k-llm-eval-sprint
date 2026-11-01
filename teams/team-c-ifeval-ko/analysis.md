@@ -218,7 +218,7 @@ Ko의 변경은 [제작자 설명](https://huggingface.co/datasets/allganize/IFE
 | Lighteval upstream PR, Lighteval upstream·harness PR | `IFEval 한국어`, `IFEval Korea` | 3 | 각 조회에서 결과 0건 |
 | Lighteval upstream·harness의 issue | `"allganize"` | 2 | 각 조회에서 결과 0건 |
 
-반환 범위에서는 Lighteval·harness 메인테이너의 Ko checker 변경 지시를 찾지 못했다. 중복 구현·관련 발언의 완전한 부재를 증명하는 결과는 아니며, 조회 20회와 통합 점검 20문항은 별개다.
+반환 범위에서는 Lighteval·harness 메인테이너의 Ko checker 변경 지시를 찾지 못했다. 중복 구현·관련 발언의 완전한 부재를 증명하는 결과는 아니며, 조회 20회와 통합 점검 23문항은 별개다.
 
 ### **7.2. 관련 선행 작업과 발언의 범위**
 
@@ -341,20 +341,21 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 통합·전체 평가 우선 후보 | `Qwen/Qwen2.5-1.5B-Instruct` | 한국어 지원·공식 chat template를 검토한 후보. 팀 채택 미확정 |
 | 경량 대안 | `Qwen/Qwen2.5-0.5B-Instruct` | 주 후보의 실행 부담이 클 때 검토 |
 
-[Qwen 공식 모델 카드](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)의 1.54B 모델을 우선 제안하되 모델·tokenizer revision·backend·dtype·실행 환경·20개 key는 팀 확정이 필요하다. [추가 후보 조사](evidence/analysis-details.md#extra-models)는 보조 자료로 옮겼으며 이번 문서 정리에서 모델 카드를 재조회하지 않았다.
+[Qwen 공식 모델 카드](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)의 1.54B 모델을 우선 제안하되 모델·tokenizer revision·backend·dtype·실행 환경·통합 검증 문항 key(현재 23문항 제안)는 팀 확정이 필요하다. [추가 후보 조사](evidence/analysis-details.md#extra-models)는 보조 자료로 옮겼으며 이번 문서 정리에서 모델 카드를 재조회하지 않았다.
 
-#### **9.1.1. 검증 모델 및 고정 20문항 선정안**
+#### **9.1.1. 검증 모델 및 통합 검증 23문항 선정안**
 
 주 검증 모델로 `Qwen/Qwen2.5-1.5B-Instruct`를 제안한다. 한국어를 지원하는 1.54B instruction 모델이며 공식 chat template를 제공한다. 반복 실행 시 메모리 부담을 고려하여 선정했으며, 실제 실행 환경에서 모델 로딩과 응답 생성을 확인한 뒤 세부 설정을 고정한다. 이번 검증의 목적은 동일한 응답에 대한 원본 Ko와 새 Lighteval-Ko의 채점 일치 여부를 확인하는 것이다.
 
-고정 데이터 revision `54199e3801116897697babf341865741dcd06fc8`의 `allganize/IFEval-Ko`에서 다음 20문항을 선정안으로 구성했다.
+고정 데이터 revision `54199e3801116897697babf341865741dcd06fc8`의 `allganize/IFEval-Ko`에서 다음 23문항을 선정안으로 제안한다. 문항 수는 목표가 아니라 지시 유형·검사 경로 포함 규칙의 결과이며, 규칙을 만족하지 못하면 문항을 더 추가한다.
 
 ```json
 [3743, 136, 3518, 1233, 3445, 3442, 1262, 1082, 1127, 3710,
- 122, 3563, 1107, 3073, 3311, 3750, 1203, 2142, 1268, 3538]
+ 122, 3563, 1107, 3073, 3311, 3750, 1203, 2142, 1268, 3538,
+ 1928, 2035, 1800]
 ```
 
-채점 특성 확인 16문항과 요청문·검사 설정 불일치 확인 4문항으로 구성했으며, 데이터에 등장하는 instruction ID 21종을 모두 포함한다. 개별 instruction은 총 33개다.
+채점 특성 확인 16문항, 요청문·검사 설정 불일치 확인 4문항, 검사 경로 보완 3문항으로 구성했으며, 데이터에 등장하는 instruction ID 21종과 kwargs 값에 따라 검사 연산·정규식이 갈리는 25개 `(ID, 입력 경로)`를 모두 포함한다. 개별 instruction은 총 40개다. 선정 규칙과 유형별 대응표는 [설계 문서](design.md) 6.3절에 있다.
 
 | 선정 기준 | 대표 key | 확인할 내용 |
 | --- | --- | --- |
@@ -363,12 +364,13 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 복수 지시와 응답 형식 | 3518, 3710, 1107 | JSON·강조·구분자 등의 검사와 일부 조건만 통과하는 경우 |
 | 채점 범위 확인 | 3750 | 여러 선택 문구를 함께 포함해도 통과하는 현재 동작 |
 | 요청문·검사 설정 불일치 | 1203, 2142, 1268, 3538 | 검사 키워드, 이하/미만, 글자 수/단어 수의 차이 |
+| 검사 경로 보완 | 1928, 2035, 1800 | 키워드 빈도 `<N`, 문장 수 `≥N`, 추신 표지 `P.S.` 경로 |
 
 이 목록은 채점 동작을 확인하기 위한 진단용 표본이며 전체 데이터셋의 모델 성능을 추정하는 표본으로 사용하지 않는다. 원본 prompt·instruction 순서·kwargs를 유지하고, 데이터 불일치의 수정 제안은 이식 검증과 별도로 다룬다.
 
 ### **9.2. 비교 방법과 합격 기준**
 
-같은 고정 문항·응답을 원본 Ko와 새 Lighteval-Ko에 전달한다. 모델 응답은 한 번 생성해 저장하고 `(key, instruction_index, instruction_id)`별 판정과 집계를 비교한다. **등록 task 구현 → 저장 응답 회귀 → 고정 20문항 통합 → 전체 split 평가** 순으로 진행하며 상세 실행 절차는 [설계 문서](design.md#validation-plan)에 둔다.
+같은 고정 문항·응답을 원본 Ko와 새 Lighteval-Ko에 전달한다. 모델 응답은 한 번 생성해 저장하고 `(key, instruction_index, instruction_id)`별 판정과 집계를 비교한다. **등록 task 구현 → 저장 응답 회귀 → 선정안(23문항) 통합 → 전체 split 평가** 순으로 진행하며 상세 실행 절차는 [설계 문서](design.md#validation-plan)에 둔다.
 
 | 비교 항목 | 제안하는 합격 기준 |
 | --- | --- |
@@ -407,7 +409,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | Known Issue | 신규 17건＋과거 재실행 6건 = 23건 × 영어·Ko | 신규 기대값·과거 전체 결과 행 일치. 고유 key 7개 |
 | metric 재사용 첫 비교 | 합성 11건 × 기존 영어 metric·French 어댑터·harness·Ko | 기대값 충족. 영어 계열과 Ko 차이 5건·4유형 |
 | 언어별 추가 대조 | 별도 합성 23건 × 위 네 경로 | 기대값 충족. 영어 계열과 Ko 차이 10건 |
-| 통합 20문항 | 새 등록 task와 원본 Ko | **20문항 선정안 작성완료·팀 확정 및 실행 대기** |
+| 통합 23문항 | 새 등록 task와 원본 Ko | **23문항·40개 지시 선정안의 입력 범위 집계 완료·팀 확정 및 실행 대기** |
 | 새 Lighteval-Ko 동등성 | 개별 판정·네 지표 비교 | **미수행·미측정** |
 
 부등호·Known Issue 실행은 evaluator당 65건, 양쪽 합계 **130개 case 실행**이며 실제 함수 호출 수는 더 많다. Known Issue 23건과 언어별 합성 23건은 별도 입력 집합이다. French 어댑터는 합성 입력으로만 확인했으며 실제 French 데이터 전체나 별도 French reference와의 동등성을 검증한 것은 아니다. [상세 대조군·실행 범위](evidence/analysis-details.md#language-controls)에 기록을 보존했다.
@@ -416,11 +418,11 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 이번 첨부는 **기존 86건**의 입력·코드·원시 결과·revision·환경 정보다. 콘솔 로그 전체와 후속 42건·Known Issue 23건·metric 재사용 11건·언어 대조군 23건의 원본 자료는 포함하지 않았다. 보조 문서의 상세 표도 원본 실행 파일의 추가 첨부를 뜻하지 않는다.
 
-[자료 README](evidence/checker-audit/README.md)에 복원·재현 명령을 정리했고 가상환경·캐시·source 전체는 제외했다. 기존 실행 환경과 원본 보존 확인은 [보조 기록](evidence/analysis-details.md#reference-environment)에 둔다. 이번 문서 정리에서는 평가를 재실행하지 않았다.
+[자료 README](evidence/checker-audit/README.md)에 복원·재현 명령을 정리했고 가상환경·캐시·source 전체는 제외했다. 기존 실행 환경과 원본 보존 확인은 [보조 기록](evidence/analysis-details.md#reference-environment)에 둔다. 이번 문서 정리에서는 평가를 재실행하지 않았다. 통합 검증 문항 선정을 위한 입력 범위 집계는 `evidence/sample-coverage/`에 따로 첨부했으며, 기존 86건과 실행 범위가 다르다.
 
 ### **9.4. 구현·후속 검증으로의 인계**
 
-구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·고정 20개 key를 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안 초안은 [issue-draft.md](issue-draft.md)이며 데이터셋 제작자에게 보내는 오류 제보와 구분한다.
+구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·통합 검증 문항(현재 23문항 제안)을 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안 초안은 [issue-draft.md](issue-draft.md)이며 데이터셋 제작자에게 보내는 오류 제보와 구분한다.
 
 ---
 
