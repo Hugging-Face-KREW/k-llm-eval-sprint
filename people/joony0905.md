@@ -7,8 +7,8 @@
 
 ## 기여 기록
 
-매주 내가 한 일을 링크와 함께 한 줄씩 적습니다. 커밋, PR, 리뷰, 이슈 댓글 모두 좋습니다.
-
-| 주차 | 한 일               | 링크 |
-|---|-------------------|---|
-| 1 | 첫 PR, 리뷰, 팀 PR 생성 | |
+| 주차 | 한 일                  | 링크                                                             |
+|----|----------------------|----------------------------------------------------------------|
+| 1  | 첫 PR, 리뷰, 팀 PR 생성    | https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18 |
+| 2  | 벤치마크 보고서 작성 및 리뷰요청   | https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18 |
+| 3  | 벤치마크 보고서 보완, 설계문서 작성 | https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18 |
