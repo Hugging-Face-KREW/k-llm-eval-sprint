@@ -1,0 +1,925 @@
+{
+  "scope": "metadata input-partition coverage, not measured code-branch coverage or model evaluation",
+  "status": "proposal_for_team_review",
+  "dataset": "allganize/IFEval-Ko",
+  "revision": "54199e3801116897697babf341865741dcd06fc8",
+  "split": "train",
+  "full_rows": 342,
+  "full_instructions": 481,
+  "full_ids": 21,
+  "full_input_partitions": 25,
+  "sources": {
+    "data/train-00000-of-00001.parquet": {
+      "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/data/train-00000-of-00001.parquet",
+      "sha256": "91e0efeef3ea81191e48ce358ebb30d399abdfadc58cbc42e943281820038fa0"
+    },
+    "ifeval_ko/instructions.py": {
+      "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions.py",
+      "sha256": "afdbf1e2cafe8f3a1480d36aeff245365e1f896bacd87cd3c1ea48278e673842"
+    },
+    "ifeval_ko/instructions_registry.py": {
+      "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions_registry.py",
+      "sha256": "3c7247b270eb51e5a6eb937b865f68fad05617b7648299c9f0b6bcd2f9b82116"
+    },
+    "README_Ko.md": {
+      "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/README_Ko.md",
+      "sha256": "4c6faf50abb4fbc740776a330990be29dcb5a4ce9fb34560fc1433ecaccc56c6"
+    }
+  },
+  "script_sha256": "5f20f874267a0bb693feade514bbdc5f9f4d1636d3b45c27bf2205b618c85f0c",
+  "selection_sha256": "aa98e14bc50b6665a5857c13b8569f5a3a8d0cdfcc138ff791b0a702095f50fa",
+  "runtime": {
+    "python": "3.14.6",
+    "pyarrow": "26.0.0"
+  },
+  "checkers": {
+    "combination:repeat_prompt": {
+      "class": "RepeatPromptThenAnswer",
+      "build_args": [
+        "prompt_to_repeat"
+      ],
+      "check_line": 1298,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "combination:two_responses": {
+      "class": "TwoResponsesChecker",
+      "build_args": [],
+      "check_line": 1243,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_content:number_placeholders": {
+      "class": "PlaceholderChecker",
+      "build_args": [
+        "num_placeholders"
+      ],
+      "check_line": 287,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_content:postscript": {
+      "class": "PostscriptChecker",
+      "build_args": [
+        "postscript_marker"
+      ],
+      "check_line": 653,
+      "dispatch": {
+        "postscript_marker": [
+          "P.P.S",
+          "P.S."
+        ]
+      },
+      "dispatch_lines": [
+        665,
+        667
+      ]
+    },
+    "detectable_format:constrained_response": {
+      "class": "ConstrainedResponseChecker",
+      "build_args": [],
+      "check_line": 373,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_format:json_format": {
+      "class": "JsonFormat",
+      "build_args": [],
+      "check_line": 935,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_format:multiple_sections": {
+      "class": "SectionChecker",
+      "build_args": [
+        "section_spliter",
+        "num_sections"
+      ],
+      "check_line": 543,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_format:number_bullet_lists": {
+      "class": "BulletListChecker",
+      "build_args": [
+        "num_bullets"
+      ],
+      "check_line": 334,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_format:number_highlighted_sections": {
+      "class": "HighlightSectionChecker",
+      "build_args": [
+        "num_highlights"
+      ],
+      "check_line": 469,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "detectable_format:title": {
+      "class": "TitleChecker",
+      "build_args": [],
+      "check_line": 1360,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "keywords:existence": {
+      "class": "KeywordChecker",
+      "build_args": [
+        "keywords"
+      ],
+      "check_line": 778,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "keywords:forbidden_words": {
+      "class": "ForbiddenWords",
+      "build_args": [
+        "forbidden_words"
+      ],
+      "check_line": 1155,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "keywords:frequency": {
+      "class": "KeywordFrequencyChecker",
+      "build_args": [
+        "keyword",
+        "frequency",
+        "relation"
+      ],
+      "check_line": 848,
+      "dispatch": {
+        "relation": [
+          "at least",
+          "less than"
+        ]
+      },
+      "dispatch_lines": [
+        852,
+        854
+      ]
+    },
+    "language:response_language": {
+      "class": "ResponseLanguageChecker",
+      "build_args": [
+        "language"
+      ],
+      "check_line": 164,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "length_constraints:nth_paragraph_first_word": {
+      "class": "ParagraphFirstWordCheck",
+      "build_args": [
+        "num_paragraphs",
+        "nth_paragraph",
+        "first_word"
+      ],
+      "check_line": 1014,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "length_constraints:number_paragraphs": {
+      "class": "ParagraphChecker",
+      "build_args": [
+        "num_paragraphs"
+      ],
+      "check_line": 593,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "length_constraints:number_sentences": {
+      "class": "NumberOfSentences",
+      "build_args": [
+        "num_sentences",
+        "relation"
+      ],
+      "check_line": 237,
+      "dispatch": {
+        "relation": [
+          "at least",
+          "less than"
+        ]
+      },
+      "dispatch_lines": [
+        251,
+        253
+      ]
+    },
+    "length_constraints:number_words": {
+      "class": "NumberOfWords",
+      "build_args": [
+        "num_words",
+        "relation"
+      ],
+      "check_line": 907,
+      "dispatch": {
+        "relation": [
+          "at least",
+          "less than"
+        ]
+      },
+      "dispatch_lines": [
+        911,
+        913
+      ]
+    },
+    "punctuation:no_comma": {
+      "class": "CommaChecker",
+      "build_args": [],
+      "check_line": 1530,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "startend:end_checker": {
+      "class": "EndChecker",
+      "build_args": [
+        "end_phrase"
+      ],
+      "check_line": 1335,
+      "dispatch": {},
+      "dispatch_lines": []
+    },
+    "startend:quotation": {
+      "class": "QuotationChecker",
+      "build_args": [],
+      "check_line": 1619,
+      "dispatch": {},
+      "dispatch_lines": []
+    }
+  },
+  "selection": {
+    "keys": [
+      3743,
+      136,
+      3518,
+      1233,
+      3445,
+      3442,
+      1262,
+      1082,
+      1127,
+      3710,
+      122,
+      3563,
+      1107,
+      3073,
+      3311,
+      3750,
+      1203,
+      2142,
+      1268,
+      3538,
+      1928,
+      2035,
+      1800
+    ],
+    "rows": 23,
+    "instructions": 40,
+    "ids_covered": 21,
+    "ids_total": 21,
+    "input_partitions_covered": 25,
+    "input_partitions_total": 25,
+    "missing_ids": [],
+    "missing_input_partitions": [],
+    "repeated_id_keys": [
+      1203
+    ],
+    "multiple_instruction_keys": [
+      136,
+      3518,
+      1233,
+      3442,
+      1262,
+      1127,
+      3710,
+      1107,
+      3311,
+      1203,
+      3538,
+      1928,
+      2035
+    ],
+    "model_execution": "not_run",
+    "fixed_response_regression": "not_run"
+  },
+  "id_table": [
+    {
+      "id": "combination:repeat_prompt",
+      "class": "RepeatPromptThenAnswer",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 26,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3563
+      ]
+    },
+    {
+      "id": "combination:two_responses",
+      "class": "TwoResponsesChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 19,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        1107
+      ]
+    },
+    {
+      "id": "detectable_content:number_placeholders",
+      "class": "PlaceholderChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 20,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3743
+      ]
+    },
+    {
+      "id": "detectable_content:postscript",
+      "class": "PostscriptChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 19,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        3710,
+        1800
+      ]
+    },
+    {
+      "id": "detectable_format:constrained_response",
+      "class": "ConstrainedResponseChecker",
+      "ko_change_note": "Ko 고정 선택 문구",
+      "full_occurrences": 10,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3750
+      ]
+    },
+    {
+      "id": "detectable_format:json_format",
+      "class": "JsonFormat",
+      "ko_change_note": "—",
+      "full_occurrences": 14,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3518
+      ]
+    },
+    {
+      "id": "detectable_format:multiple_sections",
+      "class": "SectionChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 11,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        1127
+      ]
+    },
+    {
+      "id": "detectable_format:number_bullet_lists",
+      "class": "BulletListChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 24,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        136
+      ]
+    },
+    {
+      "id": "detectable_format:number_highlighted_sections",
+      "class": "HighlightSectionChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 38,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        3710,
+        2035
+      ]
+    },
+    {
+      "id": "detectable_format:title",
+      "class": "TitleChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 27,
+      "selected_occurrences": 5,
+      "selected_keys": [
+        3442,
+        1262,
+        3710,
+        3311,
+        1928
+      ]
+    },
+    {
+      "id": "keywords:existence",
+      "class": "KeywordChecker",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 22,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        3518,
+        3311
+      ]
+    },
+    {
+      "id": "keywords:forbidden_words",
+      "class": "ForbiddenWords",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 28,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3445
+      ]
+    },
+    {
+      "id": "keywords:frequency",
+      "class": "KeywordFrequencyChecker",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 25,
+      "selected_occurrences": 6,
+      "selected_keys": [
+        1233,
+        1203,
+        2142,
+        3538,
+        1928
+      ]
+    },
+    {
+      "id": "language:response_language",
+      "class": "ResponseLanguageChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 25,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3311
+      ]
+    },
+    {
+      "id": "length_constraints:nth_paragraph_first_word",
+      "class": "ParagraphFirstWordCheck",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 2,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        3073
+      ]
+    },
+    {
+      "id": "length_constraints:number_paragraphs",
+      "class": "ParagraphChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 19,
+      "selected_occurrences": 1,
+      "selected_keys": [
+        1082
+      ]
+    },
+    {
+      "id": "length_constraints:number_sentences",
+      "class": "NumberOfSentences",
+      "ko_change_note": "Ko 문장 utility",
+      "full_occurrences": 31,
+      "selected_occurrences": 3,
+      "selected_keys": [
+        1262,
+        1268,
+        2035
+      ]
+    },
+    {
+      "id": "length_constraints:number_words",
+      "class": "NumberOfWords",
+      "ko_change_note": "Ko 단어 utility",
+      "full_occurrences": 36,
+      "selected_occurrences": 3,
+      "selected_keys": [
+        136,
+        3442,
+        3538
+      ]
+    },
+    {
+      "id": "punctuation:no_comma",
+      "class": "CommaChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 42,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        1107,
+        1928
+      ]
+    },
+    {
+      "id": "startend:end_checker",
+      "class": "EndChecker",
+      "ko_change_note": "제작자 열거 수정 클래스",
+      "full_occurrences": 15,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        1233,
+        1127
+      ]
+    },
+    {
+      "id": "startend:quotation",
+      "class": "QuotationChecker",
+      "ko_change_note": "—",
+      "full_occurrences": 28,
+      "selected_occurrences": 2,
+      "selected_keys": [
+        122,
+        2035
+      ]
+    }
+  ],
+  "input_partition_table": [
+    {
+      "id": "combination:repeat_prompt",
+      "case": "default",
+      "full_occurrences": 26,
+      "check_line": 1298,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3563,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "combination:two_responses",
+      "case": "default",
+      "full_occurrences": 19,
+      "check_line": 1243,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 1107,
+          "instruction_index": 1
+        }
+      ]
+    },
+    {
+      "id": "detectable_content:number_placeholders",
+      "case": "default",
+      "full_occurrences": 20,
+      "check_line": 287,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3743,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_content:postscript",
+      "case": "postscript_marker=P.P.S",
+      "full_occurrences": 12,
+      "check_line": 653,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3710,
+          "instruction_index": 2
+        }
+      ]
+    },
+    {
+      "id": "detectable_content:postscript",
+      "case": "postscript_marker=P.S.",
+      "full_occurrences": 7,
+      "check_line": 653,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 1800,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:constrained_response",
+      "case": "default",
+      "full_occurrences": 10,
+      "check_line": 373,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3750,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:json_format",
+      "case": "default",
+      "full_occurrences": 14,
+      "check_line": 935,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3518,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:multiple_sections",
+      "case": "default",
+      "full_occurrences": 11,
+      "check_line": 543,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 1127,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:number_bullet_lists",
+      "case": "default",
+      "full_occurrences": 24,
+      "check_line": 334,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 136,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:number_highlighted_sections",
+      "case": "default",
+      "full_occurrences": 38,
+      "check_line": 469,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 3710,
+          "instruction_index": 0
+        },
+        {
+          "key": 2035,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "detectable_format:title",
+      "case": "default",
+      "full_occurrences": 27,
+      "check_line": 1360,
+      "selected_occurrences": 5,
+      "selected_matches": [
+        {
+          "key": 3442,
+          "instruction_index": 1
+        },
+        {
+          "key": 1262,
+          "instruction_index": 0
+        },
+        {
+          "key": 3710,
+          "instruction_index": 1
+        },
+        {
+          "key": 3311,
+          "instruction_index": 1
+        },
+        {
+          "key": 1928,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "keywords:existence",
+      "case": "default",
+      "full_occurrences": 22,
+      "check_line": 778,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 3518,
+          "instruction_index": 1
+        },
+        {
+          "key": 3311,
+          "instruction_index": 2
+        }
+      ]
+    },
+    {
+      "id": "keywords:forbidden_words",
+      "case": "default",
+      "full_occurrences": 28,
+      "check_line": 1155,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3445,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "keywords:frequency",
+      "case": "relation=at least",
+      "full_occurrences": 21,
+      "check_line": 848,
+      "selected_occurrences": 5,
+      "selected_matches": [
+        {
+          "key": 1233,
+          "instruction_index": 1
+        },
+        {
+          "key": 1203,
+          "instruction_index": 0
+        },
+        {
+          "key": 1203,
+          "instruction_index": 1
+        },
+        {
+          "key": 2142,
+          "instruction_index": 0
+        },
+        {
+          "key": 3538,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "keywords:frequency",
+      "case": "relation=less than",
+      "full_occurrences": 4,
+      "check_line": 848,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 1928,
+          "instruction_index": 2
+        }
+      ]
+    },
+    {
+      "id": "language:response_language",
+      "case": "default",
+      "full_occurrences": 25,
+      "check_line": 164,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3311,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:nth_paragraph_first_word",
+      "case": "default",
+      "full_occurrences": 2,
+      "check_line": 1014,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3073,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:number_paragraphs",
+      "case": "default",
+      "full_occurrences": 19,
+      "check_line": 593,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 1082,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:number_sentences",
+      "case": "relation=at least",
+      "full_occurrences": 13,
+      "check_line": 237,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 2035,
+          "instruction_index": 2
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:number_sentences",
+      "case": "relation=less than",
+      "full_occurrences": 18,
+      "check_line": 237,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 1262,
+          "instruction_index": 1
+        },
+        {
+          "key": 1268,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:number_words",
+      "case": "relation=at least",
+      "full_occurrences": 22,
+      "check_line": 907,
+      "selected_occurrences": 1,
+      "selected_matches": [
+        {
+          "key": 3538,
+          "instruction_index": 1
+        }
+      ]
+    },
+    {
+      "id": "length_constraints:number_words",
+      "case": "relation=less than",
+      "full_occurrences": 14,
+      "check_line": 907,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 136,
+          "instruction_index": 1
+        },
+        {
+          "key": 3442,
+          "instruction_index": 0
+        }
+      ]
+    },
+    {
+      "id": "punctuation:no_comma",
+      "case": "default",
+      "full_occurrences": 42,
+      "check_line": 1530,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 1107,
+          "instruction_index": 0
+        },
+        {
+          "key": 1928,
+          "instruction_index": 1
+        }
+      ]
+    },
+    {
+      "id": "startend:end_checker",
+      "case": "default",
+      "full_occurrences": 15,
+      "check_line": 1335,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 1233,
+          "instruction_index": 0
+        },
+        {
+          "key": 1127,
+          "instruction_index": 1
+        }
+      ]
+    },
+    {
+      "id": "startend:quotation",
+      "case": "default",
+      "full_occurrences": 28,
+      "check_line": 1619,
+      "selected_occurrences": 2,
+      "selected_matches": [
+        {
+          "key": 122,
+          "instruction_index": 0
+        },
+        {
+          "key": 2035,
+          "instruction_index": 1
+        }
+      ]
+    }
+  ]
+}
