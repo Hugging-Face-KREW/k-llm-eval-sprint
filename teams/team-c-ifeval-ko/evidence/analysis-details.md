@@ -1,5 +1,7 @@
 # IFEval-Ko 분석 보조 자료
 
+**한국어** | [English](analysis-details.en.md)
+
 [분석보고서](../analysis.md)의 상세 조사·관찰 표를 보존한 문서다. 구현 계약·후속 검증 절차는 [설계 문서](../design.md)에 둔다. 이 분리 작업에서 새 평가를 실행하지 않았으며 아래 표를 옮긴 것이 후속 실험의 원본 입력·로그 추가 첨부를 뜻하지 않는다.
 
 <a id="extra-models"></a>

@@ -1,5 +1,7 @@
 # 벤치마크 분석 보고서
 
+**한국어** | [English](analysis.en.md)
+
 ## **1. 한 줄 요약: 무엇을 측정하는가**
 
 IFEval-Ko는 한국어 프롬프트에 포함된 지시사항 중 프로그램으로 검증 가능한 조건(verifiable instructions)을 LLM이 얼마나 정확하게 준수하는지 측정하는 벤치마크입니다.
@@ -195,6 +197,21 @@ Ko의 변경은 [제작자 설명](https://huggingface.co/datasets/allganize/IFE
 
 따라서 데이터 주소만 Ko로 바꾸면 원본과 다른 점수가 나올 수 있다. 공통 채점 루프·동일한 형식 검사·집계는 재사용하되 Ko의 checker·utility·고정 문구·NFC·kwargs 처리를 연결해야 한다. 이는 계산 규칙의 차이를 확인한 것으로 모델 성능이나 실제 French 데이터 전체의 평가 결과가 아니다. [언어별 상세 대조군](evidence/analysis-details.md#language-controls)에 추가 사례와 해석 범위를 보존했다.
 
+#### **6.1.1. 동일 Ko 입력에서 확인한 양방향 판정 경계**
+
+원본 영어 harness와 Ko 평가기에 동일한 Ko prompt·instruction 순서·실제 적용 kwargs·응답을 전달해 **156건의 실험**을 수행했다. [실험 결과](evidence/checker-audit/results.md)에 입력·응답 해시, 재현 여부, 개별 판정과 집계를 정리했다.
+
+| 주 검사 대상의 `(영어, Ko)` 판정 | strict | loose |
+| --- | ---: | ---: |
+| `(T,T)` | 74 | 84 |
+| `(T,F)` | 13 | 8 |
+| `(F,T)` | 22 | 21 |
+| `(F,F)` | 47 | 43 |
+
+각 실험의 주 검사 대상 하나씩을 집계하므로 strict와 loose의 분모는 각각 156개다. 추가로 지정한 검사 대상과 full 평가의 모든 개별 판정도 원시 결과에 보존했다. key 349의 `<40` 조건은 영어에서 39단어, Ko에서 40단어로 계산해 영어는 두 단계 모두 통과하고 Ko는 모두 실패한다. key 3442의 `<20` 조건은 영어 20단어·Ko 18단어로 계산해 반대 결과가 나온다. 줄 삭제로 strict 실패가 loose 통과로 바뀌는 사례도 있어 두 판정을 각각 기록했다.
+
+이 결과는 Ko의 계산 함수, 고정 문구, 정규화, checker 생성·실행 순서를 원본대로 보존할 근거다. [설계 문서](design.md) 1.3.1절의 A안은 원본과 직접 대조하기 쉽고 기존 영어/French 코드의 변경 범위를 줄일 수 있어 초기 구현으로 권고한다. B안도 같은 정책과 객체 생성 방식을 보존하면 구현할 수 있다. 이식 검증의 기준은 새 Ko task와 원본 Ko의 판정 일치다. 번역·단위 불일치와 원본 오류는 Known Issues로 기록하고 이식 과정에서 수정하지 않는다.
+
 ### **6.2. 보존 범위와 구현 인계**
 
 원본 Ko의 데이터·채점 동작을 보존하고, 번역 오류·채점 정책 개선은 별도 Known Issues로 다룬다. 제작자가 열거한 수정 클래스 7개 중 `KeySentenceChecker`는 registry에 미등록이며, 영어 전용 조건도 데이터에서 미사용일 뿐 registry에는 남아 있다. [클래스별 조사와 등록 현황](evidence/analysis-details.md#ko-classes)에 상세 수치를 정리했다.
@@ -293,7 +310,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 #### **8.2.3. 단어 수·Markdown 정책에 관한 관찰**
 
-다음은 같은 한국어 응답을 영어·Ko에 전달한 사례다. 원본 86건 중 아래 4개 입력을 포함해, 3345의 원본·override까지 **6개 입력을 양쪽에 재실행했고 과거 결과 행 전체와 일치**했다.
+다음은 **156건의 실험**에서 확인한 대표 사례다. 동일한 한국어 응답을 영어·Ko 평가기에 전달하고, 입력 재현 여부와 판정을 실험 결과에 기록했다.
 
 | key · case ID | 대상 조건의 실제 결과 | 관찰과 처리 |
 | --- | --- | --- |
@@ -302,7 +319,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 136 · `markdown_star_balanced_136` | 영어 99단어: 통과/통과, Ko 108단어: 실패/통과 | `*` 제거 후보와 줄 배치 때문에 loose가 달라짐 |
 | 136 · `markdown_dash_persistent_136` | 영어 통과/통과, Ko 실패/실패 | `-`는 loose에서 일괄 제거하지 않음 |
 
-위 판정은 실제 evaluator의 strict/loose 결과다. 실측 단어 수는 checker의 counter 진단으로 별도 확인했으며 두 종류의 확인을 구분했다. NFC나 한국어 공백 기준처럼 원본 Ko에 이미 있는 adaptation 자체를 새 데이터 오류로 분류하지 않는다.
+위 표는 실제 평가기의 strict·loose 판정이다. 단어 수는 checker가 계산한 값을 관찰해 확인했다. NFC 처리와 공백 기준 단어 계산 등 원본 Ko의 채점 규칙은 그대로 유지한다.
 
 ### **8.3. 규칙 적용 범위와 확인한 판정 차이**
 
@@ -325,7 +342,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 고정 Ko 데이터의 instruction 목록을 ID별로 집계하고, 고유 key 집합의 교집합을 계산했다. 반복 instruction ID도 발생 횟수에는 각각 포함했다. Ko 단어 수∩bullet은 key `136, 2284`다. 적용 문항 수는 오류 수나 모델 점수 변화량이 아니다. Markdown은 별도 형식 지시가 없어도 응답에 포함될 수 있어 교집합만으로 전체 영향을 판단할 수 없다.
 
-기존 86건 중 `dataset` 범주 46건에서 대상 strict 또는 loose 판정이 영어·Ko 사이에서 달랐던 고유 key는 **6개: 136, 349, 1242, 3345, 3442, 3739**다. 이는 저장된 테스트 입력에 한정한 집계이며 합성·override를 제외했다. 3345처럼 언어별 응답이 다른 사례도 포함하므로, 동일 문자열에 대한 순수 checker 차이 6개라고 해석하지 않는다. key 3739의 문장 분리 차이와 부등호 번역 오류 제외 판단도 서로 다른 내용이다.
+156건의 실험 중 원본 데이터 조건을 유지한 `dataset` 사례는 116건이다. 이 중 동일 Ko 입력에 대한 대상 instruction의 strict 또는 loose 판정이 영어·Ko 사이에서 달랐던 문항은 **11개 key: 127, 136, 349, 1127, 1237, 1242, 1480, 3073, 3442, 3739, 3750**다. 합성 입력과 메모리 override를 제외한 결과이며, 사용한 고정 응답에 한정된 관찰이다. 판정 차이는 동일 Ko 입력으로 집계하고, 원래 입력의 재현 기록은 각 case의 검증 근거로 보존했다. key 3739의 문장 분리 차이와 부등호 번역 오류 여부도 구별해 판단한다.
 
 전체 모델 응답에서 판정이 얼마나 달라지는지, 총점에 얼마나 영향을 주는지는 미측정이다. 이번 분석은 적용 범위·대표 반례·원본 판정 근거를 확보한 범위에서 마무리하고 Lighteval 연결과 동등성 검증에 집중한다.
 
@@ -387,42 +404,73 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 #### **9.3.1. 기존 86건의 구성과 실행 방식**
 
-기존 입력·양쪽 결과의 case ID·순서·입력 hash와 고정 source 대응을 확인했다. 실제 데이터 조건 46건, 메모리 override 2건, 합성 fixture 38건으로 **각 evaluator당 86건**이며 고유 데이터 86문항이나 모델 생성 86회를 뜻하지 않는다.
+156건의 실험에서 case ID, 입력 순서와 해시, 고정 원본과의 대응 관계, 재현 여부를 확인했다. 아래 기준 자료 86건은 실제 데이터 조건 46건·메모리 override 2건·합성 입력 38건으로 구성된다. 전체 판정과 집계는 9.3.4절과 [실험 결과](evidence/checker-audit/results.md)에 제시한다. case 수는 고유 문항 수나 모델 생성 횟수와 구별한다.
 
-실제 조건의 고유 key는 11개다: `127, 136, 349, 1127, 1237, 1242, 1480, 3073, 3345, 3442, 3739`. 고정 source·데이터 21개 파일과 실제 import module hash를 대조했고, 원본 `InputExample`과 strict/loose 함수를 직접 호출했다. 전체 instruction의 full, 대상 조건의 isolated, checker 진단을 구분했으며 전체 task/model CLI나 새 Lighteval-Ko 실행은 아니다.
+기준 자료에서 실제 데이터 조건을 사용한 고유 key는 11개다: `127, 136, 349, 1127, 1237, 1242, 1480, 3073, 3345, 3442, 3739`. 고정한 코드·데이터 21개 파일과 실제로 불러온 모듈의 해시를 확인하고, 원본 `InputExample`과 strict·loose 함수를 직접 호출했다. 전체 instruction을 검사하는 full 평가, 지정한 instruction만 검사하는 isolated 평가, checker 진단 결과를 각각 기록했다. 전체 task/model CLI와 새 Lighteval-Ko는 실행하지 않았다.
 
 직접 비교한 reference는 [영어 evaluator](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/utils.py)와 [Ko evaluator](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/utils.py)다. [자료 안내·재현 방법](evidence/checker-audit/README.md)과 아래 원본 파일을 함께 확인할 수 있다.
 
 | 자료 | 파일 |
 | --- | --- |
-| 86건의 입력·저장 응답 | [cases.json](evidence/checker-audit/cases.json) |
-| 실행 코드 | [영어 runner](evidence/checker-audit/run_original.py), [Ko runner](evidence/checker-audit/run_ko.py), [공통 runtime](evidence/checker-audit/audit_runtime.py), [비교 스크립트](evidence/checker-audit/compare.py) |
-| 원시·비교 결과 | [영어 86건](evidence/checker-audit/original_results.json), [Ko 86건](evidence/checker-audit/ko_results.json), [results.json](evidence/checker-audit/results.json) |
+| 입력·사전 기대값 | [cases.json](evidence/checker-audit/cases.json): 156건. 기준 입력·판정의 출처는 [baseline.json](evidence/checker-audit/baseline.json)에 보존 |
+| 실행 코드 | [입력 생성](evidence/checker-audit/build_cases.py), [양쪽 평가기 실행](evidence/checker-audit/run_audit.py), [공통 runtime](evidence/checker-audit/audit_runtime.py), [결과 비교](evidence/checker-audit/compare.py) |
+| 통합 원시·비교 결과 | [영어 156건](evidence/checker-audit/original_results.json), [Ko 156건](evidence/checker-audit/ko_results.json), [results.json](evidence/checker-audit/results.json). 기존 86건 재현 근거도 해당 case에 포함 |
 | 재현 정보 | [provenance.json](evidence/checker-audit/provenance.json), [requirements.lock.txt](evidence/checker-audit/requirements.lock.txt), [SHA256SUMS](evidence/checker-audit/SHA256SUMS) |
 
 #### **9.3.2. 후속 실행과 미완료 항목**
 
 | 자료 | 입력 수·비교 경로 | 확인한 결과·제한 |
 | --- | --- | --- |
-| 기준 환경 최소 재실행 | 3건 × 영어·Ko | 양쪽 6개 결과가 같은 쪽의 과거 전체 결과 행과 일치. 86건 전체 재실행 아님 |
-| 부등호 경계값 | 14문항 × 3길이 = 42건 × 영어·Ko | 실측 길이·full/isolated 대상 판정·Ko 전체 판정 모두 기대값 일치 |
-| Known Issue | 신규 17건＋과거 재실행 6건 = 23건 × 영어·Ko | 신규 기대값·과거 전체 결과 행 일치. 고유 key 7개 |
-| metric 재사용 첫 비교 | 합성 11건 × 기존 영어 metric·French 어댑터·harness·Ko | 기대값 충족. 영어 계열과 Ko 차이 5건·4유형 |
-| 언어별 추가 대조 | 별도 합성 23건 × 위 네 경로 | 기대값 충족. 영어 계열과 Ko 차이 10건 |
-| 통합 23문항 | 새 등록 task와 원본 Ko | **23문항·40개 지시 선정안의 입력 범위 집계 완료·팀 확정 및 실행 대기** |
+| 실험 | 156건 × 원본 영어·Ko | 동일 Ko 입력의 판정 비교, 사전 Ko 기대값과 모든 개별 판정의 일치, 입력 재현 여부 확인 |
+| 정상 경로·경계·진단 | 실험에 포함된 21종·25개 입력 경로, 13개 N−1/N/N+1 경계 검사, 반복 ID 네 조합 | 경로별 통과·실패, 실제 개수, 줄 삭제 등으로 loose에서 통과하는 경우 확인 |
+| 호환성·오류 계약 | 보조 18건 × 원본 영어·Ko | Ko 정상 반환 10·의도한 예외 8. 예외를 정상 채점 성공으로 세지 않음 |
+| 검증 도구 | 검증 테스트 18개 | 잘못된 index·해시·중복·집계와 재현 근거의 누락·변조를 검출하는 검사 등 통과 |
+| 기존 Lighteval 영어/French 회귀 | 새 구현의 변경 전후 비교 | **미수행**. 원본 reference 비교로 대체하지 않음 |
+| 통합 23문항 | 새 등록 task와 원본 Ko | **23문항·40개 instruction 선정안의 입력 범위 집계 완료. 모델 통합 평가 미수행** |
 | 새 Lighteval-Ko 동등성 | 개별 판정·네 지표 비교 | **미수행·미측정** |
 
-부등호·Known Issue 실행은 evaluator당 65건, 양쪽 합계 **130개 case 실행**이며 실제 함수 호출 수는 더 많다. Known Issue 23건과 언어별 합성 23건은 별도 입력 집합이다. French 어댑터는 합성 입력으로만 확인했으며 실제 French 데이터 전체나 별도 French reference와의 동등성을 검증한 것은 아니다. [상세 대조군·실행 범위](evidence/analysis-details.md#language-controls)에 기록을 보존했다.
+원시 판정, 재현 근거, 입력 해시와 집계는 [results.json](evidence/checker-audit/results.json)에 함께 기록했다. 이전 조사 내용은 [분석 보조 자료](evidence/analysis-details.md#language-controls)에서 확인할 수 있다. 현재 실행 상태와 수치는 156건의 실험을 기준으로 하며, 모델 생성과 새 task의 동등성 검증은 미수행이다.
 
 #### **9.3.3. 첨부 범위와 재현 조건**
 
-이번 첨부는 **기존 86건**의 입력·코드·원시 결과·revision·환경 정보다. 콘솔 로그 전체와 후속 42건·Known Issue 23건·metric 재사용 11건·언어 대조군 23건의 원본 자료는 포함하지 않았다. 보조 문서의 상세 표도 원본 실행 파일의 추가 첨부를 뜻하지 않는다.
+첨부 자료에는 **156건의 실험**에 사용한 입력·코드와 원시 결과·revision·환경 정보가 들어 있다. 실행 결과는 9.3.4절과 `evidence/checker-audit/` 폴더에서 제공하며, 기준 입력 86건과 기대값의 출처도 추적할 수 있다. 이전 보조 실험의 전체 콘솔 로그와 원본 자료는 첨부 범위에서 제외했다. 보조 문서에 결과 표가 있어도 해당 실험의 원본 실행 자료가 모두 첨부된 것은 아니다.
 
-[자료 README](evidence/checker-audit/README.md)에 복원·재현 명령을 정리했고 가상환경·캐시·source 전체는 제외했다. 기존 실행 환경과 원본 보존 확인은 [보조 기록](evidence/analysis-details.md#reference-environment)에 둔다. 이번 문서 정리에서는 평가를 재실행하지 않았다. 통합 검증 문항 선정을 위한 입력 범위 집계는 `evidence/sample-coverage/`에 따로 첨부했으며, 기존 86건과 실행 범위가 다르다.
+[자료 README](evidence/checker-audit/README.md)에 복원·재현 명령을 정리했고 가상환경·캐시·source 전체는 제외했다. 기존 실행 환경과 원본 보존 확인은 [보조 기록](evidence/analysis-details.md#reference-environment)에 둔다. 156건의 실험 결과는 9.3.4절에 기록했다. `evidence/sample-coverage/`는 이 실험의 모델 통합 선정안 23문항에 대한 입력 범위 집계이며, 회귀 case 수와 구분한다.
+
+#### **9.3.4. 전용 고정 응답 확장 구현과 원본 실행 결과**
+
+2026-11-03 로컬에서 **156건의 실험**을 수행했다. 원본 영어·Ko 평가기를 각각 full-package 방식으로 불러와 실행했다. 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건을 사용했고, full 평가에서 검사한 instruction은 247개다. 보조 호환성·오류 입력 18건도 검사했다. 이 중 10건은 정상 반환하고 8건은 원본에서 예상한 예외가 발생한다. 예외 입력은 정상 채점 분모에 넣지 않으며, 이 집계를 모델 성능 점수로 해석하지 않는다.
+
+| 확인 항목 | 실제 결과 |
+| --- | --- |
+| 원본·환경 무결성 | provenance에 지정한 코드·데이터 21개 파일, 실제로 불러온 네 모듈, NLTK 자원의 해시 확인 |
+| 기준 입력 재현 | 양쪽 평가기의 결과 행 86/86이 기준 자료와 정확히 일치. 각 case의 `baseline_reproduction`과 비교표에서 확인 가능 |
+| 기준 자료 보존 | `baseline.json`의 입력·양쪽 판정·환경을 보존하고, 추출한 입력의 LF 해시가 저장된 기대값과 일치하는지 확인 |
+| 동작 검증 범위 | 실제 데이터 조건의 21/21종·25/25개 입력 경로마다 strict·loose 모두 통과(TT)·모두 실패(FF)하는 응답 확보 |
+| 수치 경계 | 개수를 검사하는 13개 조건의 N−1/N/N+1에서 실제 checker의 계산값과 기대값 일치 |
+| 반복 ID | 1203 두 index 각각의 kwargs·판정 대응과 네 Boolean 조합 확인 |
+| 개별 판정 | 156건의 Ko 판정이 사전 기대값과 일치. 지정한 대상의 isolated·full 판정도 일치. 미처리 예외·미해결 불일치 0건 |
+| 엔진 동작 | 실제 호출 기록으로 후보 8개·빈 후보 제외·OR/AND·NFC·`if v`·실행 순서·객체 생성을 확인하고 문항별 instruction 수가 다른 집계도 검사 |
+| 검증 도구 | index·중복·원본 변경·해시·후보·집계·예외 처리 등을 검사하는 테스트 18개 통과 |
+
+| 고정 응답 실험의 집계 | 영어 평가기 | Ko 평가기 |
+| --- | --- | --- |
+| prompt strict | 61/156 | 71/156 |
+| instruction strict | 124/247 | 133/247 |
+| prompt loose | 66/156 | 79/156 |
+| instruction loose | 129/247 | 142/247 |
+
+위 수치는 진단용 고정 응답의 집계다. 25개 입력 경로는 정상 kwargs에 따른 검사 방식의 수이며, 문항 수나 전체 코드 분기 수와 구별한다. 부수적으로 검사하던 조건도 index를 지정해 isolated 판정을 확인한 뒤 전용 대상으로 사용했다. 1268·136·3073에서는 strict 실패가 loose 통과로 바뀌어 두 기대값을 각각 저장했다.
+
+선정안 23문항에 1954·240을 추가해 25문항·42개 instruction을 수집했다. 기준 자료의 문항까지 합치면 원본 32문항·55개 instruction을 사용한다. **모델 통합 선정안은 23문항·40개 instruction으로 유지한다.** 1203의 `peace`, 2142의 `predatory`, 1268의 `<6`, 3538의 600단어와 `first_word` 정규화의 비대칭은 원본대로 보존했다. registry 25종 중 데이터에서 사용하지 않는 4종과 미등록 checker는 보조 입력으로 검사했다. `capital_word_frequency`의 AttributeError 등 예외가 예상되는 8건은 정상 채점 성공으로 세지 않았다.
+
+재현·검토 자료: [안내](evidence/checker-audit/README.md), [영어·Ko 비교표](evidence/checker-audit/results.md), [입력/사전 기대값](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [원본 문항](evidence/checker-audit/source_rows.md). [이슈 #1463](https://github.com/huggingface/lighteval/issues/1463)에 나중에 첨부할 [초안](evidence/checker-audit/issue-1463.ko.md)과 로컬 ZIP을 준비했다. 원격에는 게시하지 않았다.
+
+**미수행:** 새 등록 Lighteval-Ko의 동등성, 기존 Lighteval 영어/French 변경 전후 회귀·metric 객체 격리·optional dependency 로딩, 모델 23문항 통합, 전체 split 모델 평가. 원본 reference의 source/frame 검증을 새 task 검증 완료로 해석하지 않는다.
 
 ### **9.4. 구현·후속 검증으로의 인계**
 
-구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·통합 검증 문항(현재 23문항 제안)을 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안 초안은 [issue-draft.md](issue-draft.md)이며 데이터셋 제작자에게 보내는 오류 제보와 구분한다.
+구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·통합 검증 문항(현재 23문항 제안)을 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안 초안은 [이슈 제안 초안](issue-draft.ko.md)이며 데이터셋 제작자에게 보내는 오류 제보와 구분한다.
 
 ---
 
