@@ -4,7 +4,7 @@
 
 This folder contains inputs, code, reproduction evidence and scoring results for a **156-case experiment**. The [comparison tables](results.en.md) and [results.json](results.json) show English/Ko judgments and aggregates. Input generation, execution, verification and attachment packaging all run from this folder.
 
-The experiment comprises 116 unchanged dataset conditions, 2 in-memory overrides and 38 synthetic inputs, with 247 instruction occurrences in full evaluation. Eighteen auxiliary compatibility/error inputs run alongside it: 10 return normally and 8 raise expected exceptions. Auxiliary inputs are excluded from the main metric denominators. Model generation, new Lighteval-Ko parity and existing Lighteval English/French regression are pending.
+The experiment comprises 116 unchanged dataset conditions, 2 in-memory overrides and 38 synthetic inputs, with 247 instruction occurrences in full evaluation. The 18 auxiliary compatibility/error inputs give 10 normal returns/8 expected exceptions in Ko and 16/2 in English. Counts are per 18 input cases and identical in strict and loose; normal returns include F judgments. Auxiliary inputs are excluded from the main metric denominators. Model generation, new Lighteval-Ko parity and existing Lighteval English/French regression are pending.
 
 ## Files
 
@@ -16,7 +16,7 @@ The experiment comprises 116 unchanged dataset conditions, 2 in-memory overrides
 | Coverage/boundaries | [coverage.json](coverage.json), [manifest.json](manifest.json) |
 | Source prompts | [source_rows.json](source_rows.json), [source_rows.en.md](source_rows.en.md): complete prompts, order and kwargs for 32 prompts/55 instructions |
 | Baseline | [baseline.json](baseline.json): archived inputs, English/Ko judgments and environments for oracle provenance; not overwritten when regenerating results |
-| Auxiliary inputs | [support_cases.json](support_cases.json), [support_original_results.json](support_original_results.json), [support_ko_results.json](support_ko_results.json) |
+| Auxiliary inputs and independent oracles | [support_cases.json](support_cases.json), [support_original_results.json](support_original_results.json), [support_ko_results.json](support_ko_results.json) |
 | Input generation/execution | [build_cases.py](build_cases.py), [run_original.py](run_original.py), [run_ko.py](run_ko.py), [run_audit.py](run_audit.py), [audit_runtime.py](audit_runtime.py) |
 | Comparison/tests/packaging | [compare.py](compare.py), [test_audit.py](test_audit.py), [package_results.py](package_results.py) |
 | Provenance/restoration/dependencies | [provenance.json](provenance.json), [fetch_sources.py](fetch_sources.py), [requirements.lock.txt](requirements.lock.txt), [nltk_resources.json](nltk_resources.json) |
@@ -77,11 +77,13 @@ The default import mode is `full-package`. `--import-mode isolated-source` runs 
 
 Expectations are declared before execution and never overwritten by observations. Baseline input LF hashes are checked against the stored oracle. Actual JSON byte hashes are distinguished from LF hashes to detect checkout CRLF conversion. `build_cases.py` preserves complete original prompts, instruction order and kwargs; repeated IDs are identified by `instruction_index`.
 
+Auxiliary `expected_original` and `expected_ko` are predeclared from each pinned reference and seed 0. Verify full/isolated strict/loose instruction and prompt Booleans or exception types separately, preserving original checker, NFC and exception differences. Never overwrite expectations with observations. The 25 verification-tool tests include replacing all English auxiliary results with exceptions, changing individual Booleans or exception types, and omitting or reordering results.
+
 ## Attachment scope
 
-The attachment includes inputs, raw results, tables, code, documents, provenance and `baseline.json`. It excludes downloaded sources, virtual environments, caches, models, private settings and `context.md`. After verification, `package_results.py` creates `attachments/ifeval-ko-regression.zip` and its `.sha256`. Run `sha256sum --check SHA256SUMS` at the extraction root to verify it.
+The attachment includes inputs, raw results, tables, code, documents, provenance and `baseline.json`. It excludes downloaded sources, virtual environments, caches, models, private settings, `context.md` and issue drafts. After verification, `package_results.py` creates `attachments/ifeval-ko-regression.zip` and its `.sha256`. Run `sha256sum --check SHA256SUMS` at the extraction root to verify it.
 
-The [English issue attachment draft](issue-1463.md) and ZIP use the same experiment results. Both are prepared locally; no remote publication, commits or pushes were performed.
+The ZIP is an optional bundle of experiment materials. Issue drafting and remote publication are outside this change; reproducing the experiment does not require those drafts.
 
 ## Stored-response regression expansion (2026-11-03)
 
@@ -89,6 +91,6 @@ Counting only explicitly targeted instructions under original data conditions gi
 
 Checks cover 13 N−1/N/N+1 count families, four Boolean combinations for both indexes in 1203, and strict failures recovered in loose. Baseline objects, inputs and judgments are also checked. Verified contracts include `if v`, NFC placement, eight candidates' order/duplicates/empty exclusion, instruction OR/prompt AND, all strict→all loose, fresh phase objects and uneven instruction aggregation.
 
-Comparison `(EN,Ko)` pairs differ from boundary `(strict,loose)` pairs. Original translation/unit mismatches, normalization asymmetry and internal exception behavior are preserved. Eight expected-exception auxiliary inputs are not successful scoring.
+Comparison `(EN,Ko)` pairs differ from boundary `(strict,loose)` pairs. Original translation/unit mismatches, normalization asymmetry and internal exception behavior are preserved. The 8 expected Ko exceptions and 2 expected English exceptions are not successful scoring for their respective evaluators.
 
 The new Ko task must match every instruction/prompt strict/loose Boolean, all four numerators/denominators and values within absolute error ≤1e-12, with zero omissions, unhandled exceptions or unresolved mismatches. The integration proposal remains 23 prompts/40 instructions. New-task validation, existing English/French regression/object isolation/optional dependencies, model integration and full-split evaluation remain pending.

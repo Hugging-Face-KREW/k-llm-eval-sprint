@@ -8,7 +8,7 @@ The existing `case/full/isolated/diagnostics` format is retained. `original_*` p
 
 The 156-case experiment comprises 116 unchanged dataset conditions, 2 in-memory overrides and 38 synthetic inputs. It uses 32 source prompts containing 55 instructions; full evaluation checks 247 instruction occurrences.
 
-Of 18 auxiliary compatibility/error inputs, 10 return normally and 8 raise expected reference exceptions. They are excluded from main path coverage and metrics. Model generation, new Lighteval-Ko validation and existing English/French regression remain pending.
+The 18 auxiliary compatibility/error inputs are checked against independent English and Ko expectations. Section 6 gives normal returns and expected exceptions by evaluator and phase; normal returns include F judgments. Auxiliary inputs are excluded from main path coverage and metrics. Model generation, new Lighteval-Ko validation and existing English/French regression remain pending.
 
 ## 1. Judgment direction — (English, Ko)
 
@@ -249,7 +249,16 @@ Cells show **target judgment / all instruction flags / prompt all-pass**. Both e
 
 ## 6. Auxiliary compatibility and error inputs
 
-| Case | Checker | English strict/loose | Ko strict/loose | Classification |
+Counts use 18 input cases per phase. Preserve differences between references and compare full/isolated instruction and prompt Booleans or exception types with each reference's own predeclared oracle. Never overwrite `expected_original` or `expected_ko` with observations.
+
+| Evaluator | Phase | Normal returns | Expected exceptions | Input cases |
+| --- | --- | ---: | ---: | ---: |
+| English | strict | 16 | 2 | 18 |
+| English | loose | 16 | 2 | 18 |
+| Ko | strict | 10 | 8 | 18 |
+| Ko | loose | 10 | 8 | 18 |
+
+| Case | Checker | English strict/loose | Ko strict/loose | Ko classification |
 | --- | --- | --- | --- | --- |
 | `support_filter_null` | `length_constraints:number_words` | T / [T] / T; T / [T] / T | T / [T] / T; T / [T] / T | Synthetic compatibility |
 | `support_filter_zero` | `length_constraints:number_words` | T / [T] / T; T / [T] / T | T / [T] / T; T / [T] / T | Synthetic compatibility |
@@ -278,4 +287,4 @@ Verified hashes cover 21 pinned code/data files, four imported modules, NLTK res
 
 Option A keeps Ko scoring close to the reference and limits changes to existing English/French code. Option B is also possible if it preserves the same policies and checker lifecycle.
 
-See the [README](README.en.md) for commands. The [English issue attachment draft](issue-1463.md) is prepared locally and has not been posted. Also see the [manifest](manifest.json), [coverage](coverage.json) and [source prompt catalog](source_rows.en.md).
+See the [README](README.en.md) for commands, plus the [manifest](manifest.json), [coverage](coverage.json) and [source prompt catalog](source_rows.en.md). Issue drafting and remote publication are outside this change.

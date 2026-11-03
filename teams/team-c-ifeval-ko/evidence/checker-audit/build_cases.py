@@ -94,7 +94,11 @@ class Builder:
     def promote(self, name, index, boundary=None):
         self.target(self.by_name[name], index, boundary)
 
-    def auxiliary(self, name, iid, kwargs, response, expected=None, error=None, group="kwargs_contract"):
+    def auxiliary(self, name, iid, kwargs, response, expected=None, error=None, group="kwargs_contract", *, original_expected=None, original_error=None):
+        # Both references need explicit oracles; Ko failures cannot be reused as
+        # English expectations. These values never come from current run output.
+        if (type(original_expected) is bool) == bool(original_error):
+            raise ValueError("Declare either an English Boolean or an English exception")
         case = {"case_id": "support_" + name, "key": None, "scope": "synthetic", "origin": "support_18",
                 "instruction_id": iid, "instruction_index": 0, "checker": self.checkers.get(iid, "UNREGISTERED"),
                 "group": group, "classification": "NEEDS_DISCUSSION", "reason_for_test": name,
@@ -112,6 +116,17 @@ class Builder:
             case["hashes"] = input_hashes(case)
         else:
             self.finish(case, [expected], [expected])
+        case["expected_original"] = {
+            "basis": "predeclared_from_pinned_english_code_with_seed_0",
+            "source_revision": self.provenance["harness"]["revision"],
+        }
+        if original_error:
+            case["expected_original"]["error_type"] = original_error
+        else:
+            case["expected_original"].update(
+                full={kind: [original_expected] for kind in ["strict", "loose"]},
+                prompt={kind: original_expected for kind in ["strict", "loose"]},
+            )
         self.support.append(case)
 
 
@@ -206,21 +221,21 @@ def build(source_root, output_dir):
     b.add("selected_1262_smoke", 1262, [0, 1], "<<제목>> " + sentences(4), [True, True], group="selection_smoke")
 
     for label, value in [("null", None), ("zero", 0), ("empty_string", ""), ("empty_list", [])]:
-        b.auxiliary("filter_" + label, "length_constraints:number_words", {"num_words": value, "relation": "less than"}, "평가", True)
+        b.auxiliary("filter_" + label, "length_constraints:number_words", {"num_words": value, "relation": "less than"}, "평가", True, original_expected=True)
     for label, kwargs in [("absent", {}), ("null", {"keywords": None}), ("empty_string", {"keywords": ""}), ("empty_list", {"keywords": []})]:
-        b.auxiliary("keyword_" + label, "keywords:existence", kwargs, "평가", error="ValueError")
-    b.auxiliary("bad_relation", "length_constraints:number_words", {"num_words": 2, "relation": "invalid"}, "평가", error="ValueError")
+        b.auxiliary("keyword_" + label, "keywords:existence", kwargs, "평가", error="ValueError", original_expected=False)
+    b.auxiliary("bad_relation", "length_constraints:number_words", {"num_words": 2, "relation": "invalid"}, "평가", error="ValueError", original_error="ValueError")
     for text, ok in [("a", False), ("aa", True)]:
-        b.auxiliary("letter_" + text, "keywords:letter_frequency", {"letter": "a", "let_frequency": 2, "let_relation": "at least"}, text, ok, group="registry_unused")
+        b.auxiliary("letter_" + text, "keywords:letter_frequency", {"letter": "a", "let_frequency": 2, "let_relation": "at least"}, text, ok, group="registry_unused", original_expected=ok)
     for suffix, text, ok in [("T", "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.", True),
                              ("F", "This is a clear English sentence about science and nature.", False)]:
-        b.auxiliary("capital_" + suffix, "change_case:english_capital", {}, text, ok, group="registry_unused")
+        b.auxiliary("capital_" + suffix, "change_case:english_capital", {}, text, ok, group="registry_unused", original_expected=ok)
     for suffix, text, ok in [("T", "this is a clear english sentence about science and nature.", True),
                              ("F", "This is a clear English sentence about science and nature.", False)]:
-        b.auxiliary("lowercase_" + suffix, "change_case:english_lowercase", {}, text, ok, group="registry_unused")
-    for text in ["HELLO", "hello"]:
-        b.auxiliary("capital_words_" + text, "change_case:capital_word_frequency", {"capital_frequency": 1, "capital_relation": "at least"}, text, error="AttributeError", group="registry_unused")
-    b.auxiliary("unregistered", "keywords:key_sentences", {"key_sentences": ["평가합니다."], "num_sentences": 1}, "평가합니다.", error="KeyError", group="unregistered")
+        b.auxiliary("lowercase_" + suffix, "change_case:english_lowercase", {}, text, ok, group="registry_unused", original_expected=ok)
+    for text, original_ok in [("HELLO", True), ("hello", False)]:
+        b.auxiliary("capital_words_" + text, "change_case:capital_word_frequency", {"capital_frequency": 1, "capital_relation": "at least"}, text, error="AttributeError", group="registry_unused", original_expected=original_ok)
+    b.auxiliary("unregistered", "keywords:key_sentences", {"key_sentences": ["평가합니다."], "num_sentences": 1}, "평가합니다.", error="KeyError", group="unregistered", original_error="KeyError")
 
     validate_cases(b.cases)
     validate_cases(b.support, require_expected=False)
@@ -236,7 +251,7 @@ def build(source_root, output_dir):
     write_json(output_dir / "support_cases.json", b.support)
     write_json(output_dir / "source_rows.json", [b.ko[k] for k in source_keys])
     manifest = {
-        "schema_version": 2, "scope": "original English evaluator vs original Ko evaluator on identical Ko inputs",
+        "schema_version": 3, "scope": "original English evaluator vs original Ko evaluator on identical Ko inputs",
         "source_revisions": {n: e["revision"] for n, e in b.provenance.items()}, "verified_sources": b.verified,
         "baseline_sha256": sha((ROOT / "baseline.json").read_bytes()), "baseline_cases_lf_sha256": b.legacy_lf_hash,
         "baseline_original_results_object_sha256": object_hash(baseline_run("original")),
@@ -248,6 +263,7 @@ def build(source_root, output_dir):
         "normal_scope_counts": dict(Counter(c["scope"] for c in b.cases)),
         "extension_groups": dict(Counter(c["group"] for c in b.cases if c["origin"] == "extension_70")),
         "normal_full_instruction_occurrences": sum(len(c["ko_instruction_id_list"]) for c in b.cases),
+        "support_oracle_sides": ["original", "ko"],
         "source_keys": source_keys, "source_instructions": sum(len(b.ko[k]["kwargs"]) for k in source_keys),
         "integration_selection_keys": selected, "integration_selection_changed": False,
         "model_inference_run": False, "new_lighteval_ko_parity_run": False,

@@ -53,7 +53,7 @@ For example, `markdown_quote_valid_highlights_349` counts the same response as 3
 
 Option A keeps Ko counting, fixed phrases and NFC placement close to the reference. It preserves all strict checks before all loose checks, with new checker instances in each phase. It is recommended initially because it allows direct reference comparison and limits changes to existing English/French code. The cost is duplicated maintenance of part of the scoring loop. Option B can also preserve the same policies and lifecycle; the final architecture is subject to maintainer discussion.
 
-Acceptance means **agreement between the new Ko task and original Ko judgments**. If English passes and Ko fails, the new Ko task must fail. Preserve prompt/kwargs translation mismatches and the `first_word` normalization asymmetry. The [English attachment draft for issue #1463](evidence/checker-audit/issue-1463.md) is prepared locally and has not been posted.
+Acceptance means **agreement between the new Ko task and original Ko judgments**. If English passes and Ko fails, the new Ko task must fail. Preserve prompt/kwargs translation mismatches and the `first_word` normalization asymmetry. These materials provide experiment evidence and a porting plan. Upstream issue drafting and publication are separate work.
 
 ### 1.4. Option B: shared engine and Ko policy
 
@@ -328,7 +328,7 @@ The evidence and [reproduction commands](evidence/checker-audit/README.en.md) sh
 | Check | Composition/denominator | Verified result |
 | --- | --- | --- |
 | Stored responses | 156 cases: 116 original-data conditions, 2 in-memory overrides, 38 synthetic; 247 full-evaluation occurrences | Predeclared Ko/full/isolated strict/loose agreement; zero unhandled exceptions |
-| Auxiliary compatibility/errors | 18 synthetic inputs: 10 normal returns, 8 intended propagated exceptions | Exceptions excluded from successful scoring and 21-type coverage |
+| Auxiliary compatibility/errors | 18 synthetic inputs: Ko 10 normal returns/8 expected exceptions; English 16/2, in each of strict and loose | Verify independent oracles. Normal returns include F; exceptions are excluded from successful scoring and 21-type coverage |
 | Baseline reproduction | 86 baseline cases checked by both evaluators within the experiment | Exact 86/86 stored-row agreement per side, in `baseline_reproduction` and the comparison table |
 | Source prompt collection | Add last-paragraph key 1954 and Russian-language key 240 to the 23-prompt proposal | 25 collected prompts/42 instructions; with baseline prompts, 32 source prompts/55 instructions |
 
@@ -358,7 +358,9 @@ Frames of executing functions were observed without modifying original `utils.py
 
 Checks include filters for `None`, 0, empty strings/lists; Korean/Russian requirements; empty responses and short numeric input. `123` is T/T for language because the reference catches `LangDetectException`; empty response is F/F. Uneven `[[T,T,T],[F]]` gives 0.5 prompt and 0.75 instruction accuracy. Four registered but data-unused types were also checked. AttributeError from `capital_word_frequency`'s `instructions_util.nltk` reference and KeyError for unregistered `key_sentences` are recorded as error-contract observations.
 
-All 18 [verification-tool tests](evidence/checker-audit/test_audit.py) pass. They detect incorrect indexes, duplicate `case_id`, altered source conditions, stale hashes, repeated-ID collapse, cross-phase checker sharing, candidate deduplication, incorrect candidate combination and exceptions converted to normal scores, among other errors. Distinct response hashes/cache keys prevent overwriting multiple responses for one source key.
+Auxiliary inputs declare `expected_original` and `expected_ko` separately before execution. `compare.py` checks full/isolated strict/loose instruction and prompt Booleans or exception types on both sides without replacing expectations with observations. English has 16 normal returns/2 expected exceptions and Ko 10/8. Preserve their differences: missing keywords return F in English and raise ValueError in Ko; capital-word frequency returns an English Boolean and raises AttributeError in Ko.
+
+All 25 [verification-tool tests](evidence/checker-audit/test_audit.py) pass. They detect incorrect indexes, duplicate `case_id`, altered source conditions, stale hashes, repeated-ID collapse, cross-phase checker sharing, candidate deduplication, incorrect candidate combination and exceptions converted to normal scores, among other errors. Distinct response hashes/cache keys prevent overwriting multiple responses for one source key.
 
 #### 6.2.4. Reproduction materials and port completion criteria
 
@@ -367,9 +369,9 @@ All 18 [verification-tool tests](evidence/checker-audit/test_audit.py) pass. The
 | Commands and scope | [README.en.md](evidence/checker-audit/README.en.md) |
 | Inputs, expectations and comparison | [cases.json](evidence/checker-audit/cases.json), [results.en.md](evidence/checker-audit/results.en.md), [results.json](evidence/checker-audit/results.json) |
 | Provenance, hashes, environment, scope | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
-| Issue attachment | [English draft](evidence/checker-audit/issue-1463.md), `evidence/checker-audit/attachments/ifeval-ko-regression.zip` |
+| Optional local ZIP | Generate `evidence/checker-audit/attachments/ifeval-ko-regression.zip` with `package_results.py`; issue drafts are excluded |
 
-Original English/Ko judgment differences and execution behavior are verified. **New Lighteval-Ko parity, existing English/French regression, optional-dependency loading, 23-prompt model integration and full-split evaluation are pending.** The new task must receive identical inputs/responses and match every instruction/prompt strict/loose Boolean, all four numerators/denominators and metric values within absolute error ≤1e-12. Require zero omissions, unhandled exceptions and unresolved mismatches. Eight intended exceptions are not successful scoring.
+Original English/Ko judgment differences and execution behavior are verified. **New Lighteval-Ko parity, existing English/French regression, optional-dependency loading, 23-prompt model integration and full-split evaluation are pending.** The new task must receive identical inputs/responses and match every instruction/prompt strict/loose Boolean, all four numerators/denominators and metric values within absolute error ≤1e-12. Require zero omissions, unhandled exceptions and unresolved mismatches. The 8 expected Ko exceptions and 2 expected English exceptions are not successful scoring for their respective evaluators.
 
 Dependencies are source/input integrity → baseline reproduction → Ko expectation confirmation → identical-response comparison with the new task → English/French, object-isolation and dependency regressions → 23-prompt model integration → all 342 prompts/481 instructions. Work is complete through Ko expectation confirmation. No commits, pushes, issue comments or attachment publication were performed.
 

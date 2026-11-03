@@ -4,7 +4,8 @@ import unittest
 
 from case_utils import (ROOT, baseline_run, input_hashes, instruction_index, read_json,
                         validate_case, validate_cases, validate_source_row)
-from compare import metric_counts, verify_phase, verify_record, verify_reproduction
+from compare import (metric_counts, verify_phase, verify_record, verify_reproduction,
+                     verify_support_cases, verify_support_record)
 
 
 class AuditTests(unittest.TestCase):
@@ -14,6 +15,10 @@ class AuditTests(unittest.TestCase):
         cls.inputs = {c["case_id"]: c for c in cls.cases}
         cls.results = {r["case_id"]: r for r in read_json(ROOT / "ko_results.json")["results"]}
         cls.rows = {r["key"]: r for r in read_json(ROOT / "source_rows.json")}
+        cls.support_cases = read_json(ROOT / "support_cases.json")
+        cls.support_inputs = {c["case_id"]: c for c in cls.support_cases}
+        cls.support_runs = {side: read_json(ROOT / ("support_" + side + "_results.json")) for side in ["original", "ko"]}
+        cls.support_results = {side: {r["case_id"]: r for r in run["results"]} for side, run in cls.support_runs.items()}
 
     def test_repeated_id_requires_index(self):
         ids = ["keywords:frequency", "keywords:frequency"]
@@ -151,6 +156,95 @@ class AuditTests(unittest.TestCase):
         record["baseline_reproduction"] = {"input_contract": "archived_language_specific", "result": {}}
         with self.assertRaisesRegex(AssertionError, "new case"):
             verify_reproduction(case, record, {})
+
+    def test_all_english_support_results_cannot_be_replaced_by_exceptions(self):
+        broken = copy.deepcopy(self.support_runs)
+        for result in broken["original"]["results"]:
+            for kind in ["strict", "loose"]:
+                result["full"][kind] = {"error": {"type": "UnexpectedSupportError"}}
+        with self.assertRaisesRegex(AssertionError, "scoring error|exception"):
+            verify_support_cases(self.support_cases, broken)
+
+    def test_support_normal_return_cannot_become_exception(self):
+        for side in ["original", "ko"]:
+            for case in self.support_cases:
+                if "error_type" in case["expected_" + side]:
+                    continue
+                for kind in ["strict", "loose"]:
+                    for stage in ["full", "isolated"]:
+                        with self.subTest(side=side, case=case["case_id"], kind=kind, stage=stage):
+                            result = copy.deepcopy(self.support_results[side][case["case_id"]])
+                            out = result["full"][kind] if stage == "full" else result["isolated_targets"][0][kind]
+                            out.clear()
+                            out["error"] = {"type": "UnexpectedSupportError"}
+                            with self.assertRaisesRegex(AssertionError, "scoring error"):
+                                verify_support_record(case, result, side)
+
+    def test_support_expected_exception_cannot_be_normal_or_another_type(self):
+        for side in ["original", "ko"]:
+            for case in self.support_cases:
+                if "error_type" not in case["expected_" + side]:
+                    continue
+                for kind in ["strict", "loose"]:
+                    for stage in ["full", "isolated"]:
+                        for substitute in [{"instruction_results": [False], "prompt_result": False}, {"error": {"type": "UnexpectedSupportError"}}]:
+                            with self.subTest(side=side, case=case["case_id"], kind=kind, stage=stage, substitute=substitute):
+                                result = copy.deepcopy(self.support_results[side][case["case_id"]])
+                                out = result["full"][kind] if stage == "full" else result["isolated_targets"][0][kind]
+                                out.clear()
+                                out.update(copy.deepcopy(substitute))
+                                with self.assertRaisesRegex(AssertionError, "exception not preserved"):
+                                    verify_support_record(case, result, side)
+
+    def test_support_boolean_corruption_cannot_hide_in_a_consistent_trace(self):
+        name = "support_letter_a"
+        for side in ["original", "ko"]:
+            for kind in ["strict", "loose"]:
+                for stage in ["full", "isolated"]:
+                    with self.subTest(side=side, kind=kind, stage=stage):
+                        case = self.support_inputs[name]
+                        result = copy.deepcopy(self.support_results[side][name])
+                        out = result["full"][kind] if stage == "full" else result["isolated_targets"][0][kind]
+                        self.assertEqual(out["instruction_results"], [False])
+                        out["instruction_results"] = [True]
+                        out["prompt_result"] = True
+                        out["checker_call_trace"][-1]["result"] = True
+                        # A coherent trace alone must not replace the source oracle.
+                        with self.assertRaisesRegex(AssertionError, "oracle mismatch"):
+                            verify_support_record(case, result, side)
+
+    def test_support_requires_independent_oracles_for_both_references(self):
+        name = "support_keyword_absent"
+        for side in ["original", "ko"]:
+            case = copy.deepcopy(self.support_inputs[name])
+            case.pop("expected_" + side)
+            with self.subTest(side=side), self.assertRaisesRegex(AssertionError, "Missing support oracle"):
+                verify_support_record(case, self.support_results[side][name], side)
+        case = copy.deepcopy(self.support_inputs[name])
+        case["expected_original"] = copy.deepcopy(case["expected_ko"])
+        case["expected_original"]["source_revision"] = case["source_revisions"]["harness"]
+        with self.assertRaisesRegex(AssertionError, "exception not preserved"):
+            verify_support_record(case, self.support_results["original"][name], "original")
+
+    def test_support_missing_or_reordered_english_results_are_rejected(self):
+        for change in ["missing", "reordered"]:
+            broken = copy.deepcopy(self.support_runs)
+            if change == "missing":
+                broken["original"]["results"].pop()
+            else:
+                broken["original"]["results"].reverse()
+            with self.subTest(change=change), self.assertRaisesRegex(AssertionError, "Missing/reordered original"):
+                verify_support_cases(self.support_cases, broken)
+
+    def test_support_expected_flags_and_prompt_must_be_booleans(self):
+        name = "support_filter_null"
+        for side in ["original", "ko"]:
+            for kind in ["strict", "loose"]:
+                for field in ["full", "prompt"]:
+                    case = copy.deepcopy(self.support_inputs[name])
+                    case["expected_" + side][field][kind] = [1] if field == "full" else 1
+                    with self.subTest(side=side, kind=kind, field=field), self.assertRaises(AssertionError):
+                        verify_support_record(case, self.support_results[side][name], side)
 
 
 if __name__ == "__main__":

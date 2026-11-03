@@ -8,6 +8,8 @@
     "command": [
       "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/.venv/bin/python",
       "teams/team-c-ifeval-ko/evidence/checker-audit/run_original.py",
+      "--suite",
+      "support",
       "--source-root",
       "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit"
     ],
@@ -60,7 +62,7 @@
       "ko/ifeval_ko/utils.py": "d65b40fd09b96babfa55ce14d024cf17244a9b29a4e0f041ab7adeaad897c12a",
       "ko/data/train-00000-of-00001.parquet": "91e0efeef3ea81191e48ce358ebb30d399abdfadc58cbc42e943281820038fa0"
     },
-    "cases_sha256": "da1d84a6ba1d9b9d23c97d7e2cd294031bc81800ecb445c65fca3e9afe9bb557",
+    "cases_sha256": "b8ed66a1d0168b7b5008294ffff6a1b9a25cbcb6bc03f4874408d6bc46d23c39",
     "runtime_sha256": "a270ab060d45d7e4b7ebff9ab0c0c0294fbe9ebd24bed7c8dbb99950ed729104",
     "runner_sha256": "447ad266cede89f12b7bbd8e0fbaa272881ead0e492f3111975334c636b9cad4",
     "random_seed": 0,

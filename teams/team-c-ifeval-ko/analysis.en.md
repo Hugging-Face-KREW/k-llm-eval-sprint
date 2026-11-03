@@ -421,8 +421,8 @@ The directly compared references are the [English evaluator](https://github.com/
 | --- | --- | --- |
 | Experiment | 156 cases × original English/Ko | Identical Ko input comparison; all individual Ko judgments match predeclared expectations; input reproduction verified |
 | Normal paths, boundaries, diagnostics | 21 types/25 paths, 13 N−1/N/N+1 boundary families, four repeated-ID combinations | Dedicated pass/fail judgments, observed counts and loose recovery through line deletion, etc. |
-| Compatibility/error contracts | 18 auxiliary inputs × original English/Ko | 10 normal Ko returns and 8 expected exceptions; exceptions are not successful scoring |
-| Verification tools | 18 tests | Detect incorrect indexes, hashes, duplicates, aggregation and missing/tampered reproduction evidence, among other errors |
+| Compatibility/error contracts | 18 auxiliary inputs × original English/Ko | Ko: 10 normal returns/8 expected exceptions; English: 16/2. Each reference has its own oracle; exceptions are not successful scoring |
+| Verification tools | 25 tests | Detect incorrect indexes, hashes, duplicates, aggregation and missing/tampered reproduction evidence, among other errors |
 | Existing Lighteval English/French regression | Before/after new implementation | **Not run**; reference comparison does not replace it |
 | 23-prompt integration | Registered new task versus original Ko | **Input coverage counted for 23 prompts/40 instructions; model integration not run** |
 | New Lighteval-Ko parity | Individual judgments and four metrics | **Not run or measured** |
@@ -431,13 +431,13 @@ The directly compared references are the [English evaluator](https://github.com/
 
 #### **9.3.3. Attachment scope and reproduction requirements**
 
-The attachment contains inputs, code, raw results, revisions and environment metadata for the **156-case experiment**. Results are in section 9.3.4 and `evidence/checker-audit/`. The 86 baseline inputs and expected-result provenance are also traceable. Complete console logs and source materials for earlier auxiliary experiments are excluded. A table in the supplementary document does not imply that all original execution artifacts for that experiment are attached.
+`evidence/checker-audit/` preserves inputs, code, raw results, revisions and environment metadata for the **156-case experiment**. Issue drafts are outside the scope of these materials. Results are in section 9.3.4 and `evidence/checker-audit/`. The 86 baseline inputs and expected-result provenance are also traceable. Complete console logs and source materials for earlier auxiliary experiments are excluded. A table in the supplementary document does not imply that all original execution artifacts for that experiment are attached.
 
 The [evidence README](evidence/checker-audit/README.en.md) explains restoration and reproduction. Virtual environments, caches and downloaded sources are excluded. The [environment record](evidence/analysis-details.en.md#reference-environment) covers the earlier environment and source-preservation checks. Section 9.3.4 records the 156-case results. `evidence/sample-coverage/` counts input coverage of the 23-prompt model integration proposal; it is distinct from regression case counts.
 
 #### **9.3.4. Dedicated stored-response regression and reference results**
 
-The **156-case experiment** ran locally on 2026-11-03, loading original English/Ko evaluators through full-package imports. It uses 116 unchanged data conditions, 2 in-memory overrides and 38 synthetic inputs, with 247 full-evaluation instruction occurrences. Eighteen auxiliary compatibility/error inputs were also checked: 10 return normally and 8 raise expected reference exceptions. Exception inputs are excluded from normal scoring denominators. These aggregates are not model benchmark scores.
+The **156-case experiment** ran locally on 2026-11-03, loading original English/Ko evaluators through full-package imports. It uses 116 unchanged data conditions, 2 in-memory overrides and 38 synthetic inputs, with 247 full-evaluation instruction occurrences. The 18 auxiliary compatibility/error inputs give 10 normal returns/8 expected exceptions in Ko and 16/2 in English. These are input-case counts, identical in strict and loose; normal returns include F judgments. Exception inputs are excluded from normal scoring denominators. These aggregates are not model benchmark scores.
 
 | Verification | Actual result |
 | --- | --- |
@@ -449,7 +449,7 @@ The **156-case experiment** ran locally on 2026-11-03, loading original English/
 | Repeated ID | Both index/kwargs alignments and all four Boolean combinations confirmed for 1203 |
 | Individual judgments | All 156 Ko results match predeclared expectations; full/isolated target judgments agree; zero unhandled exceptions or unresolved mismatches |
 | Engine behavior | Actual traces confirm eight candidates, empty-candidate exclusion, OR/AND, NFC, `if v`, phase order and checker construction; uneven instruction aggregation also checked |
-| Verification tools | All 18 tests pass, covering indexes, duplicates, source mutation, hashes, candidates, aggregation, exceptions, etc. |
+| Verification tools | All 25 tests pass, covering indexes, duplicates, source mutation, hashes, candidates, aggregation, exceptions and tampered support results on both sides. |
 
 | Stored-response aggregate | English evaluator | Ko evaluator |
 | --- | --- | --- |
@@ -458,17 +458,19 @@ The **156-case experiment** ran locally on 2026-11-03, loading original English/
 | Prompt loose | 66/156 | 79/156 |
 | Instruction loose | 129/247 | 142/247 |
 
+On 2026-11-04, the 18 auxiliary cases were rerun with both pinned reference evaluators. Full/isolated strict/loose judgments or exception types were checked against predeclared `expected_original` and `expected_ko` separately. Original checker, NFC and exception differences were preserved; results match the stored observations. The main 156 stored results were revalidated without rerunning the full main suite or generating model responses.
+
 These are aggregates over diagnostic stored responses. The 25 paths count checks selected by normal kwargs, not prompts or all code branches. Previously incidental conditions were promoted to explicit targets only after their indexes and isolated judgments were checked. For 1268, 136 and 3073, strict failure recovers under loose evaluation, so both expectations are stored.
 
-Adding 1954 and 240 to the 23-prompt proposal gives 25 collected prompts/42 instructions. Including baseline prompts gives 32 source prompts/55 instructions. **The model integration selection remains 23 prompts/40 instructions.** We preserve `peace` in 1203, `predatory` in 2142, `<6` in 1268, 600 words in 3538 and the `first_word` normalization asymmetry. Auxiliary inputs cover the four registered types absent from the data and an unregistered checker. Eight expected-exception inputs, including `capital_word_frequency` AttributeError cases, are not successful scoring.
+Adding 1954 and 240 to the 23-prompt proposal gives 25 collected prompts/42 instructions. Including baseline prompts gives 32 source prompts/55 instructions. **The model integration selection remains 23 prompts/40 instructions.** We preserve `peace` in 1203, `predatory` in 2142, `<6` in 1268, 600 words in 3538 and the `first_word` normalization asymmetry. Auxiliary inputs cover the four registered types absent from the data and an unregistered checker. The 8 expected-exception Ko inputs, including `capital_word_frequency` AttributeError cases, and 2 expected-exception English inputs are excluded from successful scoring for their respective evaluators.
 
-Review/reproduction materials: [guide](evidence/checker-audit/README.en.md), [English/Ko comparison](evidence/checker-audit/results.en.md), [inputs/expectations](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [source prompts](evidence/checker-audit/source_rows.en.md). An [English draft](evidence/checker-audit/issue-1463.md) and local ZIP are prepared for a later attachment to [issue #1463](https://github.com/huggingface/lighteval/issues/1463). They have not been posted.
+Review/reproduction materials: [guide](evidence/checker-audit/README.en.md), [English/Ko comparison](evidence/checker-audit/results.en.md), [inputs/expectations](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [source prompts](evidence/checker-audit/source_rows.en.md). A local ZIP of the experiment materials can be generated with `package_results.py` when needed. Issue drafting and remote publication are outside this change.
 
 **Not run:** parity for the newly registered Lighteval-Ko task; before/after regression, metric-object isolation and optional-dependency loading for existing English/French paths; 23-prompt model integration; full-split model evaluation. Source/frame validation of references does not establish new-task parity.
 
 ### **9.4. Handoff to implementation and further validation**
 
-[design.en.md](design.en.md) specifies architecture, input/output contracts, tests, generation settings and open decisions. Integration and full evaluation follow team confirmation of the model, environment and integration selection, currently 23 proposed prompts. [issue-draft.md](issue-draft.md) is the upstream proposal, separate from data-error reports to dataset authors.
+[design.en.md](design.en.md) specifies architecture, input/output contracts, tests, generation settings and open decisions. Integration and full evaluation follow team confirmation of the model, environment and integration selection, currently 23 proposed prompts. Upstream proposals and data-error reports to dataset authors are handled separately. Their drafts are not included in these materials.
 
 ---
 

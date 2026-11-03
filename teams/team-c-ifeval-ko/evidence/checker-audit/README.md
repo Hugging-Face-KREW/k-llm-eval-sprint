@@ -4,7 +4,7 @@
 
 **156건의 실험**에 사용한 입력·코드·재현 근거·채점 결과를 이 폴더에 모았다. [비교표](results.md)와 [results.json](results.json)에서 영어·Ko 판정과 집계를 확인할 수 있다. 별도 실험 패키지 없이 이 폴더에서 입력 생성부터 결과 검증·첨부 자료 생성까지 수행한다.
 
-실험은 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건으로 구성되며, full 평가에서 검사한 instruction은 247개다. 보조 호환성·오류 입력 18건도 같은 실행에서 검사한다. 이 중 10건은 정상 반환하고 8건은 예상한 예외가 발생한다. 보조 입력은 주 실험의 지표 분모에 넣지 않는다. 모델 생성·새 Lighteval-Ko 동등성·기존 Lighteval 영어/French 회귀는 미수행이다.
+실험은 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건으로 구성되며, full 평가에서 검사한 instruction은 247개다. 보조 호환성·오류 입력 18건도 같은 실행에서 검사한다. Ko에서는 정상 반환 10건·예상 예외 8건이고, 영어에서는 정상 반환 16건·예상 예외 2건이다. 입력 18건 기준으로 strict·loose 각각 같은 건수이며, 정상 반환에는 F 판정도 포함한다. 보조 입력은 주 실험의 지표 분모에 넣지 않는다. 모델 생성·새 Lighteval-Ko 동등성·기존 Lighteval 영어/French 회귀는 미수행이다.
 
 ## 파일 안내
 
@@ -16,7 +16,7 @@
 | 검증 범위·경계 | [coverage.json](coverage.json), [manifest.json](manifest.json) |
 | 원본 문항 | [source_rows.json](source_rows.json), [source_rows.md](source_rows.md): 원본 32문항·55개 instruction의 전체 prompt·순서·kwargs |
 | 기준 자료 | [baseline.json](baseline.json): 기대값 추적용 기준 입력·영어/Ko 저장 판정·환경. 현재 실험 결과를 다시 생성할 때 덮어쓰지 않음 |
-| 보조 입력 | [support_cases.json](support_cases.json), [support_original_results.json](support_original_results.json), [support_ko_results.json](support_ko_results.json) |
+| 보조 입력·양쪽 기대값 | [support_cases.json](support_cases.json), [support_original_results.json](support_original_results.json), [support_ko_results.json](support_ko_results.json) |
 | 입력 생성·실행 | [build_cases.py](build_cases.py), [run_original.py](run_original.py), [run_ko.py](run_ko.py), [run_audit.py](run_audit.py), [audit_runtime.py](audit_runtime.py) |
 | 비교·테스트·첨부 | [compare.py](compare.py), [test_audit.py](test_audit.py), [package_results.py](package_results.py) |
 | 출처·복원·의존성 | [provenance.json](provenance.json), [fetch_sources.py](fetch_sources.py), [requirements.lock.txt](requirements.lock.txt), [nltk_resources.json](nltk_resources.json) |
@@ -77,11 +77,13 @@ sha256sum --check SHA256SUMS
 
 기대값은 평가 실행 전에 선언하고 관측값으로 덮어쓰지 않는다. 기준 자료는 저장된 입력의 LF 해시와 기대값의 입력 해시를 대조한다. 실제 JSON 바이트 해시와 LF 해시를 구별해 checkout의 CRLF 변환을 검사한다. `build_cases.py`는 고정 데이터의 전체 prompt·instruction 순서·kwargs를 보존하고, 반복 ID는 `instruction_index`로 식별한다.
 
+보조 입력의 `expected_original`·`expected_ko`는 각 고정 원본 코드와 seed 0에 근거해 사전 선언한다. 양쪽 full·isolated의 strict·loose Boolean·문항 판정 또는 예외 유형을 각각 검사한다. 원본 checker·NFC·예외 동작의 차이를 유지하며, 관측 결과로 기대값을 덮어쓰지 않는다. 검증 도구 테스트 25개에는 영어 보조 결과 전체를 예외로 바꾸는 변조, 개별 Boolean·예외 유형 변경, 결과 누락·순서 변경을 검출하는 검사가 포함된다.
+
 ## 첨부 범위
 
-실험의 입력·원시 결과·비교표·코드·문서·출처 정보와 기대값 추적에 필요한 `baseline.json`을 포함한다. source·가상환경·cache·모델·개인 설정·`context.md`는 제외했다. `package_results.py`가 검증 후 `attachments/ifeval-ko-regression.zip`과 `.sha256`을 만든다. 압축을 푼 최상위 디렉터리에서 `sha256sum --check SHA256SUMS`로 검사할 수 있다.
+실험의 입력·원시 결과·비교표·코드·문서·출처 정보와 기대값 추적에 필요한 `baseline.json`을 포함한다. source·가상환경·cache·모델·개인 설정·`context.md`·이슈 초안은 제외한다. `package_results.py`가 검증 후 `attachments/ifeval-ko-regression.zip`과 `.sha256`을 만든다. 압축을 푼 최상위 디렉터리에서 `sha256sum --check SHA256SUMS`로 검사할 수 있다.
 
-[이슈 첨부 초안](issue-1463.ko.md)과 ZIP은 같은 실험 결과로 생성한다. 로컬에 준비했으며 원격 게시·커밋·푸시는 하지 않았다.
+ZIP은 필요할 때 생성하는 실험 자료 묶음이다. 이슈 초안 작성과 원격 게시는 별도 범위이며, 이 폴더의 실험 재현에 해당 초안은 필요하지 않다.
 
 ## 확장 고정 응답 회귀 (2026-11-03)
 
@@ -89,6 +91,6 @@ sha256sum --check SHA256SUMS
 
 13개 개수 조건의 N−1/N/N+1, 1203의 두 index가 만드는 네 Boolean 조합, strict 실패가 loose 통과로 바뀌는 사례를 검사했다. 기준 자료의 객체·입력·판정도 확인했다. `if v` 필터, NFC 적용 위치, 후보 8개의 순서·중복·빈 후보 제외, instruction별 OR·문항별 AND, strict 전체→loose 전체와 단계별 새 객체, 문항별 instruction 수가 다른 집계를 검증했다.
 
-비교표의 `(EN,Ko)`와 경계 표의 `(strict,loose)`는 서로 다른 순서다. 원본의 번역·단위 불일치, 문자열 정규화 비대칭과 내부 예외 처리 결과를 그대로 유지했다. 예외가 예상되는 보조 입력 8건은 정상 채점 성공으로 세지 않는다.
+비교표의 `(EN,Ko)`와 경계 표의 `(strict,loose)`는 서로 다른 순서다. 원본의 번역·단위 불일치, 문자열 정규화 비대칭과 내부 예외 처리 결과를 그대로 유지했다. Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다.
 
 새 Ko task에는 같은 입력·응답을 전달해 개별·문항 strict/loose 판정 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12, 누락·미처리 예외·미해결 불일치 0을 요구한다. 모델 통합 선정안은 23문항·40개 instruction으로 유지한다. 새 task 검증, 기존 Lighteval 영어/French 회귀·객체 격리·optional dependency 로딩, 모델 통합·전체 split 평가는 미수행이다.

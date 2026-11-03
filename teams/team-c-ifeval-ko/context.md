@@ -495,3 +495,25 @@ Lighteval 이식에도 그대로 반영할 수 있습니다.
 - 기존 156건 입력·응답·양쪽 원시 판정·기준 자료·원본 revision·모든 실험 집계는 작업 시작 시점과 동일하다. 전체 평가기/모델은 재실행하지 않았다. 저장 결과 검증과 검증 도구 테스트 18개가 통과했다.
 - 최신 ZIP은 56파일·SHA256 `61f8f04bbeeba7c352e5b0c2de425242084a0a89b2ce021a7c7e01c6f18b5e05`. 새 압축 해제본에서 checksum → 문항 선정 문서 재생성 → 실험 문서 재생성/검증/18개 테스트/재포장 → checksum 검사를 통과했고 22문서가 현재 파일과 byte 단위로 동일하다. 로그 `.cache/bilingual-final-reproduction.json`, 완료 감사 `.cache/translation-completion-audit.json`.
 - HEAD·범위 밖 파일 불변, staged 변경 0건. 커밋·푸시·원격 작성 없음. 새 Lighteval-Ko 동등성과 모델 평가는 계속 미수행이다.
+
+
+### 이슈 초안 제외 범위 반영 완료
+
+- 사용자는 `issue-1463.md`·`issue-1463.ko.md`·`issue-draft.ko.md`를 담당 범위가 아니므로 푸시하지 않는다고 명시했다. 해당 3개 로컬 파일은 수정·삭제하지 않고 보존했다. 이슈 초안 전체를 공개 실험 문서의 필수 자료·링크·자동 생성·첨부 ZIP 범위에서 제외했다.
+- analysis/design/팀 README/실험 README/생성 결과의 한·영 양쪽에서 초안 준비·제공·첨부 완료 표현과 로컬 초안 링크를 제거했다. 이슈 작성·원격 게시는 별도 범위로 설명하고, 실제 실험 파일과 선택적 로컬 ZIP 생성 방법으로 연결했다. 기존 영어 `issue-draft.md`는 미포함 파일 링크와 첨부 표현만 실험 결과·출처 링크로 바꿨다.
+- `compare.py`의 issue-1463 양쪽 언어 자동 생성을 제거하고 `report_i18n.py`의 미사용 이슈 번역을 정리했다. `package_results.py`는 이슈 초안 4파일을 ZIP/언어별 문서 검사 목록에서 제외하고 ZIP 유입도 검사한다. 공개 실험 문서는 9쌍·18문서이며 본문 링크 224개 유효, 끊어진 링크·불필요한 언어 전환 0개다.
+- 사용자가 이전 작업을 커밋하여 현재 HEAD가 `54a9fa53ac8f716fb79eec716db90ec1fd5bbd70`임을 확인했다. 이번 작업 시작 파일 해시·HEAD를 `.cache/issue-scope-baseline.json`과 `.cache/active-worktree-baseline.json`에 기록하고 현재 작업 기준으로 범위 밖 파일·HEAD 보존을 검사했다. 이전 source/기준 판정의 고정 검사는 유지했다.
+- 검증 도구 테스트 18개 통과. 초안이 없는 ZIP 압축 해제본에서 checksum → 보고서 재생성·검증·18개 테스트·재포장 → checksum 검사가 성공했고 초안 파일이 다시 생성되지 않았다. 입력·원시 판정·실험 집계·문서 제목은 그대로다. 전체 평가기나 모델은 재실행하지 않았다.
+- ZIP은 52파일·SHA256 `fb586736297eb5349cd5cd779a5c1916be9d23e08809a133d3f28f215dd2173c`. 재현 로그 `.cache/issue-scope-final-reproduction.json`, 완료 감사 `.cache/issue-scope-completion-audit.json`. 커밋·푸시·원격 작성 없으며 staged 변경 0건이다.
+
+
+### 영어 보조 기대값 누락·평가기별 건수 설명 보완 완료 (2026-11-04)
+
+- 사용자 승인: 리뷰의 두 P2를 보완한다. 추가 지시로 영어/Ko checker·NFC·예외 처리에서 생기는 차이는 그대로 유지해야 함을 확인했다. 원본 code/data 수정이나 판정 일치는 목표가 아니다. 커밋·푸시·원격 작성 금지는 유지한다.
+- `build_cases.py`는 보조 18건 모두에 영어의 `expected_original`을 명시적으로 사전 선언하며, Ko 기대값을 기본 복사하지 않는다. 영어 source revision과 seed 0 근거를 기록했다. 기존 보조 입력은 해당 필드만 추가됐고 Ko 기대값·prompt·kwargs·응답·해시는 그대로다. manifest schema는 3이며 양쪽 oracle 필수임을 표시했다.
+- `compare.py`의 `verify_support_record`/`verify_support_cases`가 양쪽 full·isolated의 strict·loose Boolean·문항 AND·trace 또는 예상 예외 유형, 입력/해시/순서를 검사한다. summary의 모호한 정상10·예외8 필드를 `support_outcomes_by_evaluator`로 교체해 양쪽 단계별로 기록한다. Ko는 10/8, 영어는 16/2이며 F도 정상 반환에 포함한다. 보조 18건은 본156 지표 분모에서 계속 제외한다.
+- 원본 고정 영어/Ko 보조18건을 full-package로 각각 재실행했다. 양쪽 모든 원시 결과 행(판정·예외·호출 기록 포함)이 작업 전과 정확히 동일하다. 본156건은 저장 결과를 재검증했으며 입력·양쪽 원시 파일·네 지표·양방향 판정 쌍·21종/25경로/13경계군이 모두 그대로다. 원본 checker·utility·NFC·예외 동작은 전혀 수정하지 않았다.
+- 검증 도구 테스트는 기존18+추가7=25개 통과. 전체 영어 보조 결과를 예외로 바꾸기, full/isolated 각 단계의 정상→예외·예외→정상/다른유형·Boolean과trace 동시변조·기대값누락/Ko복사·결과누락/재정렬·비Boolean 기대값을 검사한다. 전체 `verify()`에도 영어18건 모두를 메모리에서 예상 밖 예외로 바꾸어 전달했고 검증이 거부됨을 확인했다. 원시 결과 파일은 변조하지 않았다.
+- analysis/design/실험README/생성report의 양쪽 언어판에 평가기별 건수·입력 기준·독립기대값·원본차이보존·25개 테스트를 반영했다. 기존 제목은 보존했다. 과거17/42/언어별합성23의 재현 자료 제한과 새 Ko task/모델평가 미수행 상태는 유지한다.
+- 최신 ZIP은 52파일·SHA256 `9eccbae292342ec4957b7787c6c80cb1ec7fa40d95ed7db927c34bc6c7f0ae59`. 압축 해제본에서 checksum → builder → 영어 보조18 → Ko 보조18 → 검증/25테스트/재포장 → checksum이 모두 통과했다. 입력·생성문서·결과행·summary가 현재 자료와 같고 이슈 초안은 생성/첨부되지 않는다. 로그 `.cache/support-oracle-reproduction.json`, 변조 거부 증거 `.cache/support-oracle-mutation-check.json`, 완료 감사 `.cache/support-oracle-completion-audit.json`.
+- 현재 HEAD 불변, staged 변경0, 범위 밖 파일 불변. 로컬 이슈 초안4파일은 이번에 수정하지 않았다. 커밋·푸시·원격 작성 없음. 새 Lighteval-Ko나 모델 평가 완료로 표현하지 않는다.

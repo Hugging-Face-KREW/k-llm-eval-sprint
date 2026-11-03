@@ -20,18 +20,17 @@ AUDIT_FILES = [
     "fetch_sources.py", "provenance.json", "requirements.lock.txt", "nltk_resources.json", "baseline.json",
     "cases.json", "support_cases.json", "source_rows.json", "source_rows.md", "manifest.json",
     "original_results.json", "ko_results.json", "support_original_results.json", "support_ko_results.json",
-    "results.json", "results.md", "results.en.md", "source_rows.en.md", "coverage.json", "issue-1463.md", "issue-1463.ko.md", "validation.json", "test_output.txt",
+    "results.json", "results.md", "results.en.md", "source_rows.en.md", "coverage.json", "validation.json", "test_output.txt",
 ]
-TEAM_FILES = ["README.md", "README.en.md", "analysis.md", "analysis.en.md", "design.md", "design.en.md", "issue-draft.md", "issue-draft.ko.md", "evidence/analysis-details.md", "evidence/analysis-details.en.md"]
+TEAM_FILES = ["README.md", "README.en.md", "analysis.md", "analysis.en.md", "design.md", "design.en.md", "evidence/analysis-details.md", "evidence/analysis-details.en.md"]
 SAMPLE_FILES = ["README.md", "README.en.md", "audit_coverage.py", "coverage_i18n.py", "selection.json", "coverage.json", "coverage.md", "coverage.en.md"]
+EXCLUDED_DRAFT_NAMES = {"issue-draft.md", "issue-draft.ko.md", "issue-1463.md", "issue-1463.ko.md"}
 DOCUMENT_PAIRS = [
     ("README.md", "README.en.md"), ("analysis.md", "analysis.en.md"), ("design.md", "design.en.md"),
-    ("issue-draft.ko.md", "issue-draft.md"),
     ("evidence/analysis-details.md", "evidence/analysis-details.en.md"),
     ("evidence/checker-audit/README.md", "evidence/checker-audit/README.en.md"),
     ("evidence/checker-audit/results.md", "evidence/checker-audit/results.en.md"),
     ("evidence/checker-audit/source_rows.md", "evidence/checker-audit/source_rows.en.md"),
-    ("evidence/checker-audit/issue-1463.ko.md", "evidence/checker-audit/issue-1463.md"),
     ("evidence/sample-coverage/README.md", "evidence/sample-coverage/README.en.md"),
     ("evidence/sample-coverage/coverage.md", "evidence/sample-coverage/coverage.en.md"),
 ]
@@ -103,11 +102,15 @@ def verify_document_structure():
         result["files"][name] = {"existing_headings_preserved": True, "top_level_sections_preserved": True,
                                  "added_headings": additions, "file_sha256": sha((TEAM / name).read_bytes())}
     if baseline:
+        # A new local task may start after the user has committed earlier work.
+        active_path = ROOT / ".cache/active-worktree-baseline.json"
+        worktree_baseline = read_json(active_path) if active_path.exists() else baseline
         # The follow-up request authorizes bilingual documentation and its renderers.
-        allowed_names = TEAM_FILES + ["context.md"] + ["evidence/sample-coverage/" + n for n in SAMPLE_FILES if n != "selection.json"]
+        # Fix links in the existing English proposal without bundling issue drafts.
+        allowed_names = TEAM_FILES + ["context.md", "issue-draft.md"] + ["evidence/sample-coverage/" + n for n in SAMPLE_FILES if n != "selection.json"]
         allowed = {str((TEAM / n).relative_to(REPO)) for n in allowed_names}
         audit_prefix = str(ROOT.relative_to(REPO)) + "/"
-        for relative, digest in baseline["files"].items():
+        for relative, digest in worktree_baseline["files"].items():
             if relative in allowed or relative.startswith(audit_prefix):
                 continue
             require((REPO / relative).is_file() and sha((REPO / relative).read_bytes()) == digest, f"File outside authorized scope changed: {relative}")
@@ -118,7 +121,7 @@ def verify_document_structure():
         original_results = str((ROOT / "results.json").relative_to(REPO))
         require(sha((ROOT / "baseline.json").read_bytes()) == baseline["files"][original_results], "Archived baseline bundle was modified")
         current_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip()
-        require(current_head == baseline["head"], "HEAD changed during local task")
+        require(current_head == worktree_baseline["head"], "HEAD changed during local task")
         require(not subprocess.check_output(["git", "diff", "--cached", "--name-only"], cwd=REPO, text=True).strip(), "Unexpected staged changes")
         result["local_worktree_checks"] = {"head_unchanged": current_head, "index_has_no_staged_changes": True,
                                             "outside_scope_files_unchanged": True, "baseline_bundle_bytes_unchanged": True}
@@ -164,8 +167,8 @@ def main():
             archive.writestr(info, data)
     with zipfile.ZipFile(destination) as archive:
         require(archive.testzip() is None, "ZIP CRC failure")
-        forbidden = {"context.md", ".cache", ".venv", "sources", "__pycache__", ".git"}
-        require(not any(set(Path(name).parts) & forbidden for name in archive.namelist()), "Private or downloaded artifacts entered ZIP")
+        forbidden = {"context.md", ".cache", ".venv", "sources", "__pycache__", ".git"} | EXCLUDED_DRAFT_NAMES
+        require(not any(set(Path(name).parts) & forbidden for name in archive.namelist()), "Private, downloaded or excluded issue-draft files entered ZIP")
         for line in archive.read("SHA256SUMS").decode().splitlines():
             digest, name = line.split("  ", 1)
             require(sha(archive.read(name)) == digest, f"ZIP checksum mismatch: {name}")
@@ -173,7 +176,7 @@ def main():
     (attachments / "ifeval-ko-regression.zip.sha256").write_text(f"{digest}  {destination.name}\n", encoding="utf-8")
     write_json(attachments / "manifest.json", {"zip": destination.name, "bytes": destination.stat().st_size,
                                                "sha256": digest, "files": len(files), "crc_and_all_checksums_verified": True,
-                                               "private_context_excluded": True, "remote_publication_performed": False})
+                                               "private_context_excluded": True, "issue_drafts_excluded": True, "remote_publication_performed": False})
     print(json.dumps({"archive": str(destination), "bytes": destination.stat().st_size, "sha256": digest,
                       "files": len(files), "tests": validation["unit_tests_run"], "existing_document_headings_preserved": True}, ensure_ascii=False, indent=2))
 

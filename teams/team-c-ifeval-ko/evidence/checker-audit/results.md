@@ -8,7 +8,7 @@
 
 156건의 실험은 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건으로 구성된다. 사용한 원본 문항은 32개이며 instruction 55개를 포함한다. full 평가에서 검사한 instruction은 247개다.
 
-보조 호환성·오류 입력 18건 중 10건은 정상 반환하고, 8건은 원본에서 예상한 예외가 발생한다. 보조 입력은 주 실험의 경로별 검증과 지표에 포함하지 않는다. 모델 생성, 새 Lighteval-Ko 검증과 기존 Lighteval 영어/French 회귀는 미수행이다.
+보조 호환성·오류 입력 18건은 영어·Ko 각각의 독립 기대값으로 검증한다. 정상 반환·예상 예외 건수는 6절에서 평가기·단계별로 제시하며, 정상 반환에는 F 판정도 포함한다. 보조 입력은 주 실험의 경로별 검증과 지표에 포함하지 않는다. 모델 생성, 새 Lighteval-Ko 검증과 기존 Lighteval 영어/French 회귀는 미수행이다.
 
 ## 1. 판정 방향 — (영어, Ko)
 
@@ -249,7 +249,16 @@ key 1203의 두 빈도 조건은 index 0이 전쟁≥8, index 1이 peace≥10이
 
 ## 6. 별도 호환성·오류 입력
 
-| case | checker | 영어 strict/loose | Ko strict/loose | 분류 |
+아래 건수는 단계별 입력 18건 기준이다. 양쪽 평가기의 차이를 유지하며, 각자의 사전 기대값과 full·isolated의 Boolean·문항 판정 또는 예외 유형을 대조한다. `expected_original`과 `expected_ko`는 관측값으로 덮어쓰지 않는다.
+
+| 평가기 | 단계 | 정상 반환 | 예상 예외 | 입력 수 |
+| --- | --- | ---: | ---: | ---: |
+| 영어 | strict | 16 | 2 | 18 |
+| 영어 | loose | 16 | 2 | 18 |
+| Ko | strict | 10 | 8 | 18 |
+| Ko | loose | 10 | 8 | 18 |
+
+| case | checker | 영어 strict/loose | Ko strict/loose | Ko 기준 분류 |
 | --- | --- | --- | --- | --- |
 | `support_filter_null` | `length_constraints:number_words` | T / [T] / T; T / [T] / T | T / [T] / T; T / [T] / T | 합성 호환성 |
 | `support_filter_zero` | `length_constraints:number_words` | T / [T] / T; T / [T] / T | T / [T] / T; T / [T] / T | 합성 호환성 |
@@ -278,4 +287,4 @@ key 1203의 두 빈도 조건은 index 0이 전쟁≥8, index 1이 peace≥10이
 
 A안은 원본 Ko의 채점 규칙을 가깝게 보존하고 기존 영어/French 코드의 변경 범위를 줄이기 위한 선택이다. B안도 같은 정책과 객체 생성 방식을 보존하면 구현할 수 있다.
 
-재현 명령은 README에 정리했다. [이슈 첨부 초안](issue-1463.ko.md)은 로컬에 준비했으며 아직 게시하지 않았다. [manifest](manifest.json), [검증 범위](coverage.json), [원본 문항 목록](source_rows.md)을 함께 확인할 수 있다.
+재현 명령은 [README](README.md)에 정리했다. [manifest](manifest.json), [검증 범위](coverage.json), [원본 문항 목록](source_rows.md)을 함께 확인할 수 있다. 이슈 초안 작성과 원격 게시는 별도 범위다.

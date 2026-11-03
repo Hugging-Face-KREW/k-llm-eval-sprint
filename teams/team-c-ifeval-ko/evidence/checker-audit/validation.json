@@ -1,10 +1,10 @@
 {
-  "validated_at_utc": "2026-11-03T13:26:51.201533+00:00",
-  "unit_tests_run": 18,
+  "validated_at_utc": "2026-11-03T15:09:46.284122+00:00",
+  "unit_tests_run": 25,
   "unit_test_failures": 0,
-  "verifier_sha256": "ceff1c07b5a5abfbe984742bfa846299a9d800666d86504b0304e94abec77df6",
-  "test_code_sha256": "81232f10433537b2fc785c7eeac8b41213018f7fc45e07bdc9ef449bbad48bd6",
-  "packager_sha256": "a8bb0752205eeace9a60a6080fe9d2915572251c4bdb64e031325f4f388af807",
+  "verifier_sha256": "2109ff1dd7cc1a6ec344edf4ead54e4899ab5feb37dd53416f524755c0c260f2",
+  "test_code_sha256": "2db143dad2231fcd12ac8e9af44eb62af21ebe691c8e4be89bdf4715194ba0ec",
+  "packager_sha256": "770ef4700d2449418e145073e5b743027505ee241825fbe7b7e8e611295d5771",
   "summary": {
     "normal_cases": 156,
     "support_cases": 18,
@@ -121,8 +121,28 @@
       "reproduction_integrated": true
     },
     "baseline_cases_hash_verified": true,
-    "support_normal_returns": 10,
-    "support_expected_exceptions": 8,
+    "support_outcomes_by_evaluator": {
+      "original": {
+        "strict": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        },
+        "loose": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        }
+      },
+      "ko": {
+        "strict": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        },
+        "loose": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        }
+      }
+    },
     "normal_unhandled_exceptions": 0,
     "unresolved_ko_oracle_mismatches": 0,
     "identical_input_hashes_verified": 156,
@@ -217,7 +237,7 @@
           "#### **6.1.1. 동일 Ko 입력에서 확인한 양방향 판정 경계**",
           "#### **9.3.4. 전용 고정 응답 확장 구현과 원본 실행 결과**"
         ],
-        "file_sha256": "8a370dd96444b8bb2dc8d80394efc6b83e3a6e0a954d503bd66b9e0c8fc9e49f"
+        "file_sha256": "4c4bf6176925917d0a477463bf974156c6d3d114c442aba354a64d902290090c"
       },
       "design.md": {
         "existing_headings_preserved": true,
@@ -229,21 +249,21 @@
           "#### 6.2.3. 원본 엔진 계약과 별도 오류 검증",
           "#### 6.2.4. 재현 자료와 이후 이식 완료 기준"
         ],
-        "file_sha256": "6bceb72ecdf188d7dc0a5ca3c7fbeecbb06b1310419e4b9245342bed25ca3ef2"
+        "file_sha256": "cf3ec473edb76e9e8525cab2a0d3affcc0917d5a1e56f571d450af9b8a33f76c"
       }
     },
     "local_worktree_checks": {
-      "head_unchanged": "aa16a077bb4a06bf2bc92c285e4c9c98509fc240",
+      "head_unchanged": "54a9fa53ac8f716fb79eec716db90ec1fd5bbd70",
       "index_has_no_staged_changes": true,
       "outside_scope_files_unchanged": true,
       "baseline_bundle_bytes_unchanged": true
     }
   },
   "document_languages": {
-    "pairs": 11,
-    "documents": 22,
-    "top_language_links": 22,
-    "local_body_links_checked": 253,
+    "pairs": 9,
+    "documents": 18,
+    "top_language_links": 18,
+    "local_body_links_checked": 224,
     "broken_links": 0,
     "unexpected_language_switches": 0
   },

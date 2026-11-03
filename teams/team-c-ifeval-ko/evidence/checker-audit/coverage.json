@@ -115,8 +115,28 @@
       "reproduction_integrated": true
     },
     "baseline_cases_hash_verified": true,
-    "support_normal_returns": 10,
-    "support_expected_exceptions": 8,
+    "support_outcomes_by_evaluator": {
+      "original": {
+        "strict": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        },
+        "loose": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        }
+      },
+      "ko": {
+        "strict": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        },
+        "loose": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        }
+      }
+    },
     "normal_unhandled_exceptions": 0,
     "unresolved_ko_oracle_mismatches": 0,
     "identical_input_hashes_verified": 156,

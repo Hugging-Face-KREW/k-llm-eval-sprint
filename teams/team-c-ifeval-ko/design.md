@@ -53,7 +53,7 @@
 
 A안은 Ko의 단어·문장 계산, 고정 문구, NFC 적용 위치를 원본과 가깝게 유지한다. strict 전체 검사 후 loose 전체 검사를 수행하는 순서와 단계마다 checker를 새로 만드는 동작도 보존한다. 원본과 직접 대조하기 쉽고 기존 영어/French 코드의 변경 범위를 줄일 수 있어 초기 구현으로 권고한다. 다만 채점 루프 일부를 중복 관리해야 한다. B안도 같은 정책과 객체 생성 방식을 보존하면 구현할 수 있으며, 최종 구조는 메인테이너와 협의한다.
 
-이식의 합격 기준은 **새 Ko task와 원본 Ko의 판정 일치**다. 영어가 통과하고 Ko가 실패하는 응답은 새 Ko task에서도 실패해야 한다. prompt와 kwargs의 번역 불일치, `first_word` 정규화의 비대칭은 원본대로 유지한다. [이슈 #1463용 첨부 초안](evidence/checker-audit/issue-1463.ko.md)은 로컬에 준비했으며 아직 게시하지 않았다.
+이식의 합격 기준은 **새 Ko task와 원본 Ko의 판정 일치**다. 영어가 통과하고 Ko가 실패하는 응답은 새 Ko task에서도 실패해야 한다. prompt와 kwargs의 번역 불일치, `first_word` 정규화의 비대칭은 원본대로 유지한다. 이번 자료는 실험 근거와 이식 계획을 제공한다. 업스트림 이슈 초안 작성과 게시는 별도 범위다.
 
 ### 1.4. B안: 공통 엔진과 Ko 정책
 
@@ -327,7 +327,7 @@ checker 단독 진단과 실제 등록 task 경로를 모두 확인한다. 합�
 | 검사 항목 | 구성·분모 | 확인 결과 |
 | --- | --- | --- |
 | 고정 응답 검사 | 156건: 실제 데이터 조건 116·메모리 override 2·합성 입력 38. 전체 문항 평가(full)에서 instruction 247개 검사 | Ko의 사전 기대값과 full·isolated의 strict·loose 판정 일치, 미처리 예외 0건 |
-| 보조 호환성·오류 검사 | 합성 입력 18건: 정상 반환 10·의도한 외부 예외 8 | 예외는 정상 채점 성공이나 21종 검증 범위에 포함하지 않음 |
+| 보조 호환성·오류 검사 | 합성 입력 18건: Ko 정상 반환 10·예상 예외 8, 영어 정상 반환 16·예상 예외 2. strict·loose 각각 동일 | 양쪽의 독립 기대값으로 검사. 정상 반환에는 F도 포함하며, 예외는 정상 채점 성공이나 21종 검증 범위에 포함하지 않음 |
 | 기준 입력 재현 | 실험에 포함된 기준 자료 86건을 양쪽 평가기로 검사 | 양쪽 모두 저장된 결과 행 86/86 일치. 각 case의 `baseline_reproduction`과 비교표에서 확인 가능 |
 | 원본 문항 수집 | 선정안 23문항에 마지막 문단 검사 1954와 러시아어 요구 문항 240 추가 | 수집한 25문항에 instruction 42개 포함. 기준 자료의 문항까지 합치면 원본 32문항·55개 instruction 사용 |
 
@@ -357,7 +357,9 @@ strict 실패가 loose에서 통과로 바뀔 수 있으므로 두 기대값을 
 
 `None`, `0`, 빈 문자열·리스트에 대한 필터 동작과 한국어·러시아어 요구 조건, 빈 응답·짧은 숫자 입력을 검사했다. `123`은 원본이 `LangDetectException`을 내부 처리하므로 언어 조건에서 T/T이고, 빈 응답은 F/F다. 문항별 instruction 수가 다른 `[[T,T,T],[F]]`의 집계는 문항 점수 0.5, instruction 점수 0.75임을 확인했다. registry에 등록됐지만 데이터에서 사용하지 않는 4종도 검사했다. `capital_word_frequency`의 `instructions_util.nltk` 참조에서 발생하는 AttributeError와 미등록 `key_sentences`의 KeyError는 오류 처리 동작의 확인 결과로 기록했다.
 
-[검증 도구 테스트](evidence/checker-audit/test_audit.py) 18개가 통과했다. 잘못된 index, 중복 `case_id`, 원본 조건 변경, 오래된 해시, 반복 ID의 병합, 단계 간 객체 공유, 후보 중복 제거, 잘못된 후보 결합과 예외를 정상 점수로 바꾸는 오류 등을 검출한다. 같은 key에 여러 응답이 있어도 응답 해시와 캐시 키를 구분해 저장한다.
+보조 입력에는 `expected_original`·`expected_ko`를 각각 사전 선언한다. `compare.py`는 양쪽 full·isolated의 strict·loose Boolean·문항 판정 또는 예외 유형을 검사하고, 관측 결과를 기대값으로 사용하지 않는다. 정상 반환은 영어 16·Ko 10, 예상 예외는 영어 2·Ko 8이다. 양쪽 판정의 차이를 유지하며 영어의 키워드 누락 시 F 반환과 Ko의 ValueError, 영어 대문자 단어 빈도의 Boolean과 Ko의 AttributeError도 각자의 기대 동작으로 검사한다.
+
+[검증 도구 테스트](evidence/checker-audit/test_audit.py) 25개가 통과했다. 잘못된 index, 중복 `case_id`, 원본 조건 변경, 오래된 해시, 반복 ID의 병합, 단계 간 객체 공유, 후보 중복 제거, 잘못된 후보 결합과 예외를 정상 점수로 바꾸는 오류 등을 검출한다. 같은 key에 여러 응답이 있어도 응답 해시와 캐시 키를 구분해 저장한다.
 
 #### 6.2.4. 재현 자료와 이후 이식 완료 기준
 
@@ -366,9 +368,9 @@ strict 실패가 loose에서 통과로 바뀔 수 있으므로 두 기대값을 
 | 재현 명령·검증 범위 | [README.md](evidence/checker-audit/README.md) |
 | 입력·사전 기대값·전체 비교 | [cases.json](evidence/checker-audit/cases.json), [results.md](evidence/checker-audit/results.md), [results.json](evidence/checker-audit/results.json) |
 | 출처·해시·환경·검증 범위 | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
-| 이슈 첨부 자료 | [초안](evidence/checker-audit/issue-1463.ko.md), `evidence/checker-audit/attachments/ifeval-ko-regression.zip` |
+| 선택적 로컬 ZIP | `package_results.py`로 `evidence/checker-audit/attachments/ifeval-ko-regression.zip` 생성. 이슈 초안은 제외 |
 
-원본 영어·Ko 평가기의 판정 차이와 실행 동작을 확인했다. **새 Lighteval-Ko의 동등성, 기존 Lighteval 영어/French 회귀, optional dependency 로딩, 23문항 모델 통합과 전체 split 평가는 미수행**이다. 새 task에는 같은 입력·응답을 전달해 instruction별·문항별 strict·loose Boolean 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12를 요구한다. 누락·미처리 예외·미해결 불일치는 없어야 한다. 의도한 예외 8건은 정상 채점 성공으로 세지 않는다.
+원본 영어·Ko 평가기의 판정 차이와 실행 동작을 확인했다. **새 Lighteval-Ko의 동등성, 기존 Lighteval 영어/French 회귀, optional dependency 로딩, 23문항 모델 통합과 전체 split 평가는 미수행**이다. 새 task에는 같은 입력·응답을 전달해 instruction별·문항별 strict·loose Boolean 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12를 요구한다. 누락·미처리 예외·미해결 불일치는 없어야 한다. Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다.
 
 실행 순서는 원본·입력 무결성 확인 → 기준 입력 재현 → Ko 기대값 확인 → 새 task의 동일 응답 비교 → 기존 영어/French·객체 격리·의존성 회귀 → 23문항 모델 통합 → 전체 342문항·481개 instruction 평가다. 현재는 Ko 기대값 확인까지 완료했으며, 커밋·푸시·이슈 댓글이나 첨부 자료 게시는 하지 않았다.
 

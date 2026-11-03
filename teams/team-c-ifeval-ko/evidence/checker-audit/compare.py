@@ -95,6 +95,69 @@ def verify_record(case, result, side):
             require(result["full"][kind]["instruction_results"] == case["expected_ko"]["full"][kind], f"Predeclared Ko oracle mismatch: {label}/{kind}")
 
 
+def verify_support_record(case, result, side):
+    """Check each reference's own normal/error oracle, including isolated runs."""
+    label = side + "/" + case["case_id"]
+    expected = case.get("expected_" + side)
+    require(isinstance(expected, dict) and expected.get("basis"), f"Missing support oracle: {label}")
+    if side == "original":
+        require(expected.get("source_revision") == case["source_revisions"]["harness"], f"Wrong English oracle revision: {label}")
+    ids, kwargs = case["ko_instruction_id_list"], ko_input(case)["kwargs"]
+    require(len(ids) == 1, f"Support fixture must isolate one instruction: {label}")
+    if "error_type" in expected:
+        require(isinstance(expected["error_type"], str) and expected["error_type"], f"Invalid exception oracle: {label}")
+        require("full" not in expected and "prompt" not in expected, f"Conflicting support oracle: {label}")
+    else:
+        require(isinstance(expected.get("full"), dict) and isinstance(expected.get("prompt"), dict), f"Invalid normal oracle: {label}")
+        for kind in KINDS:
+            flags = expected["full"].get(kind)
+            require(isinstance(flags, list) and len(flags) == len(ids) and all(type(v) is bool for v in flags), f"Expected support flags must be Boolean lists: {label}/{kind}")
+            require(type(expected["prompt"].get(kind)) is bool and expected["prompt"][kind] == all(flags), f"Expected support prompt AND mismatch: {label}/{kind}")
+    require(result["case_id"] == case["case_id"] and result["evaluated_input"] == ko_input(case), f"Support input mismatch: {label}")
+    for key in ["input_sha256", "response_sha256", "cache_key"]:
+        require(result[key] == case["hashes"][key], f"Stale support {key}: {label}")
+    require(result["phase_schedule"] == ["full.strict", "full.loose", "isolated[0].strict", "isolated[0].loose"], f"Support phase order changed: {label}")
+    response = case["test_response_ko"]
+    if side == "ko":
+        response = unicodedata.normalize("NFC", response)
+
+    def check_phase(out, kind, stage):
+        phase_label = label + "/" + stage + "/" + kind
+        if "error_type" in expected:
+            error = out.get("error")
+            require(isinstance(error, dict) and error.get("type") == expected["error_type"], f"Expected {side} support exception not preserved: {phase_label}")
+            require("instruction_results" not in out and "prompt_result" not in out, f"Exception counted as normal scoring: {phase_label}")
+        else:
+            verify_phase(out, ids, kwargs, response, kind, phase_label)
+            require(out["instruction_results"] == expected["full"][kind], f"Support {side} oracle mismatch: {phase_label}")
+            require(type(out["prompt_result"]) is bool and out["prompt_result"] == expected["prompt"][kind], f"Support {side} prompt oracle mismatch: {phase_label}")
+
+    targets = result["isolated_targets"]
+    require(len(targets) == 1 and targets[0]["instruction_index"] == 0 and targets[0]["instruction_id"] == ids[0], f"Support isolated target mismatch: {label}")
+    for kind in KINDS:
+        check_phase(result["full"][kind], kind, "full")
+        check_phase(targets[0][kind], kind, "isolated[0]")
+        require(result["isolated"][kind] == targets[0][kind], f"Support isolated alias mismatch: {label}/{kind}")
+
+
+def verify_support_cases(cases, runs):
+    validate_cases(cases, require_expected=False)
+    require(len(cases) == 18 and set(runs) == {"original", "ko"}, "Incomplete support suite")
+    outcomes = {}
+    for side, run in runs.items():
+        require([r["case_id"] for r in run["results"]] == [c["case_id"] for c in cases], f"Missing/reordered {side} support input")
+        for case, result in zip(cases, run["results"]):
+            verify_support_record(case, result, side)
+        outcomes[side] = {
+            kind: {
+                "normal_returns": sum("error" not in r["full"][kind] for r in run["results"]),
+                "expected_exceptions": sum("error" in r["full"][kind] for r in run["results"]),
+            }
+            for kind in KINDS
+        }
+    return outcomes
+
+
 def metric_counts(results):
     counts = {}
     for kind in KINDS:
@@ -164,6 +227,7 @@ def legacy_coverage(cases, results):
 def verify(output_dir, source_root):
     provenance, verified_sources = verify_sources(source_root)
     manifest = read_json(output_dir / "manifest.json")
+    require(manifest["schema_version"] == 3 and manifest["support_oracle_sides"] == ["original", "ko"], "Missing independent support oracles")
     require(manifest["builder_sha256"] == sha((ROOT / "build_cases.py").read_bytes()), "Stale builder manifest")
     require(verify_baseline() == manifest["baseline_cases_lf_sha256"], "Baseline input hash mismatch")
     for field, path in [("cases_sha256", output_dir / "cases.json"), ("support_cases_sha256", output_dir / "support_cases.json"),
@@ -257,17 +321,14 @@ def verify(output_dir, source_root):
     support_rows = []
     for side, run in supports.items():
         verify_environment(run, output_dir / "support_cases.json", side, provenance)
-        require([r["case_id"] for r in run["results"]] == [c["case_id"] for c in support_cases], "Missing support input")
+    for c in support_cases:
+        require(c["source_revisions"] == {name: info["revision"] for name, info in provenance.items()}, "Support source revision mismatch")
+    support_outcomes = verify_support_cases(support_cases, supports)
     for c, a, b in zip(support_cases, supports["original"]["results"], supports["ko"]["results"]):
-        require(a["evaluated_input"] == b["evaluated_input"] == ko_input(c), "Support inputs differ")
-        for kind in KINDS:
-            if "error_type" in c["expected_ko"]:
-                require(b["full"][kind].get("error", {}).get("type") == c["expected_ko"]["error_type"], "Expected Ko exception not preserved")
-            else:
-                require("error" not in b["full"][kind] and b["full"][kind]["instruction_results"] == c["expected_ko"]["full"][kind], "Support oracle mismatch")
-                verify_phase(b["full"][kind], c["ko_instruction_id_list"], ko_input(c)["kwargs"], unicodedata.normalize("NFC", c["test_response_ko"]), kind, c["case_id"])
         support_rows.append({"case": c, "original": a, "ko": b})
-    require(sum("error_type" in c["expected_ko"] for c in support_cases) == 8, "Wrong exception-contract count")
+    for side, expected_counts in [("original", {"normal_returns": 16, "expected_exceptions": 2}),
+                                  ("ko", {"normal_returns": 10, "expected_exceptions": 8})]:
+        require(all(support_outcomes[side][kind] == expected_counts for kind in KINDS), f"Wrong {side} support outcome counts")
 
     # Validate the actual original aggregation utility on uneven instructions.
     from audit_runtime import load_modules
@@ -297,7 +358,7 @@ def verify(output_dir, source_root):
                "metrics": metrics, "baseline_reproduction": reproduction,
                "experiment": {"retained_cases": 86, "added_cases": 70, "normal_cases": 156, "reproduction_integrated": True},
                "baseline_cases_hash_verified": True,
-               "support_normal_returns": 10, "support_expected_exceptions": 8,
+               "support_outcomes_by_evaluator": support_outcomes,
                "normal_unhandled_exceptions": 0, "unresolved_ko_oracle_mismatches": 0,
                "identical_input_hashes_verified": 156, "comparison_scope": "English reference vs Ko reference; identical Ko input",
                "model_inference_run": False, "new_lighteval_ko_parity_run": False,
@@ -317,7 +378,7 @@ def decision(result, kind, index):
 
 
 def report(result, output_dir):
-    from report_i18n import catalog_en, issue_ko, report_en, with_language_link
+    from report_i18n import catalog_en, report_en, with_language_link
 
     summary = result["summary"]
     write_json(output_dir / "results.json", result)
@@ -326,7 +387,7 @@ def report(result, output_dir):
              "원본 영어·Ko 평가기에 **동일한 Ko prompt·instruction 순서·실제 적용 kwargs·응답**을 전달했다. 회귀 검증의 기준은 원본 Ko의 기대값과 일치하는지 여부다.", "",
              "기존 `case/full/isolated/diagnostics` 형식을 유지했다. `original_*` 필드는 원래 영어 문항의 출처를 보존하며, 실제 비교 입력은 각 원시 결과의 `evaluated_input`에 기록했다.", "",
              "156건의 실험은 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건으로 구성된다. 사용한 원본 문항은 32개이며 instruction 55개를 포함한다. full 평가에서 검사한 instruction은 247개다.", "",
-             "보조 호환성·오류 입력 18건 중 10건은 정상 반환하고, 8건은 원본에서 예상한 예외가 발생한다. 보조 입력은 주 실험의 경로별 검증과 지표에 포함하지 않는다. 모델 생성, 새 Lighteval-Ko 검증과 기존 Lighteval 영어/French 회귀는 미수행이다.", "",
+             "보조 호환성·오류 입력 18건은 영어·Ko 각각의 독립 기대값으로 검증한다. 정상 반환·예상 예외 건수는 6절에서 평가기·단계별로 제시하며, 정상 반환에는 F 판정도 포함한다. 보조 입력은 주 실험의 경로별 검증과 지표에 포함하지 않는다. 모델 생성, 새 Lighteval-Ko 검증과 기존 Lighteval 영어/French 회귀는 미수행이다.", "",
              "## 1. 판정 방향 — (영어, Ko)", "", "| 단계 | T,T | T,F | F,T | F,F | 분모 |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
     for kind in KINDS:
         counts = summary["primary_pairs_english_ko"][kind]
@@ -356,7 +417,14 @@ def report(result, output_dir):
         pairs = [pair(a["full"][k]["instruction_results"][i], b["full"][k]["instruction_results"][i]) for k in KINDS]
         composition = "기존·양쪽 재현 일치" if c["origin"] == "legacy_86" else "신규"
         lines.append(f"| {c['key']}:{i} | {c['checker']} | `{c['case_id']}` | " + " | ".join(cells + pairs + [c["scope"], composition]) + " |")
-    lines += ["", "## 6. 별도 호환성·오류 입력", "", "| case | checker | 영어 strict/loose | Ko strict/loose | 분류 |", "| --- | --- | --- | --- | --- |"]
+    lines += ["", "## 6. 별도 호환성·오류 입력", "",
+              "아래 건수는 단계별 입력 18건 기준이다. 양쪽 평가기의 차이를 유지하며, 각자의 사전 기대값과 full·isolated의 Boolean·문항 판정 또는 예외 유형을 대조한다. `expected_original`과 `expected_ko`는 관측값으로 덮어쓰지 않는다.", "",
+              "| 평가기 | 단계 | 정상 반환 | 예상 예외 | 입력 수 |", "| --- | --- | ---: | ---: | ---: |"]
+    for side, label in [("original", "영어"), ("ko", "Ko")]:
+        for kind in KINDS:
+            counts = summary["support_outcomes_by_evaluator"][side][kind]
+            lines.append(f"| {label} | {kind} | {counts['normal_returns']} | {counts['expected_exceptions']} | 18 |")
+    lines += ["", "| case | checker | 영어 strict/loose | Ko strict/loose | Ko 기준 분류 |", "| --- | --- | --- | --- | --- |"]
     for r in result["support"]:
         c = r["case"]
         vals = ["; ".join(decision(r[side], k, 0) for k in KINDS) for side in ["original","ko"]]
@@ -364,10 +432,9 @@ def report(result, output_dir):
     lines += ["", "## 7. 재현·이식 인계", "", "156건의 실험 결과에 입력 재현의 검증 근거를 포함했다. 기준 결과와의 일치 여부는 원시 결과의 `baseline_reproduction`과 `summary`에서 확인할 수 있다. 비교표는 동일 Ko 입력을 전달한 156건을 기준으로 집계한다.", "",
               "고정한 코드·데이터 21개 파일, 실제로 불러온 네 모듈, NLTK 자원과 입력·응답의 해시를 확인했다. 실행 단계·객체 생성·초기화·후보 처리 기록을 검사하고, instruction별 후보 OR·문항별 AND·단계별 새 객체·`if v` 필터·문항별 instruction 수가 다른 집계도 확인했다.", "",
               "A안은 원본 Ko의 채점 규칙을 가깝게 보존하고 기존 영어/French 코드의 변경 범위를 줄이기 위한 선택이다. B안도 같은 정책과 객체 생성 방식을 보존하면 구현할 수 있다.", "",
-              "재현 명령은 README에 정리했다. [영문 이슈 첨부 초안](issue-1463.md)은 로컬에 준비했으며 아직 게시하지 않았다. [manifest](manifest.json), [검증 범위](coverage.json), [원본 문항 목록](source_rows.md)을 함께 확인할 수 있다.", ""]
+              "재현 명령은 [README](README.md)에 정리했다. [manifest](manifest.json), [검증 범위](coverage.json), [원본 문항 목록](source_rows.md)을 함께 확인할 수 있다. 이슈 초안 작성과 원격 게시는 별도 범위다.", ""]
     (output_dir / "results.en.md").write_text("\n".join(with_language_link(report_en(lines), "results.md", "en")), encoding="utf-8")
-    korean_lines = [line.replace("[영문 이슈 첨부 초안](issue-1463.md)", "[이슈 첨부 초안](issue-1463.ko.md)") for line in lines]
-    (output_dir / "results.md").write_text("\n".join(with_language_link(korean_lines, "results.en.md", "ko")), encoding="utf-8")
+    (output_dir / "results.md").write_text("\n".join(with_language_link(lines, "results.en.md", "ko")), encoding="utf-8")
     ko_source = result["provenance"]["ko"]
     source_base = ko_source["repository"] + "/blob/" + ko_source["revision"] + "/"
     code_lines = {c["instruction_id"]: c["check_line"] for c in result["coverage"]}
@@ -381,44 +448,7 @@ def report(result, output_dir):
         catalog.append("")
     (output_dir / "source_rows.en.md").write_text("\n".join(with_language_link(catalog_en(catalog), "source_rows.md", "en")), encoding="utf-8")
     (output_dir / "source_rows.md").write_text("\n".join(with_language_link(catalog, "source_rows.en.md", "ko")), encoding="utf-8")
-    issue = ["# Local experiment attachment for huggingface/lighteval#1463", "",
-             "This draft summarizes a reference-evaluator experiment for https://github.com/huggingface/lighteval/issues/1463. It has not been posted. The new Lighteval-Ko task and model evaluation remain pending.", "",
-             "## Experiment", "",
-             "We conducted a **156-case experiment** and checked **18 auxiliary inputs** for compatibility and error handling. Of the 156 cases, 116 use unchanged dataset conditions, 2 use explicit in-memory overrides, and 38 are synthetic. Full evaluation checks 247 instruction occurrences across these responses. These figures describe test results, not model benchmark accuracy.", "",
-             "Both evaluators, at the pinned revisions, received the **same Ko prompt, ordered instruction IDs, effective kwargs and response**. Input and response hashes confirm this. The `original_*` fields in cases.json preserve the English source metadata; `evaluated_input` in each raw result records the Ko input used for the comparison.", "",
-             "Each of the 21 instruction IDs and 25 input partitions used by the dataset has an explicitly targeted response that passes both strict and loose checks and one that fails both. Thirteen count conditions have N−1/N/N+1 checks. The two frequency instructions in key 1203 are identified by index and tested with [T,T], [T,F], [F,T] and [F,F]. The 25 partitions describe normal kwargs paths, not all source-code branches.", "",
-             "## Same-input decision matrix", "", "Pairs below mean **(English, Ko)** for the primary target of each case.", "", "| Phase | T,T | T,F | F,T | F,F | Cases |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
-    for kind in KINDS:
-        counts = summary["primary_pairs_english_ko"][kind]
-        issue.append(f"| {kind} | " + " | ".join(str(counts.get(p,0)) for p in ["T,T","T,F","F,T","F,F"]) + " | 156 |")
-    issue += ["", "Representative results using identical responses:", "", "| Key / case | English strict/loose | Ko strict/loose | Observation |", "| --- | --- | --- | --- |"]
-    witnesses = [("markdown_quote_valid_highlights_349", "word counts 39 vs 40 at <40; blockquote marker contributes a Ko whitespace token"),
-                 ("comma_boundary_compact", "word counts 20 vs 18 at <20; compact comma-separated text"),
-                 ("markdown_star_balanced_136", "strict difference recovers in loose; instruction-wise candidate OR"),
-                 ("expanded_constrained_T", "Ko fixed response phrase is absent from the English options")]
-    by_id = {r["case"]["case_id"]: r for r in result["cases"]}
-    for name, observation in witnesses:
-        r = by_id[name];i=r["case"]["instruction_index"]
-        values = ["/".join(tf(r[side]["full"][k]["instruction_results"][i]) for k in KINDS) for side in ["original","ko"]]
-        issue.append(f"| {r['case']['key']} / `{name}` | {values[0]} | {values[1]} | {observation} |")
-    issue += ["", "## Interpretation and proposed implementation", "",
-              "These results support a separate `ifeval_ko` package and scorer for the initial port (option A). This keeps the Ko word and sentence utilities, fixed phrases and NFC handling close to the reference. It also preserves the order of running all strict checks before all loose checks, with fresh checker instances in each phase. The approach limits changes to the existing English and French paths, at the cost of duplicating a small scoring loop. Option B can also work if it preserves the same policies and checker lifecycle.", "",
-              "The port must **match the Ko reference**. If English passes a response and Ko fails it, the port must also fail it. We preserve the known prompt/kwargs mismatches in 1203, 2142, 1268 and 3538, as well as the `first_word` normalization asymmetry.", "",
-              "## Verification and limitations", "",
-              "- All 156 cases match the Ko expectations declared before execution, with no unhandled scoring exceptions or unresolved mismatches. Full and isolated evaluations agree for every specified target.",
-              "- Input reproduction is checked against the stored reference results and recorded with the raw results. The comparison table and metrics use identical Ko inputs throughout.",
-              "- Auxiliary inputs cover four registered instruction types absent from the dataset. Ko `capital_word_frequency` raises AttributeError because `instructions_util` has no `nltk` attribute; the unregistered `key_sentences` ID raises KeyError. Eight auxiliary inputs raise expected exceptions and are excluded from normal scoring.",
-              "- Traces from the original functions confirm candidate order and duplicates, exclusion of empty candidates, instruction-level OR and prompt-level AND, the original `if v` filter, and checker construction. The control with unequal instruction counts yields prompt accuracy 0.5 and instruction accuracy 0.75.",
-              "- Parity testing for the new Lighteval-Ko task, regression checks for the existing Lighteval English/French paths, 23-prompt model integration and full-split evaluation on 342 prompts remain pending.", "",
-              "## Pinned sources", ""]
-    for name, p in result["provenance"].items():
-        issue.append(f"- {name}: `{p['revision']}` — {p['repository']}")
-    issue += ["", "The English reference in this experiment is the pinned lm-evaluation-harness evaluator. Both evaluators ran through full-package imports after source-file hashes were verified. The Lighteval implementation was used as a design reference.", "",
-              "## Attachment contents and reproduction", "",
-              "The ZIP contains fixtures, predeclared Ko expectations, raw results and traces, comparison tables, provenance, checksums and reproduction scripts. Start with [README.en.md](README.en.md) and [results.en.md](results.en.md) in `team-c-ifeval-ko/evidence/checker-audit/`. Downloaded evaluator sources, dependencies and model weights are excluded; the README explains how to restore the required versions. Private context, caches and credentials are also excluded.", "",
-              "The ZIP and this note are ready for a later issue attachment. Relative links refer to files inside the archive.", ""]
-    (output_dir / "issue-1463.ko.md").write_text("\n".join(with_language_link(issue_ko(issue), "issue-1463.md", "ko")), encoding="utf-8")
-    (output_dir / "issue-1463.md").write_text("\n".join(with_language_link(issue, "issue-1463.ko.md", "en")), encoding="utf-8")
+
 
 
 def main():

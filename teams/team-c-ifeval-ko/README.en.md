@@ -21,8 +21,6 @@ Add your name as a new row in your first PR.
 - [Supplementary analysis](evidence/analysis-details.en.md)
 - [Experiment guide](evidence/checker-audit/README.en.md) and [156-case results](evidence/checker-audit/results.en.md)
 - [Prompt selection guide](evidence/sample-coverage/README.en.md) and [coverage tables](evidence/sample-coverage/coverage.en.md)
-- [Upstream proposal draft](issue-draft.md)
-- [Experiment attachment draft](evidence/checker-audit/issue-1463.md)
 
 ## Upstream links
 

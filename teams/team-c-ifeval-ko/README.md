@@ -21,8 +21,6 @@
 - [분석 보조 자료](evidence/analysis-details.md)
 - [실험 안내](evidence/checker-audit/README.md)와 [156건의 실험 결과](evidence/checker-audit/results.md)
 - [문항 선정 안내](evidence/sample-coverage/README.md)와 [집계표](evidence/sample-coverage/coverage.md)
-- [업스트림 제안 초안](issue-draft.ko.md)
-- [실험 첨부 초안](evidence/checker-audit/issue-1463.ko.md)
 
 ## 업스트림 링크
 

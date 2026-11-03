@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "scope": "original English evaluator vs original Ko evaluator on identical Ko inputs",
   "source_revisions": {
     "harness": "d6de81643928d653435c431bae19945d41d32520",
@@ -35,9 +35,9 @@
   "baseline_original_results_object_sha256": "6f6a9b1401a456abdb221bd73efdde7eaae8ee7d6fc4b8b4a229380c7b8eab44",
   "baseline_ko_results_object_sha256": "693c0bc3c751ff1b6f96b8caebcefa71fc4aaa6af0605ff6b976c78938df4179",
   "cases_sha256": "b1e7fd7efc639bb57f18e46356eeb04182bb43135c1801328fc2dcde629ffdcd",
-  "support_cases_sha256": "da1d84a6ba1d9b9d23c97d7e2cd294031bc81800ecb445c65fca3e9afe9bb557",
+  "support_cases_sha256": "b8ed66a1d0168b7b5008294ffff6a1b9a25cbcb6bc03f4874408d6bc46d23c39",
   "source_rows_sha256": "78556f581d5594a909d36c58498d531c88ec341f006d924ba58dcdf13256ac8e",
-  "builder_sha256": "bb91bdbcd1dcec01bddb9834b516c27731b9b6883b01af86a9c611b90a4f3a80",
+  "builder_sha256": "6512eca7d41d5fdfb9597cc2279b724cbea4934e715ea6de45c9510a3ec394bf",
   "normal_cases": 156,
   "support_cases": 18,
   "normal_scope_counts": {
@@ -52,6 +52,10 @@
     "selection_smoke": 1
   },
   "normal_full_instruction_occurrences": 247,
+  "support_oracle_sides": [
+    "original",
+    "ko"
+  ],
   "source_keys": [
     122,
     127,
