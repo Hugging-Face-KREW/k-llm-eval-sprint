@@ -6,3 +6,5 @@ __pycache__/
 *.egg-info/
 results.md
 dataset_checks.json
+!results.md
+attachments/

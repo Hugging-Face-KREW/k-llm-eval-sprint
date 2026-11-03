@@ -18,9 +18,11 @@ import re
 import sys
 import types
 import unicodedata
+from case_utils import instruction_index
 
 ROOT = Path(__file__).resolve().parent
-os.environ.setdefault("NLTK_DATA", str(ROOT / ".cache/nltk_data"))
+SOURCE_ROOT = Path(os.environ.get("IFEVAL_AUDIT_SOURCE_ROOT", str(ROOT))).resolve()
+os.environ.setdefault("NLTK_DATA", str(SOURCE_ROOT / ".cache/nltk_data"))
 os.environ.setdefault("HF_HOME", str(ROOT / ".cache/huggingface"))
 os.environ.setdefault("XDG_CACHE_HOME", str(ROOT / ".cache"))
 
@@ -31,7 +33,7 @@ def write_json(path, value):
 
 def location(obj):
     path = Path(inspect.getsourcefile(obj)).resolve()
-    return {"path": str(path.relative_to(ROOT)), "line": inspect.getsourcelines(obj)[1],
+    return {"path": str(path.relative_to(SOURCE_ROOT)), "line": inspect.getsourcelines(obj)[1],
             "function": obj.__qualname__}
 
 
@@ -43,17 +45,17 @@ def load_modules(side, mode):
         # Extending the existing package search path accomplishes that without
         # copying over, editing, or replacing any upstream Python source.
         if side == "ko":
-            lm_eval.tasks.__path__.append(str(ROOT / "sources/ko"))
+            lm_eval.tasks.__path__.append(str(SOURCE_ROOT / "sources/ko"))
     else:
         # Explicit fallback only: bypass top-level task-manager dependencies,
         # retaining the exact source modules and their original imports.
-        for name, path in [("lm_eval", ROOT / "sources/harness/lm_eval"),
-                           ("lm_eval.tasks", ROOT / "sources/harness/lm_eval/tasks")]:
+        for name, path in [("lm_eval", SOURCE_ROOT / "sources/harness/lm_eval"),
+                           ("lm_eval.tasks", SOURCE_ROOT / "sources/harness/lm_eval/tasks")]:
             package = types.ModuleType(name)
             package.__path__ = [str(path)]
             sys.modules[name] = package
         if side == "ko":
-            sys.modules["lm_eval.tasks"].__path__.append(str(ROOT / "sources/ko"))
+            sys.modules["lm_eval.tasks"].__path__.append(str(SOURCE_ROOT / "sources/ko"))
     prefix = "lm_eval.tasks.ifeval" if side == "original" else "lm_eval.tasks.ifeval_ko"
     return {name: importlib.import_module(prefix + "." + name)
             for name in ["utils", "instructions", "instructions_registry", "instructions_util"]}
@@ -130,7 +132,7 @@ def evaluate_case(modules, case, side):
     response = case["test_response_" + side]
     inp = utils.InputExample(key=case["key"] if case["key"] is not None else -1,
                              instruction_id_list=ids, prompt=prompt, kwargs=kwargs)
-    index = case.get("instruction_index", ids.index(iid))
+    index = instruction_index(ids, iid, case.get("instruction_index"))
     isolated = utils.InputExample(key=inp.key, instruction_id_list=[iid], prompt=prompt,
                                   kwargs=[kwargs[index]])
     random.seed(0)
@@ -181,41 +183,6 @@ def evaluate_case(modules, case, side):
 
 
 def main(side):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--cases", type=Path, default=ROOT / "cases.json")
-    parser.add_argument("--output", type=Path, default=ROOT / (side + "_results.json"))
-    parser.add_argument("--import-mode", choices=["full-package", "isolated-source"], default="full-package")
-    options = parser.parse_args()
-    modules = load_modules(side, options.import_mode)
-    cases = json.loads(options.cases.read_text(encoding="utf-8"))
-    results = []
-    for case in cases:
-        try:
-            results.append(evaluate_case(modules, case, side))
-        except Exception as error:
-            results.append({"case_id": case["case_id"], "error": type(error).__name__ + ": " + str(error)})
-    import nltk
-    nltk_path = Path(str(nltk.data.find("tokenizers/punkt_tab/english")))
-    metadata = {"side": side, "python": sys.version, "platform": platform.platform(),
-                "executable": sys.executable, "import_mode": options.import_mode,
-                "command": [sys.executable] + sys.argv,
-                "module_paths": {name: str(Path(m.__file__).relative_to(ROOT)) for name, m in modules.items()},
-                "module_sha256": {name: hashlib.sha256(Path(m.__file__).read_bytes()).hexdigest()
-                                  for name, m in modules.items()},
-                "evaluator_functions": {name: location(getattr(modules["utils"], name)) for name in
-                                        ["test_instruction_following_strict", "test_instruction_following_loose"]},
-                "package_versions": {name: importlib.metadata.version(name) for name in
-                                     ["nltk", "langdetect", "immutabledict", "packaging", "pyarrow"]},
-                "model_inference_run": False,
-                "cases_sha256": hashlib.sha256(options.cases.read_bytes()).hexdigest()}
-    metadata["nltk_resource_path"] = str(nltk_path)
-    metadata["nltk_resource_sha256"] = {
-        str(Path("tokenizers/punkt_tab/english") / p.name): hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in nltk_path.iterdir() if p.is_file()}
-    write_json(options.output, {"environment": metadata, "results": results})
-    errors = [r for r in results if "error" in r]
-    print(f"{side}: {len(results)} cases, {len(errors)} errors; {options.output}")
-    if errors:
-        for error in errors:
-            print(error)
-        raise SystemExit(1)
+    """Compatibility entry point for the single audit runner."""
+    from run_audit import main as run_main
+    return run_main(side)

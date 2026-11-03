@@ -1,194 +1,265 @@
-"""Construct controlled cases from pinned source rows; preserve original values."""
+"""Build the 156-case experiment and auxiliary inputs from pinned source rows."""
+import argparse
 import copy
+from collections import Counter
 import json
 from pathlib import Path
-import unicodedata
 
-ROOT = Path(__file__).resolve().parent
-original = {r["key"]: r for r in map(json.loads, (ROOT / "sources/original_dataset/ifeval_input_data.jsonl").read_text().splitlines())}
-ko = {r["key"]: r for r in json.loads((ROOT / "sources/ko/data/rows.json").read_text())}
-cases = []
-NFD = lambda value: unicodedata.normalize("NFD", value)
+from case_utils import (ROOT, baseline_cases, baseline_cases_hash, baseline_run, read_baseline, object_hash, input_hashes, instruction_index, partition, read_json,
+                        registry_names, sha, validate_cases, validate_source_row,
+                        verify_sources, write_json)
 
 
-def add(case_id, key, iid, response_original, response_ko=None, reason="", group="", classification="NEEDS_DISCUSSION",
-        patch=None, fixture=None):
-    if fixture is None:
-        rows = {"original": original[key], "ko": ko[key]}
-        scope = "dataset" if patch is None else "controlled_override"
-    else:
-        rows = {s: {"prompt": fixture["prompt"], "instruction_id_list": [iid], "kwargs": [fixture["kwargs"]]}
-                for s in ["original", "ko"]}
-        scope = "synthetic"
-    case = {"case_id": case_id, "key": key, "scope": scope, "checker": {
-        "length_constraints:number_words": "NumberOfWords", "length_constraints:number_sentences": "NumberOfSentences",
-        "keywords:frequency": "KeywordFrequencyChecker", "keywords:existence": "KeywordChecker",
-        "keywords:forbidden_words": "ForbiddenWords", "startend:end_checker": "EndChecker",
-        "combination:repeat_prompt": "RepeatPromptThenAnswer",
-        "length_constraints:nth_paragraph_first_word": "ParagraphFirstWordCheck"}[iid],
-        "instruction_id": iid, "group": group, "classification": classification,
-        "reason_for_test": reason, "test_response_original": response_original,
-        "test_response_ko": response_original if response_ko is None else response_ko}
-    for side, row in rows.items():
-        index = row["instruction_id_list"].index(iid)
-        case[side + "_prompt"] = row["prompt"]
-        case[side + "_instruction_id_list"] = row["instruction_id_list"]
-        case[side + "_all_kwargs"] = row["kwargs"]
-        case[side + "_kwargs"] = row["kwargs"][index]
-        if patch and side in patch:
-            effective = copy.deepcopy(row["kwargs"])
-            effective[index].update(patch[side])
-            case[side + "_eval_all_kwargs"] = effective
-    if patch:
-        case["runtime_override"] = patch
-    cases.append(case)
+KO_TEXT = "서비스의 신뢰성을 관리하는 업무입니다. 서비스 지표를 살피고 목표를 정하며 장애의 원인을 분석합니다."
+EN_TEXT = ("The reliability engineer monitors service quality and resolves operational incidents. "
+           "This response is written entirely in English.")
+RU_TEXT = ("Решётка представляет собой упорядоченную структуру из повторяющихся элементов. "
+           "Эти элементы соединяются между собой и образуют регулярный узор.")
 
 
-WORDS = "length_constraints:number_words"
-SENTENCES = "length_constraints:number_sentences"
-FREQ = "keywords:frequency"
-FORBIDDEN = "keywords:forbidden_words"
-EXIST = "keywords:existence"
+def words(n, token="평가"):
+    return " ".join([token] * n)
 
-add("robber_minimal", 3345, FREQ, "robber robber appears.", "강도 강도는 등장합니다.",
-    "한국어 prompt는 강도 2회를 요구하지만 데이터 kwargs는 robber. 다른 bullet 제약은 의도적으로 충족하지 않는다.", "alignment", "DATA")
-add("robber_full", 3345, FREQ, "* robber\n* robber", "* 강도\n* 강도",
-    "동일한 최소 반례를 두 bullet로 감싸 prompt-level 차이도 격리한다.", "alignment", "DATA")
-add("robber_keyword_override", 3345, FREQ, "* robber\n* robber", "* 강도\n* 강도",
-    "Ko keyword만 메모리에서 강도로 교체; 데이터 및 checker 원본 파일은 변경하지 않는다.", "alignment", "DATA",
-    patch={"ko": {"keyword": "강도"}})
 
-# Same-script probes isolate tokenization from translation and semantic content.
-for name, text in [("comma_compact", "사과,배,포도"), ("comma_spaced", "사과, 배, 포도"),
-                   ("heading_minimal", "## 결론\n한국어 평가가 필요합니다."),
-                   ("quote_minimal", "> 한국어 평가가 필요합니다."),
-                   ("star_minimal", "* 사과\n* 배\n* 포도"),
-                   ("dash_minimal", "- 사과\n- 배\n- 포도")]:
-    add(name, 3442, WORDS, text, reason="동일한 한국어 입력을 양쪽 evaluator에 전달. 실제 <20 조건에서는 count 차이가 판정 차이를 뜻하지 않음.", group="word_minimal",
-        classification="INTENTIONAL" if name.startswith("comma") else "NEEDS_DISCUSSION")
-    expected_counts = {"comma_compact": (3, 1), "comma_spaced": (3, 3),
-                       "heading_minimal": (4, 5), "quote_minimal": (3, 4),
-                       "star_minimal": (3, 6), "dash_minimal": (3, 6)}
-    expected = expected_counts[name]
-    cases[-1]["expected_observation"] = {
-        "original_word_count": expected[0], "ko_word_count": expected[1],
-        "status": "사전 예상; 실제 관측은 results.json의 diagnostics 및 evaluator 결과 참조"}
-    if name.startswith("comma"):
-        add(name + "_threshold2", None, WORDS, text, reason="최소 count 반례용 합성 <2 조건; 실제 key 3442의 kwargs가 아니다.",
-            group="word_synthetic", classification="INTENTIONAL", fixture={"prompt": "두 단어 미만으로 답하십시오.", "kwargs": {"num_words": 2, "relation": "less than"}})
+def sentences(n, multiline=False):
+    return ("\n" if multiline else " ").join(["평가합니다."] * n)
 
-# <20 with a real title; punctuation changes the effective count around threshold.
-for name, fruits in [("compact", "사과,배,포도"), ("spaced", "사과, 배, 포도")]:
-    text = "<<제목>> " + " ".join(["항목"] * 16) + " " + fruits
-    add("comma_boundary_" + name, 3442, WORDS, text, reason="실제 <20·제목 조건 유지. 영어 tokenizer count=20, Ko compact=18/spaced=20 여부를 실제 실행으로 확인.", group="word_boundary", classification="INTENTIONAL")
 
-for marker, name in [("##", "heading"), (">", "quote")]:
-    if name == "heading":
-        text = "## 결론\n" + " ".join(["평가"] * 98)
-    else:
-        text = "> " + " ".join(["평가"] * 99)
-    add("markdown_" + name + "_136", 136, WORDS, text,
-        reason="실제 <100 조건 경계. heading은 첫 줄 제거 가능, 단일 행 quote는 제거하면 빈 문자열. bullet 제약 실패와 별개로 word 결과를 확인.", group="markdown")
+class Builder:
+    def __init__(self, source_root):
+        import pyarrow.parquet as pq
+        self.provenance, self.verified = verify_sources(source_root)
+        source_root = Path(source_root)
+        self.rows = pq.read_table(source_root / "sources/ko/data/train-00000-of-00001.parquet").to_pylist()
+        self.ko = {r["key"]: r for r in self.rows}
+        self.original = {r["key"]: r for r in map(json.loads, (source_root / "sources/original_dataset/ifeval_input_data.jsonl").read_text().splitlines())}
+        self.checkers = registry_names(source_root / "sources/ko/ifeval_ko/instructions_registry.py")
+        self.legacy = baseline_cases()
+        stored = baseline_run("ko")
+        # Checkout newline conversion is recorded, never mistaken for changed JSON.
+        self.legacy_lf_hash = baseline_cases_hash(read_baseline())
+        if self.legacy_lf_hash != stored["environment"]["cases_sha256"]:
+            raise ValueError("Archived cases differ from the stored Ko oracle")
+        self.saved = {r["case_id"]: r for r in stored["results"]}
+        self.cases, self.support = [], []
+        for old in self.legacy:
+            case = copy.deepcopy(old)
+            case["instruction_index"] = instruction_index(case["ko_instruction_id_list"], case["instruction_id"])
+            case["targets"] = []
+            case["origin"] = "legacy_86"
+            result = self.saved[case["case_id"]]
+            self.finish(case, result["full"]["strict"]["instruction_results"], result["full"]["loose"]["instruction_results"], "archived_ko_results_not_current_execution")
+            self.target(case, case["instruction_index"])
+            self.cases.append(case)
+        self.by_name = {c["case_id"]: c for c in self.cases}
 
-for marker, name in [("*", "star"), ("-", "dash")]:
-    balanced = "\n".join(marker + " " + " ".join(["평가"] * 11) for _ in range(9))
-    add("markdown_" + name + "_balanced_136", 136, WORDS, balanced,
-        reason="9 bullet·99 lexical words. strict는 marker 영향, loose는 star 제거 또는 줄 제거가 영향을 줄 수 있음.", group="markdown")
-    lengths = [1, 14, 14, 14, 14, 14, 14, 13, 1]
-    uneven = "\n".join(marker + " " + " ".join(["평가"] * n) for n in lengths)
-    add("markdown_" + name + "_persistent_136", 136, WORDS, uneven,
-        reason="9 bullet·99 lexical words. 양 끝 줄은 각각 1 word라 삭제 후에도 Ko dash count가 <100으로 내려가지 않도록 통제.", group="markdown")
+    def finish(self, case, strict, loose, basis="predeclared_from_pinned_code_and_review"):
+        case["comparison_input"] = "identical_ko"
+        case["source_revisions"] = {name: entry["revision"] for name, entry in self.provenance.items()}
+        case["expected_ko"] = {"basis": basis,
+                               "full": {"strict": list(strict), "loose": list(loose)},
+                               "prompt": {"strict": all(strict), "loose": all(loose)}}
+        case["hashes"] = input_hashes(case)
 
-add("markdown_heading_blank_edges", 3442, WORDS,
-    "\n## <<제목>>\n" + " ".join(["평가"] * 18) + "\n",
-    reason="앞뒤 빈 줄을 가진 실제 <20·제목 출력: 첫/마지막 줄 삭제가 heading token 차이를 없애지 않는 대조군.", group="markdown")
+    def target(self, case, index, boundary=None):
+        iid = case["ko_instruction_id_list"][index]
+        existing = next((t for t in case["targets"] if t["instruction_index"] == index), None)
+        target = existing if existing is not None else {
+            "instruction_index": index, "instruction_id": iid,
+            "input_partition": partition(iid, case.get("ko_eval_all_kwargs", case["ko_all_kwargs"])[index]),
+        }
+        if boundary:
+            target["boundary"] = boundary
+        if existing is None:
+            case["targets"].append(target)
 
-for name, highlights in [("attached", "*사과* *배* *포도*"), ("separated", "* 사과 * * 배 * * 포도 *")]:
-    text = highlights + " " + " ".join(["평가"] * 36)
-    add("markdown_highlights_" + name + "_349", 349, WORDS, text,
-        reason="실제 <40·강조 3개 조건. 붙은 *와 공백으로 분리된 *의 count 차이 및 loose star 제거를 비교.", group="markdown")
-    if name == "separated":
-        cases[-1]["reason_for_test"] += " 공백으로 둘러싼 * 사과 *는 유효한 CommonMark italic이 아니므로 regex와 token 격리 control로만 해석한다."
-add("markdown_quote_valid_highlights_349", 349, WORDS,
-    "> *사과* *배* *포도* " + " ".join(["평가"] * 36),
-    reason="유효한 blockquote와 붙은 italic 3개. 실제 <40·강조 제약 모두 검사한다. 한 줄의 >가 39/40 count 차이를 만들고 loose star 제거 후에도 남는지 확인.", group="markdown")
+    def add(self, name, key, indices, response, strict, loose=None, group="input_partition", reason="", boundary=None):
+        loose = strict if loose is None else loose
+        iid = self.ko[key]["instruction_id_list"][indices[0]]
+        case = {"case_id": "expanded_" + name, "key": key, "scope": "dataset", "origin": "extension_70",
+                "instruction_id": iid, "instruction_index": indices[0], "checker": self.checkers[iid],
+                "group": group, "classification": "INTENTIONAL", "reason_for_test": reason or name,
+                "test_response_original": response, "test_response_ko": response, "targets": []}
+        for side, row in [("original", self.original[key]), ("ko", self.ko[key])]:
+            case[side + "_prompt"] = row["prompt"]
+            case[side + "_instruction_id_list"] = row["instruction_id_list"]
+            case[side + "_all_kwargs"] = copy.deepcopy(row["kwargs"])
+            case[side + "_kwargs"] = copy.deepcopy(row["kwargs"][indices[0]])
+        self.finish(case, strict, loose)
+        for i in indices:
+            self.target(case, i, boundary if i == indices[0] else None)
+        self.cases.append(case)
+        return case
 
-sentence_inputs = {
-    "period_newlines": "첫 번째 문장입니다.\n두 번째 문장입니다.",
-    "only_newlines": "첫 번째 문장입니다\n두 번째 문장입니다",
-    "heading": "## 제목\n첫 번째 문장입니다.",
-    "divider": "첫 번째 문장입니다.\n\n---",
-    "divider_boundary": "첫 번째 문장입니다.\n두 번째 문장입니다.\n\n---",
-    "korean_list_lines": "가. 첫 번째 문장입니다.\n나. 두 번째 문장입니다.",
-    "korean_list_single_line": "가. 첫 번째 문장입니다. 나. 두 번째 문장입니다.",
-    "decimal": "가격은 3.14원입니다. 다음 가격은 2.71원입니다.",
-    "english_abbreviation": "Dr. Kim입니다. 다음 문장입니다.",
-    "eg_abbreviation": "예시는 e.g. 사과입니다. 다음 문장입니다.",
-    "korean_abbreviation": "가.나.다. 예시입니다. 다음 문장입니다.",
-}
-for name, text in sentence_inputs.items():
-    add("sentences_" + name, 3739, SENTENCES, text, reason="실제 <3 조건·동일 한국어 문자열. 각 tokenizer의 실제 sentence list와 strict/loose를 실행한다.", group="sentences",
-        classification="INTENTIONAL" if name in {"korean_list_lines", "korean_list_single_line", "eg_abbreviation", "korean_abbreviation"} else "NEEDS_DISCUSSION")
+    def promote(self, name, index, boundary=None):
+        self.target(self.by_name[name], index, boundary)
 
-# Real translated forbidden-word intent; ASCII suffix and Korean particle controls.
-for name, en, kr in [("exact", "nickname", "별명"), ("particle", "nickname", "별명을"),
-                     ("compound", "nicknames", "별명표")]:
-    add("forbidden_dataset_" + name, 1242, FORBIDDEN, json.dumps({"value": en}), json.dumps({"value": kr}, ensure_ascii=False),
-        "실제 JSON+금지어 조건. exact/한국어 조사/합성어에 대한 경계 match를 비교.", "forbidden", "NEEDS_DISCUSSION")
-for word in ["사과", "사과를", "사과가", "사과나무"]:
-    for iid, kw in [(FORBIDDEN, {"forbidden_words": ["사과"]}), (EXIST, {"keywords": ["사과"]}),
-                    (FREQ, {"keyword": "사과", "frequency": 1, "relation": "at least"})]:
-        add("boundary_" + iid.split(":")[1] + "_" + word, None, iid, word,
-            reason="합성 한국어 사과 fixture로 동일 input/kwargs 사용. ForbiddenWords와 keyword checker의 경계 의미를 격리.",
-            group="forbidden_synthetic", fixture={"prompt": "사과 keyword 경계 검사", "kwargs": kw})
+    def auxiliary(self, name, iid, kwargs, response, expected=None, error=None, group="kwargs_contract"):
+        case = {"case_id": "support_" + name, "key": None, "scope": "synthetic", "origin": "support_18",
+                "instruction_id": iid, "instruction_index": 0, "checker": self.checkers.get(iid, "UNREGISTERED"),
+                "group": group, "classification": "NEEDS_DISCUSSION", "reason_for_test": name,
+                "targets": [{"instruction_index": 0, "instruction_id": iid, "input_partition": "outside_dataset_contract"}],
+                "test_response_original": response, "test_response_ko": response}
+        for side in ["original", "ko"]:
+            case[side + "_prompt"] = "Synthetic evaluator contract diagnostic; not a dataset row."
+            case[side + "_instruction_id_list"] = [iid]
+            case[side + "_all_kwargs"] = [copy.deepcopy(kwargs)]
+            case[side + "_kwargs"] = copy.deepcopy(kwargs)
+        if error:
+            case["comparison_input"] = "identical_ko"
+            case["source_revisions"] = {n: e["revision"] for n, e in self.provenance.items()}
+            case["expected_ko"] = {"error_type": error, "basis": "pinned_source_error_contract"}
+            case["hashes"] = input_hashes(case)
+        else:
+            self.finish(case, [expected], [expected])
+        self.support.append(case)
 
-# Dataset-level composed/decomposed Korean counterparts (English reference remains English).
-dataset_nfc = [(1237, EXIST, "keywords"), (127, FREQ, "keyword"), (1242, FORBIDDEN, "forbidden_words"),
-               (1127, "startend:end_checker", "end_phrase"), (1480, "combination:repeat_prompt", "prompt_to_repeat")]
-for key, iid, arg in dataset_nfc:
-    index = original[key]["instruction_id_list"].index(iid)
-    okw = original[key]["kwargs"][index]
-    kkw = ko[key]["kwargs"][index]
-    def target_response(kw):
-        value = kw[arg]
-        if isinstance(value, list):
-            return " ".join(value)
-        return " ".join([value] * kw["frequency"]) if iid == FREQ else value
-    en, kr = target_response(okw), target_response(kkw)
-    for form in ["NFC", "NFD"]:
-        add("nfc_dataset_" + iid.split(":")[1] + "_" + form.lower(), key, iid, en,
-            unicodedata.normalize(form, kr), "실제 비교 대상 유지. 한국어 response의 canonical equivalent 형태만 변경한다. 나머지 instruction은 충족하지 않을 수 있음.",
-            "nfc_dataset", "INTENTIONAL")
 
-# Same Korean target in English checker is explicitly synthetic; no invented dataset value.
-for iid, arg in [(EXIST, "keywords"), (FREQ, "keyword"), (FORBIDDEN, "forbidden_words"),
-                 ("startend:end_checker", "end_phrase"), ("combination:repeat_prompt", "prompt_to_repeat"),
-                 ("length_constraints:nth_paragraph_first_word", "first_word")]:
-    for target_form, response_form in [("NFC", "NFC"), ("NFC", "NFD"), ("NFD", "NFC"), ("NFD", "NFD")]:
-        target = unicodedata.normalize(target_form, "가")
-        response = unicodedata.normalize(response_form, "가")
-        kw = {arg: [target] if arg in {"keywords", "forbidden_words"} else target}
-        if iid == FREQ:
-            kw.update(frequency=1, relation="at least")
-        if arg == "first_word":
-            kw.update(num_paragraphs=1, nth_paragraph=1)
-        add("nfc_matrix_" + iid.split(":")[1] + "_" + target_form.lower() + "_" + response_form.lower(), None, iid, response,
-            reason="합성 가/U+1100 U+1161 matrix: 비교 대상과 response의 정규화 경로를 분리. raw checker와 evaluator를 함께 검사.",
-            group="nfc_synthetic", classification="INTENTIONAL", fixture={"prompt": "가 canonical equivalence 검사", "kwargs": kw})
-        if arg == "first_word":
-            cases[-1]["classification"] = "CHECKER" if target_form == "NFD" else "INTENTIONAL"
+def build(source_root, output_dir):
+    b = Builder(source_root)
 
-first_iid = "length_constraints:nth_paragraph_first_word"
-for form in ["NFC", "NFD"]:
-    en_kw = original[3073]["kwargs"][original[3073]["instruction_id_list"].index(first_iid)]
-    ko_kw = ko[3073]["kwargs"][ko[3073]["instruction_id_list"].index(first_iid)]
-    en = "\n\n".join([en_kw["first_word"] + " text", "second", "third", "fourth"])
-    kr = "\n\n".join([ko_kw["first_word"] + " 내용", "둘째", "셋째", "넷째"])
-    add("nfc_dataset_first_word_" + form.lower(), 3073, first_iid, en, unicodedata.normalize(form, kr),
-        "실제 4문단·첫 단어 조건. response-only NFD는 evaluator 진입 NFC로 복원되는지 확인.", "nfc_dataset", "INTENTIONAL")
-add("nfc_first_word_target_override", 3073, first_iid, en, kr,
-    "실제 first_word의 canonical equivalent NFD만 메모리에서 적용. first_word 인자의 NFC 누락과 response NFC 사이의 비대칭 검사; 원본 데이터 변경 없음.",
-    "nfc_target_override", "CHECKER", patch={"ko": {"first_word": NFD(ko_kw["first_word"])}})
+    def boundary(parameter, threshold, count):
+        return {"parameter": parameter, "threshold": threshold, "response_count": count, "offset": count - threshold}
 
-(ROOT / "cases.json").write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print(f"{len(cases)} cases; dataset keys={sorted({c['key'] for c in cases if c['key'] is not None})}")
+    # 13 count paths, each with N-1/N/N+1. Expectations are declared here,
+    # before any evaluator runs, and never regenerated from observed decisions.
+    for n in [7, 8, 9]:
+        b.add(f"freq_ge_{n}", 1233, [1], words(n, "마천루"), [False, n >= 8], boundary=boundary("frequency", 8, n))
+    for n in [2, 3, 4]:
+        b.add(f"freq_lt_{n}", 1928, [2], words(n, "피부"), [False, True, n < 3], boundary=boundary("frequency", 3, n))
+    for n in [5, 6, 7]:
+        b.add(f"sent_lt_{n}", 1268, [0], sentences(n), [n < 6], boundary=boundary("num_sentences", 6, n))
+    for n in [4, 5, 6]:
+        b.add(f"sent_ge_{n}", 2035, [2], sentences(n), [False, False, n >= 5], boundary=boundary("num_sentences", 5, n))
+    for n in [19, 20, 21]:
+        edge = boundary("num_words", 20, n)
+        if n == 20:
+            b.promote("comma_boundary_spaced", 0, edge)
+        else:
+            b.add(f"words_lt_{n}", 3442, [0], "<<제목>> " + words(n - 1), [n < 20, True], boundary=edge)
+    for n in [599, 600, 601]:
+        b.add(f"words_ge_{n}", 3538, [1], "폭탄 " + words(n - 1), [True, n >= 600], boundary=boundary("num_words", 600, n))
+    for n in [2, 3, 4]:
+        b.add(f"placeholders_{n}", 3743, [0], " ".join(["[항목]"] * n), [n >= 3], boundary=boundary("num_placeholders", 3, n))
+    for n in [8, 9, 10]:
+        edge = boundary("num_bullets", 9, n)
+        if n == 9:
+            b.promote("markdown_star_balanced_136", 0, edge)
+        else:
+            text = "\n\n" + "\n".join(["- 항목"] * n) + "\n\n"
+            b.add(f"bullets_{n}", 136, [0], text, [False, True], boundary=edge)
+    for n in [1, 2, 3]:
+        text = " ".join(["**강조**" if n == 3 else "*강조*"] * n)
+        b.add(f"highlights_{n}", 3710, [0], text, [n >= 2, False, False], boundary=boundary("num_highlights", 2, n))
+    for n in [3, 4, 5]:
+        text = " ".join(f"섹션 {i} 내용" for i in range(1, n + 1))
+        b.add(f"sections_{n}", 1127, [0], text, [n >= 4, False], boundary=boundary("num_sections", 4, n))
+    for n in [1, 2, 3]:
+        b.add(f"paragraphs_{n}", 1082, [0], "***".join(["내용"] * n), [n == 2], boundary=boundary("num_paragraphs", 2, n))
+    for n in [3, 4, 5]:
+        edge = boundary("num_paragraphs", 4, n)
+        if n == 4:
+            b.promote("nfc_dataset_first_word_nfc", 0, edge)
+        else:
+            text = "\n\n".join(["회사 내용"] + ["다음"] * (n - 1))
+            b.add(f"nth_paragraphs_{n}", 3073, [0], text, [False], [n == 5], boundary=edge)
+    for n in [1, 2, 3]:
+        text = "******".join(["첫,농담" if n == 3 else "첫 농담", "둘 농담", "셋 농담"][:n])
+        b.add(f"two_responses_{n}", 1107, [0, 1] if n != 2 else [1], text, [n != 3, n == 2])
+        b.target(b.cases[-1], 1, boundary("num_responses", 2, n))
+    for key, marker in [(3710, "P.P.S"), (1800, "P.S.")]:
+        index = 2 if key == 3710 else 0
+        for ok in [True, False]:
+            flags = [False, False, ok] if key == 3710 else [ok]
+            b.add("postscript_" + marker + ("_T" if ok else "_F"), key, [index], "본문 " + marker + " 후기" if ok else "본문", flags)
+    b.add("constrained_T", 3750, [0], "제 답변은 예입니다.", [True])
+    b.add("constrained_F", 3750, [0], "답변입니다.", [False])
+    b.add("json_existence_T", 3518, [0, 1], '```json\n{"보상":"이민자"}\n```', [True, True])
+    b.add("json_existence_F", 3518, [0, 1], "보상", [False, False])
+    b.promote("comma_boundary_compact", 1)
+    b.promote("comma_compact", 1)
+    b.add("forbidden_T", 3445, [0], "컴퓨터를", [True])
+    b.add("forbidden_F", 3445, [0], "컴퓨터", [False])
+    b.add("language_ko_T", 3311, [0], KO_TEXT, [True, False, True])
+    b.add("language_ko_F", 3311, [0], EN_TEXT, [False, False, False])
+    b.promote("nfc_dataset_end_checker_nfc", 1)
+    b.add("end_F", 1127, [1], "끝", [False, False])
+    b.add("quotation_T", 122, [0], '"내용"', [True])
+    b.add("quotation_F", 122, [0], "내용", [False])
+    query = b.ko[3563]["kwargs"][0]["prompt_to_repeat"]
+    b.add("repeat_T", 3563, [0], query + " 이언 매켈런입니다.", [True])
+    b.add("repeat_F", 3563, [0], "이언 매켈런입니다.", [False])
+    for x, y in [(8, 10), (8, 9), (7, 10), (7, 9)]:
+        b.add(f"repeat_id_{x}_{y}", 1203, [0, 1], words(x, "전쟁") + " " + words(y, "peace"), [x >= 8, y >= 10], group="diagnostic")
+    b.add("predatory_ko", 2142, [0], words(2, "포식자"), [False], group="diagnostic")
+    b.add("predatory_literal", 2142, [0], words(2, "predatory"), [True], group="diagnostic")
+    b.add("sent_lt_6_multiline", 1268, [0], sentences(6, True), [False], [True], group="diagnostic")
+    b.add("characters_600_not_words", 3538, [0, 1], "폭탄" + "가" * 600, [True, False], group="diagnostic")
+    b.add("last_paragraph_T", 1954, [0], "\n\n".join(["내용"] * 6 + ["요약 내용"]), [True], group="diagnostic")
+    b.add("last_paragraph_F", 1954, [0], "\n\n".join(["요약 내용"] + ["내용"] * 6), [False], group="diagnostic")
+    b.add("bullets_10_unpadded", 136, [0], "\n".join(["- 항목"] * 10), [False, True], [True, True], group="diagnostic")
+    b.add("constrained_multi", 3750, [0], "제 답변은 예입니다. 제 답변은 아니요입니다.", [True], group="diagnostic")
+    b.add("language_empty", 3311, [0], "", [False, False, False], group="language_engine")
+    b.add("language_short_exception", 3311, [0], "123", [True, False, False], group="language_engine")
+    b.add("language_ru_T", 240, [0], RU_TEXT, [True], group="language_engine")
+    b.add("language_ru_F", 240, [0], KO_TEXT, [False], group="language_engine")
+    b.add("selected_1262_smoke", 1262, [0, 1], "<<제목>> " + sentences(4), [True, True], group="selection_smoke")
+
+    for label, value in [("null", None), ("zero", 0), ("empty_string", ""), ("empty_list", [])]:
+        b.auxiliary("filter_" + label, "length_constraints:number_words", {"num_words": value, "relation": "less than"}, "평가", True)
+    for label, kwargs in [("absent", {}), ("null", {"keywords": None}), ("empty_string", {"keywords": ""}), ("empty_list", {"keywords": []})]:
+        b.auxiliary("keyword_" + label, "keywords:existence", kwargs, "평가", error="ValueError")
+    b.auxiliary("bad_relation", "length_constraints:number_words", {"num_words": 2, "relation": "invalid"}, "평가", error="ValueError")
+    for text, ok in [("a", False), ("aa", True)]:
+        b.auxiliary("letter_" + text, "keywords:letter_frequency", {"letter": "a", "let_frequency": 2, "let_relation": "at least"}, text, ok, group="registry_unused")
+    for suffix, text, ok in [("T", "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.", True),
+                             ("F", "This is a clear English sentence about science and nature.", False)]:
+        b.auxiliary("capital_" + suffix, "change_case:english_capital", {}, text, ok, group="registry_unused")
+    for suffix, text, ok in [("T", "this is a clear english sentence about science and nature.", True),
+                             ("F", "This is a clear English sentence about science and nature.", False)]:
+        b.auxiliary("lowercase_" + suffix, "change_case:english_lowercase", {}, text, ok, group="registry_unused")
+    for text in ["HELLO", "hello"]:
+        b.auxiliary("capital_words_" + text, "change_case:capital_word_frequency", {"capital_frequency": 1, "capital_relation": "at least"}, text, error="AttributeError", group="registry_unused")
+    b.auxiliary("unregistered", "keywords:key_sentences", {"key_sentences": ["평가합니다."], "num_sentences": 1}, "평가합니다.", error="KeyError", group="unregistered")
+
+    validate_cases(b.cases)
+    validate_cases(b.support, require_expected=False)
+    for case in b.cases:
+        validate_source_row(case, b.ko)
+    assert len(b.cases) == 156 and len(b.support) == 18
+    assert len({c["hashes"]["cache_key"] for c in b.cases}) == 156, "Duplicate response record"
+    selected = read_json(ROOT.parent / "sample-coverage/selection.json")["keys"]
+    source_keys = sorted({c["key"] for c in b.cases if c["key"] is not None})
+    assert set(selected) <= set(source_keys) and len(source_keys) == 32
+    output_dir = Path(output_dir)
+    write_json(output_dir / "cases.json", b.cases)
+    write_json(output_dir / "support_cases.json", b.support)
+    write_json(output_dir / "source_rows.json", [b.ko[k] for k in source_keys])
+    manifest = {
+        "schema_version": 2, "scope": "original English evaluator vs original Ko evaluator on identical Ko inputs",
+        "source_revisions": {n: e["revision"] for n, e in b.provenance.items()}, "verified_sources": b.verified,
+        "baseline_sha256": sha((ROOT / "baseline.json").read_bytes()), "baseline_cases_lf_sha256": b.legacy_lf_hash,
+        "baseline_original_results_object_sha256": object_hash(baseline_run("original")),
+        "baseline_ko_results_object_sha256": object_hash(baseline_run("ko")),
+        "cases_sha256": sha((output_dir / "cases.json").read_bytes()),
+        "support_cases_sha256": sha((output_dir / "support_cases.json").read_bytes()),
+        "source_rows_sha256": sha((output_dir / "source_rows.json").read_bytes()),
+        "builder_sha256": sha(Path(__file__).read_bytes()), "normal_cases": 156, "support_cases": 18,
+        "normal_scope_counts": dict(Counter(c["scope"] for c in b.cases)),
+        "extension_groups": dict(Counter(c["group"] for c in b.cases if c["origin"] == "extension_70")),
+        "normal_full_instruction_occurrences": sum(len(c["ko_instruction_id_list"]) for c in b.cases),
+        "source_keys": source_keys, "source_instructions": sum(len(b.ko[k]["kwargs"]) for k in source_keys),
+        "integration_selection_keys": selected, "integration_selection_changed": False,
+        "model_inference_run": False, "new_lighteval_ko_parity_run": False,
+        "count_formula": "86 + (25*2 + 13 - 4 shared slots - 6 reused responses) + 1 selection smoke + 12 diagnostics + 4 language = 156; support=18",
+    }
+    write_json(output_dir / "manifest.json", manifest)
+    print(json.dumps({k: manifest[k] for k in ["normal_cases", "support_cases", "normal_scope_counts", "extension_groups", "normal_full_instruction_occurrences"]}, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-root", type=Path, default=ROOT)
+    parser.add_argument("--output-dir", type=Path, default=ROOT)
+    options = parser.parse_args()
+    build(options.source_root, options.output_dir)

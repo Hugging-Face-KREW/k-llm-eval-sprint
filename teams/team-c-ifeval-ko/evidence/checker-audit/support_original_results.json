@@ -1,0 +1,6102 @@
+{
+  "environment": {
+    "side": "original",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "executable": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/.venv/bin/python",
+    "import_mode": "full-package",
+    "command": [
+      "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/.venv/bin/python",
+      "teams/team-c-ifeval-ko/evidence/checker-audit/run_original.py",
+      "--source-root",
+      "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit"
+    ],
+    "source_root": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit",
+    "module_paths": {
+      "utils": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/sources/harness_full/lm_eval/tasks/ifeval/utils.py",
+      "instructions": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+      "instructions_registry": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/sources/harness_full/lm_eval/tasks/ifeval/instructions_registry.py",
+      "instructions_util": "/mnt/c/testifeval/ifevaltest/ifeval_checker_audit/sources/harness_full/lm_eval/tasks/ifeval/instructions_util.py"
+    },
+    "module_sha256": {
+      "utils": "1ab8f14808c826f93f2364883487ed63cf4267980bf4761fda8053899c013632",
+      "instructions": "511cc41a53787d818c292d8335c8e98aa833296a0789ac470db56bcd6496345e",
+      "instructions_registry": "9db1c062cdb70a91420d3789a588235a1064c2b9a1a66e09e5fb9df9e7584a6c",
+      "instructions_util": "e8c4d9187bac1482d93941fb46469609c3ae78d896195bfcb300a0707d492567"
+    },
+    "package_versions": {
+      "nltk": "3.10.3",
+      "langdetect": "1.0.9",
+      "immutabledict": "4.3.1",
+      "packaging": "26.3",
+      "pyarrow": "26.0.0"
+    },
+    "nltk_resource_sha256": {
+      "tokenizers/punkt_tab/english/abbrev_types.txt": "92a3e070f43d9b4c5534758ca40ad7343b04e7e29bfe0c2eb658a39445a4f779",
+      "tokenizers/punkt_tab/english/collocations.tab": "8e2da1225e4dd2cc9dba261ee231ccb134859e21b46006e7f472c5ee269af0cf",
+      "tokenizers/punkt_tab/english/ortho_context.tab": "4bbcca25ed3d3f06c02402abf8419b9f033b8adc06e7b482eca4e45f81a5dc4c",
+      "tokenizers/punkt_tab/english/sent_starters.txt": "f3f8535483e1dba487241b764945168123bca3209a9645e59acd1225dc76edac"
+    },
+    "verified_sources": {
+      "harness/lm_eval/tasks/ifeval/utils.py": "1ab8f14808c826f93f2364883487ed63cf4267980bf4761fda8053899c013632",
+      "harness/lm_eval/tasks/ifeval/instructions.py": "511cc41a53787d818c292d8335c8e98aa833296a0789ac470db56bcd6496345e",
+      "harness/lm_eval/tasks/ifeval/instructions_registry.py": "9db1c062cdb70a91420d3789a588235a1064c2b9a1a66e09e5fb9df9e7584a6c",
+      "harness/lm_eval/tasks/ifeval/instructions_util.py": "e8c4d9187bac1482d93941fb46469609c3ae78d896195bfcb300a0707d492567",
+      "harness/lm_eval/tasks/ifeval/README.md": "6759456b3130980616e16f63e7a088a7f9b0e743e9e470589e478209c6596425",
+      "harness/lm_eval/tasks/ifeval/ifeval.yaml": "3d8a3eb32de03f6a23ac87b46951d972a4ec7cb137e753365c0271594e38f84b",
+      "lighteval/src/lighteval/tasks/tasks/ifeval/instructions.py": "1e5ac3c04ee4868058ea5f8b68e9b5f251d36b10296f748032cdc8594bd4ef35",
+      "lighteval/src/lighteval/tasks/tasks/ifeval/instructions_registry.py": "f4e260af41ccd718c29be71485e37cd20c72ef0a249158850d1e65cebc9f04e2",
+      "lighteval/src/lighteval/tasks/tasks/ifeval/instructions_utils.py": "dbdd5b177545ae4ecb4b5d3d2a0ac5ca58ff885e7b87fcdaabcef1aaa56edf54",
+      "lighteval/src/lighteval/tasks/tasks/ifeval/main.py": "2a6c25d2ac8645cc444d152f4ed17a911a139bd8e07cfba7ade375f78af30803",
+      "original_dataset/README.md": "c3e2d7da8286ae27649f526e3153cc72f071c21a6a7702d06f09cef5f9c114f1",
+      "original_dataset/ifeval_input_data.jsonl": "6a85310ca8ce15eff755aa08a3a4ff931c7e273e7515ebb3c492ea85fd8288f2",
+      "ko/README.md": "a5166c3eab1b92b76f89c59721c3553f214c81ce62ba02c7f95f08f0988b6b6d",
+      "ko/README_Ko.md": "4c6faf50abb4fbc740776a330990be29dcb5a4ce9fb34560fc1433ecaccc56c6",
+      "ko/ifeval_ko/README.md": "ffc3b48567c6607751679360bb04d1bd36577ad711d6e87e2dc573e73cc89220",
+      "ko/ifeval_ko/ifeval_ko.yaml": "5be0e47d832327d68c4eb5463df44aea296ff4ccc4ae930e28fee57e4d7c837b",
+      "ko/ifeval_ko/instructions.py": "afdbf1e2cafe8f3a1480d36aeff245365e1f896bacd87cd3c1ea48278e673842",
+      "ko/ifeval_ko/instructions_registry.py": "3c7247b270eb51e5a6eb937b865f68fad05617b7648299c9f0b6bcd2f9b82116",
+      "ko/ifeval_ko/instructions_util.py": "95d2b002aa4d12bbab524e48c1dbbcfe6f444078c5f4ed41f79cddc1f455ddd2",
+      "ko/ifeval_ko/utils.py": "d65b40fd09b96babfa55ce14d024cf17244a9b29a4e0f041ab7adeaad897c12a",
+      "ko/data/train-00000-of-00001.parquet": "91e0efeef3ea81191e48ce358ebb30d399abdfadc58cbc42e943281820038fa0"
+    },
+    "cases_sha256": "da1d84a6ba1d9b9d23c97d7e2cd294031bc81800ecb445c65fca3e9afe9bb557",
+    "runtime_sha256": "a270ab060d45d7e4b7ebff9ab0c0c0294fbe9ebd24bed7c8dbb99950ed729104",
+    "runner_sha256": "447ad266cede89f12b7bbd8e0fbaa272881ead0e492f3111975334c636b9cad4",
+    "random_seed": 0,
+    "langdetect_seed": 0,
+    "model_inference_run": false,
+    "new_lighteval_ko_parity_run": false,
+    "comparison_input": "identical_ko"
+  },
+  "results": [
+    {
+      "case_id": "support_filter_null",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "num_words": null,
+        "relation": "less than"
+      },
+      "input_sha256": "6ffb3580066920fe6b5da201d633ac11738c71f4a35a905a949719811ac08940",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "7f5ab44119e07dabb6a3d9af8ff28faf33b015ca9da94d05df88b4f79403943d",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "length_constraints:number_words"
+        ],
+        "kwargs": [
+          {
+            "num_words": null,
+            "relation": "less than"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "length_constraints:number_words",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 297,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 488,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 870,
+          "function": "NumberOfWords.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 915,
+          "function": "NumberOfWords.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_filter_zero",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "num_words": 0,
+        "relation": "less than"
+      },
+      "input_sha256": "6c455a0ffc0df1524871012d7b79f0b239b90481ea10abe13ce33154b8f320eb",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "23c47ed1ec025569996e9ca14da647478741bfc23591bb5a8802b154bcb85990",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "length_constraints:number_words"
+        ],
+        "kwargs": [
+          {
+            "num_words": 0,
+            "relation": "less than"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "length_constraints:number_words",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 297,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 488,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 870,
+          "function": "NumberOfWords.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 915,
+          "function": "NumberOfWords.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_filter_empty_string",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "num_words": "",
+        "relation": "less than"
+      },
+      "input_sha256": "e2c32ec1610b46b6ffd41978168a1780ca3d59e6317e111d6e26c8979bf08665",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "7c72723c392243a212b08b16dcd5390a55688ddb1c5340a29281b83ab4e02c52",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "length_constraints:number_words"
+        ],
+        "kwargs": [
+          {
+            "num_words": "",
+            "relation": "less than"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "length_constraints:number_words",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 297,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 488,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 870,
+          "function": "NumberOfWords.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 915,
+          "function": "NumberOfWords.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_filter_empty_list",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "num_words": [],
+        "relation": "less than"
+      },
+      "input_sha256": "002643cd7bbf44384907046c6bb7cbffc86227ffcf9564d6d732f10c4b3ea401",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "218735510d01963f00d2174862b58f796010143cfa5a1c55a0e05ccca6428731",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "length_constraints:number_words"
+        ],
+        "kwargs": [
+          {
+            "num_words": [],
+            "relation": "less than"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "length_constraints:number_words",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 297,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": true,
+                "counts": {
+                  "num_words": 1
+                }
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "relation": "less than"
+                },
+                "built_args": {
+                  "num_words": 488,
+                  "relation": "less than"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 297,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": true,
+              "counts": {
+                "num_words": 1
+              }
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "relation": "less than"
+              },
+              "built_args": {
+                "num_words": 488,
+                "relation": "less than"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": true,
+          "built_args": {
+            "num_words": 297,
+            "relation": "less than"
+          },
+          "count": 1,
+          "tokens": [
+            "평가"
+          ]
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 870,
+          "function": "NumberOfWords.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 915,
+          "function": "NumberOfWords.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_keyword_absent",
+      "instruction_index": 0,
+      "effective_kwargs": {},
+      "input_sha256": "5684572d237266c101f4e58f746bbacd0143961472bfaa187a8c8e2eef7a00c3",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "774116b4c9521a652a1847c2c3da35a0d1b7304d6b56852614f76e816c54be66",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:existence"
+        ],
+        "kwargs": [
+          {}
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:existence",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "resident",
+                    "sector"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "pattern",
+                    "standard"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 758,
+          "function": "KeywordChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 788,
+          "function": "KeywordChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_keyword_null",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "keywords": null
+      },
+      "input_sha256": "89120d9cbed15ceac19150ac8e6f995f2ef5a3525f732be09734fab30571961f",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "93f1bddb380f838d9256de5f1a9474c9266e1ae8514b54e86ce4146445fecc55",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:existence"
+        ],
+        "kwargs": [
+          {
+            "keywords": null
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:existence",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "resident",
+                    "sector"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "pattern",
+                    "standard"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 758,
+          "function": "KeywordChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 788,
+          "function": "KeywordChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_keyword_empty_string",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "keywords": ""
+      },
+      "input_sha256": "7e5f5959aef1d98ce00db4009c4397ddf2fc641cfe73c4529b48d65b214d47fa",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "a027a88d84b7ae783a1baff8bddc69cba61e62b52c399c1193ca4f3af35d5c53",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:existence"
+        ],
+        "kwargs": [
+          {
+            "keywords": ""
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:existence",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "resident",
+                    "sector"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "pattern",
+                    "standard"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 758,
+          "function": "KeywordChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 788,
+          "function": "KeywordChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_keyword_empty_list",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "keywords": []
+      },
+      "input_sha256": "6c695062f934467dfe792a79e0121e615e5547673993cdb3ccab0c65c37fa8b6",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "125af6558e3cc96fc2a403aaedd89ebe1ad317c6545e04af4d446f2f2bb0f01d",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:existence"
+        ],
+        "kwargs": [
+          {
+            "keywords": []
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:existence",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "resident",
+                    "sector"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "평가",
+                "checker_local_value": "평가",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": {
+                  "keywords": [
+                    "pattern",
+                    "standard"
+                  ]
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:existence",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "평가"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "resident",
+                  "sector"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "평가",
+              "checker_local_value": "평가",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": {
+                "keywords": [
+                  "pattern",
+                  "standard"
+                ]
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:existence",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "평가"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        },
+        "nfc": {
+          "text": "평가",
+          "checker_result": false,
+          "built_args": {
+            "keywords": [
+              "resident",
+              "sector"
+            ]
+          },
+          "matches": {
+            "resident": false,
+            "sector": false
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 758,
+          "function": "KeywordChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 788,
+          "function": "KeywordChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_bad_relation",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "num_words": 2,
+        "relation": "invalid"
+      },
+      "input_sha256": "742ec112c9695e36d794dc4e8dca1281b62c9e885ace81db4a7148caa1402055",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "nfc_response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "3f47c7a4de5ffb152a7c8156fc2417642e3ac28daf6352260773cc21905e9d2e",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "length_constraints:number_words"
+        ],
+        "kwargs": [
+          {
+            "num_words": 2,
+            "relation": "invalid"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "num_words": 2,
+                "relation": "invalid"
+              },
+              "built_args": {
+                "get_args_error": "AttributeError"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "error": {
+            "type": "ValueError",
+            "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+          }
+        },
+        "loose": {
+          "checker_call_trace": [],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "num_words": 2,
+                "relation": "invalid"
+              },
+              "built_args": {
+                "get_args_error": "AttributeError"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "error": {
+            "type": "ValueError",
+            "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+          }
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "length_constraints:number_words",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "num_words": 2,
+                  "relation": "invalid"
+                },
+                "built_args": {
+                  "get_args_error": "AttributeError"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "error": {
+              "type": "ValueError",
+              "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+            }
+          },
+          "loose": {
+            "checker_call_trace": [],
+            "checker_build_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "num_words": 2,
+                  "relation": "invalid"
+                },
+                "built_args": {
+                  "get_args_error": "AttributeError"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "length_constraints:number_words",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "평가",
+              "평가",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "error": {
+              "type": "ValueError",
+              "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+            }
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "num_words": 2,
+                "relation": "invalid"
+              },
+              "built_args": {
+                "get_args_error": "AttributeError"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "error": {
+            "type": "ValueError",
+            "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+          }
+        },
+        "loose": {
+          "checker_call_trace": [],
+          "checker_build_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "num_words": 2,
+                "relation": "invalid"
+              },
+              "built_args": {
+                "get_args_error": "AttributeError"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "length_constraints:number_words",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "평가",
+            "평가",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "error": {
+            "type": "ValueError",
+            "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+          }
+        }
+      },
+      "diagnostic_error": {
+        "type": "ValueError",
+        "message": "The supported relation for comparison must be in ('less than', 'at least'), but invalid is given."
+      }
+    },
+    {
+      "case_id": "support_letter_a",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      },
+      "input_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "response_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+      "nfc_response_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+      "cache_key": "e32576f8972635b92385baa1ac725e2c0a937cc1cd8f6c71dcf73f9528937eef",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:letter_frequency"
+        ],
+        "kwargs": [
+          {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "a"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "a",
+            "a",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "a"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:letter_frequency",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "a",
+                "checker_local_value": "a",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                },
+                "built_args": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "a"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "a",
+                "checker_local_value": "a",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "a",
+                "checker_local_value": "a",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                },
+                "built_args": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "a",
+              "a",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "a"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "a"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "a",
+              "checker_local_value": "a",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "a",
+            "a",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "a"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "a",
+          "checker_result": false,
+          "built_args": {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        },
+        "nfc": {
+          "text": "a",
+          "checker_result": false,
+          "built_args": {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1372,
+          "function": "LetterFrequencyChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1436,
+          "function": "LetterFrequencyChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_letter_aa",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      },
+      "input_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "response_sha256": "961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506",
+      "nfc_response_sha256": "961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506",
+      "cache_key": "b418c4826853ec822d64fbb9afd569a139a9c3610b5ec4b2f460cf55a31f1381",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:letter_frequency"
+        ],
+        "kwargs": [
+          {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "aa",
+              "checker_local_value": "aa",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "aa"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "aa",
+              "checker_local_value": "aa",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "aa",
+            "aa",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "aa"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:letter_frequency",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "aa",
+                "checker_local_value": "aa",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                },
+                "built_args": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "aa"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "aa",
+                "checker_local_value": "aa",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                },
+                "built_args": {
+                  "letter": "a",
+                  "let_frequency": 2,
+                  "let_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "keywords:letter_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "aa",
+              "aa",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "aa"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "aa",
+              "checker_local_value": "aa",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "aa"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "aa",
+              "checker_local_value": "aa",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              },
+              "built_args": {
+                "letter": "a",
+                "let_frequency": 2,
+                "let_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "keywords:letter_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "aa",
+            "aa",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "aa"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "aa",
+          "checker_result": true,
+          "built_args": {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        },
+        "nfc": {
+          "text": "aa",
+          "checker_result": true,
+          "built_args": {
+            "letter": "a",
+            "let_frequency": 2,
+            "let_relation": "at least"
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1372,
+          "function": "LetterFrequencyChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1436,
+          "function": "LetterFrequencyChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_capital_T",
+      "instruction_index": 0,
+      "effective_kwargs": {},
+      "input_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "response_sha256": "e676c422ee2354cd397c192c6ed90968c5846681ef76f3063f4d59946646d17a",
+      "nfc_response_sha256": "e676c422ee2354cd397c192c6ed90968c5846681ef76f3063f4d59946646d17a",
+      "cache_key": "cc04008f08411f6ee74ad0fb666408c32819fff44fa8949908feb6120a694b64",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:english_capital"
+        ],
+        "kwargs": [
+          {}
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+            "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:english_capital",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+                "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+                "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "checker_local_value": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+            "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE."
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+          "checker_result": true,
+          "built_args": {}
+        },
+        "nfc": {
+          "text": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+          "checker_result": true,
+          "built_args": {}
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1450,
+          "function": "CapitalLettersEnglishChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1464,
+          "function": "CapitalLettersEnglishChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_capital_F",
+      "instruction_index": 0,
+      "effective_kwargs": {},
+      "input_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "nfc_response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "cache_key": "6566bf8df668dd2d79324d918fd39a3205446668889594444e400dbc72e02445",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:english_capital"
+        ],
+        "kwargs": [
+          {}
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "This is a clear English sentence about science and nature.",
+            "This is a clear English sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:english_capital",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "This is a clear English sentence about science and nature."
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_capital",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "This is a clear English sentence about science and nature.",
+              "This is a clear English sentence about science and nature.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "This is a clear English sentence about science and nature."
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_capital",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "This is a clear English sentence about science and nature.",
+            "This is a clear English sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "This is a clear English sentence about science and nature.",
+          "checker_result": false,
+          "built_args": {}
+        },
+        "nfc": {
+          "text": "This is a clear English sentence about science and nature.",
+          "checker_result": false,
+          "built_args": {}
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1450,
+          "function": "CapitalLettersEnglishChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1464,
+          "function": "CapitalLettersEnglishChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_lowercase_T",
+      "instruction_index": 0,
+      "effective_kwargs": {},
+      "input_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "response_sha256": "a906c3419a1c92a24cf7487e2121c235e358918f152f7f9a275c07f379948a65",
+      "nfc_response_sha256": "a906c3419a1c92a24cf7487e2121c235e358918f152f7f9a275c07f379948a65",
+      "cache_key": "315782de08cceb330e83011c5368ba9e4eb43f9ada2cfbaf92be3315de31a445",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:english_lowercase"
+        ],
+        "kwargs": [
+          {}
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "this is a clear english sentence about science and nature.",
+              "checker_local_value": "this is a clear english sentence about science and nature.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "this is a clear english sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "this is a clear english sentence about science and nature.",
+              "checker_local_value": "this is a clear english sentence about science and nature.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "this is a clear english sentence about science and nature.",
+            "this is a clear english sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "this is a clear english sentence about science and nature."
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:english_lowercase",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "this is a clear english sentence about science and nature.",
+                "checker_local_value": "this is a clear english sentence about science and nature.",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "this is a clear english sentence about science and nature."
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "this is a clear english sentence about science and nature.",
+                "checker_local_value": "this is a clear english sentence about science and nature.",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "this is a clear english sentence about science and nature.",
+              "this is a clear english sentence about science and nature.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "this is a clear english sentence about science and nature."
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "this is a clear english sentence about science and nature.",
+              "checker_local_value": "this is a clear english sentence about science and nature.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "this is a clear english sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "this is a clear english sentence about science and nature.",
+              "checker_local_value": "this is a clear english sentence about science and nature.",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "this is a clear english sentence about science and nature.",
+            "this is a clear english sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "this is a clear english sentence about science and nature."
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "this is a clear english sentence about science and nature.",
+          "checker_result": true,
+          "built_args": {}
+        },
+        "nfc": {
+          "text": "this is a clear english sentence about science and nature.",
+          "checker_result": true,
+          "built_args": {}
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1481,
+          "function": "LowercaseLettersEnglishChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1496,
+          "function": "LowercaseLettersEnglishChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_lowercase_F",
+      "instruction_index": 0,
+      "effective_kwargs": {},
+      "input_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "nfc_response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "cache_key": "c3de15163a96ba49b4b96d98d5ad34582a369883a0f8f9ee5c342bfbc89b6683",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:english_lowercase"
+        ],
+        "kwargs": [
+          {}
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "This is a clear English sentence about science and nature.",
+            "This is a clear English sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:english_lowercase",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "This is a clear English sentence about science and nature."
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "This is a clear English sentence about science and nature.",
+                "checker_local_value": "This is a clear English sentence about science and nature.",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {},
+                "built_args": null
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:english_lowercase",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "This is a clear English sentence about science and nature.",
+              "This is a clear English sentence about science and nature.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "This is a clear English sentence about science and nature."
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "This is a clear English sentence about science and nature.",
+              "checker_local_value": "This is a clear English sentence about science and nature.",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {},
+              "built_args": null
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:english_lowercase",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "This is a clear English sentence about science and nature.",
+            "This is a clear English sentence about science and nature.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "This is a clear English sentence about science and nature."
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "This is a clear English sentence about science and nature.",
+          "checker_result": false,
+          "built_args": {}
+        },
+        "nfc": {
+          "text": "This is a clear English sentence about science and nature.",
+          "checker_result": false,
+          "built_args": {}
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1481,
+          "function": "LowercaseLettersEnglishChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1496,
+          "function": "LowercaseLettersEnglishChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_capital_words_HELLO",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      },
+      "input_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "response_sha256": "3733cd977ff8eb18b987357e22ced99f46097f31ecb239e878ae63760e83e4d5",
+      "nfc_response_sha256": "3733cd977ff8eb18b987357e22ced99f46097f31ecb239e878ae63760e83e4d5",
+      "cache_key": "8e9ece685407fe8a11bfa31e72b1534f07c7250f041deeb327831de54abdb9e6",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:capital_word_frequency"
+        ],
+        "kwargs": [
+          {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "HELLO",
+              "checker_local_value": "HELLO",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "HELLO"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "HELLO",
+              "checker_local_value": "HELLO",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "HELLO",
+            "HELLO",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "HELLO"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:capital_word_frequency",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "HELLO",
+                "checker_local_value": "HELLO",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                },
+                "built_args": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "HELLO"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "HELLO",
+                "checker_local_value": "HELLO",
+                "result": true,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                },
+                "built_args": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "HELLO",
+              "HELLO",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              true
+            ],
+            "prompt_result": true,
+            "evaluated_response": "HELLO"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "HELLO",
+              "checker_local_value": "HELLO",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "HELLO"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "HELLO",
+              "checker_local_value": "HELLO",
+              "result": true,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "HELLO",
+            "HELLO",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            true
+          ],
+          "prompt_result": true,
+          "evaluated_response": "HELLO"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "HELLO",
+          "checker_result": true,
+          "built_args": {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        },
+        "nfc": {
+          "text": "HELLO",
+          "checker_result": true,
+          "built_args": {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1535,
+          "function": "CapitalWordFrequencyChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1584,
+          "function": "CapitalWordFrequencyChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_capital_words_hello",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      },
+      "input_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "response_sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      "nfc_response_sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      "cache_key": "a964d653a095250f7b0bd90e129d7ce2c6c904d8fd26e1220bf7336e04a62b9a",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "change_case:capital_word_frequency"
+        ],
+        "kwargs": [
+          {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "hello"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "full.loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "hello",
+            "hello",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "hello"
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "change_case:capital_word_frequency",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "value": "hello",
+                "checker_local_value": "hello",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0",
+                "filtered_kwargs": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                },
+                "built_args": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].strict:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "hello"
+          },
+          "loose": {
+            "checker_call_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "hello",
+                "checker_local_value": "hello",
+                "result": false,
+                "counts": {}
+              },
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "value": "hello",
+                "checker_local_value": "hello",
+                "result": false,
+                "counts": {}
+              }
+            ],
+            "checker_build_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0",
+                "filtered_kwargs": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                },
+                "built_args": {
+                  "capital_frequency": 1,
+                  "capital_relation": "at least"
+                }
+              }
+            ],
+            "checker_creation_trace": [
+              {
+                "instruction_id": "change_case:capital_word_frequency",
+                "instruction_index": 0,
+                "instance": "isolated[0].loose:0"
+              }
+            ],
+            "loose_candidates_from_evaluator": [
+              "hello",
+              "hello",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "instruction_results": [
+              false
+            ],
+            "prompt_result": false,
+            "evaluated_response": "hello"
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].strict:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "hello"
+        },
+        "loose": {
+          "checker_call_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            },
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "value": "hello",
+              "checker_local_value": "hello",
+              "result": false,
+              "counts": {}
+            }
+          ],
+          "checker_build_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0",
+              "filtered_kwargs": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              },
+              "built_args": {
+                "capital_frequency": 1,
+                "capital_relation": "at least"
+              }
+            }
+          ],
+          "checker_creation_trace": [
+            {
+              "instruction_id": "change_case:capital_word_frequency",
+              "instruction_index": 0,
+              "instance": "isolated[0].loose:0"
+            }
+          ],
+          "loose_candidates_from_evaluator": [
+            "hello",
+            "hello",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "instruction_results": [
+            false
+          ],
+          "prompt_result": false,
+          "evaluated_response": "hello"
+        }
+      },
+      "diagnostics": {
+        "raw": {
+          "text": "hello",
+          "checker_result": false,
+          "built_args": {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        },
+        "nfc": {
+          "text": "hello",
+          "checker_result": false,
+          "built_args": {
+            "capital_frequency": 1,
+            "capital_relation": "at least"
+          }
+        }
+      },
+      "source": {
+        "build_description": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1535,
+          "function": "CapitalWordFrequencyChecker.build_description"
+        },
+        "check_following": {
+          "path": "sources/harness_full/lm_eval/tasks/ifeval/instructions.py",
+          "line": 1584,
+          "function": "CapitalWordFrequencyChecker.check_following"
+        }
+      }
+    },
+    {
+      "case_id": "support_unregistered",
+      "instruction_index": 0,
+      "effective_kwargs": {
+        "key_sentences": [
+          "평가합니다."
+        ],
+        "num_sentences": 1
+      },
+      "input_sha256": "4aac9fb8b16a69181449b697ff216d20b8330e542a7c5482adc4c498a0d4731d",
+      "response_sha256": "fc95dea9872b83e7adf2e0ba57c235f3d29611fa13b3fe6e914e19b2f98ddd53",
+      "nfc_response_sha256": "fc95dea9872b83e7adf2e0ba57c235f3d29611fa13b3fe6e914e19b2f98ddd53",
+      "cache_key": "2ac5fa25dcba4fe61b9df3c036cd6b0b8d95c17feff7b92ca2773508918ce5f5",
+      "evaluated_input": {
+        "key": null,
+        "prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+        "instruction_id_list": [
+          "keywords:key_sentences"
+        ],
+        "kwargs": [
+          {
+            "key_sentences": [
+              "평가합니다."
+            ],
+            "num_sentences": 1
+          }
+        ]
+      },
+      "input_origin": "identical case.ko_* and test_response_ko; original_* are archival metadata",
+      "full": {
+        "strict": {
+          "checker_call_trace": [],
+          "checker_build_trace": [],
+          "checker_creation_trace": [],
+          "loose_candidates_from_evaluator": [],
+          "error": {
+            "type": "KeyError",
+            "message": "'keywords:key_sentences'"
+          }
+        },
+        "loose": {
+          "checker_call_trace": [],
+          "checker_build_trace": [],
+          "checker_creation_trace": [],
+          "loose_candidates_from_evaluator": [
+            "평가합니다.",
+            "평가합니다.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "error": {
+            "type": "KeyError",
+            "message": "'keywords:key_sentences'"
+          }
+        }
+      },
+      "isolated_targets": [
+        {
+          "instruction_id": "keywords:key_sentences",
+          "instruction_index": 0,
+          "strict": {
+            "checker_call_trace": [],
+            "checker_build_trace": [],
+            "checker_creation_trace": [],
+            "loose_candidates_from_evaluator": [],
+            "error": {
+              "type": "KeyError",
+              "message": "'keywords:key_sentences'"
+            }
+          },
+          "loose": {
+            "checker_call_trace": [],
+            "checker_build_trace": [],
+            "checker_creation_trace": [],
+            "loose_candidates_from_evaluator": [
+              "평가합니다.",
+              "평가합니다.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "error": {
+              "type": "KeyError",
+              "message": "'keywords:key_sentences'"
+            }
+          }
+        }
+      ],
+      "phase_schedule": [
+        "full.strict",
+        "full.loose",
+        "isolated[0].strict",
+        "isolated[0].loose"
+      ],
+      "isolated": {
+        "strict": {
+          "checker_call_trace": [],
+          "checker_build_trace": [],
+          "checker_creation_trace": [],
+          "loose_candidates_from_evaluator": [],
+          "error": {
+            "type": "KeyError",
+            "message": "'keywords:key_sentences'"
+          }
+        },
+        "loose": {
+          "checker_call_trace": [],
+          "checker_build_trace": [],
+          "checker_creation_trace": [],
+          "loose_candidates_from_evaluator": [
+            "평가합니다.",
+            "평가합니다.",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "error": {
+            "type": "KeyError",
+            "message": "'keywords:key_sentences'"
+          }
+        }
+      },
+      "diagnostic_error": {
+        "type": "KeyError",
+        "message": "'keywords:key_sentences'"
+      }
+    }
+  ]
+}

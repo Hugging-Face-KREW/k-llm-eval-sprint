@@ -1,0 +1,1244 @@
+[
+  {
+    "case_id": "support_filter_null",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "length_constraints:number_words",
+    "instruction_index": 0,
+    "checker": "NumberOfWords",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "filter_null",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "length_constraints:number_words",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "original_all_kwargs": [
+      {
+        "num_words": null,
+        "relation": "less than"
+      }
+    ],
+    "original_kwargs": {
+      "num_words": null,
+      "relation": "less than"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "ko_all_kwargs": [
+      {
+        "num_words": null,
+        "relation": "less than"
+      }
+    ],
+    "ko_kwargs": {
+      "num_words": null,
+      "relation": "less than"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "6ffb3580066920fe6b5da201d633ac11738c71f4a35a905a949719811ac08940",
+      "source_row_sha256": "6ffb3580066920fe6b5da201d633ac11738c71f4a35a905a949719811ac08940",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "7f5ab44119e07dabb6a3d9af8ff28faf33b015ca9da94d05df88b4f79403943d"
+    }
+  },
+  {
+    "case_id": "support_filter_zero",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "length_constraints:number_words",
+    "instruction_index": 0,
+    "checker": "NumberOfWords",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "filter_zero",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "length_constraints:number_words",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "original_all_kwargs": [
+      {
+        "num_words": 0,
+        "relation": "less than"
+      }
+    ],
+    "original_kwargs": {
+      "num_words": 0,
+      "relation": "less than"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "ko_all_kwargs": [
+      {
+        "num_words": 0,
+        "relation": "less than"
+      }
+    ],
+    "ko_kwargs": {
+      "num_words": 0,
+      "relation": "less than"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "6c455a0ffc0df1524871012d7b79f0b239b90481ea10abe13ce33154b8f320eb",
+      "source_row_sha256": "6c455a0ffc0df1524871012d7b79f0b239b90481ea10abe13ce33154b8f320eb",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "23c47ed1ec025569996e9ca14da647478741bfc23591bb5a8802b154bcb85990"
+    }
+  },
+  {
+    "case_id": "support_filter_empty_string",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "length_constraints:number_words",
+    "instruction_index": 0,
+    "checker": "NumberOfWords",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "filter_empty_string",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "length_constraints:number_words",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "original_all_kwargs": [
+      {
+        "num_words": "",
+        "relation": "less than"
+      }
+    ],
+    "original_kwargs": {
+      "num_words": "",
+      "relation": "less than"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "ko_all_kwargs": [
+      {
+        "num_words": "",
+        "relation": "less than"
+      }
+    ],
+    "ko_kwargs": {
+      "num_words": "",
+      "relation": "less than"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "e2c32ec1610b46b6ffd41978168a1780ca3d59e6317e111d6e26c8979bf08665",
+      "source_row_sha256": "e2c32ec1610b46b6ffd41978168a1780ca3d59e6317e111d6e26c8979bf08665",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "7c72723c392243a212b08b16dcd5390a55688ddb1c5340a29281b83ab4e02c52"
+    }
+  },
+  {
+    "case_id": "support_filter_empty_list",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "length_constraints:number_words",
+    "instruction_index": 0,
+    "checker": "NumberOfWords",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "filter_empty_list",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "length_constraints:number_words",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "original_all_kwargs": [
+      {
+        "num_words": [],
+        "relation": "less than"
+      }
+    ],
+    "original_kwargs": {
+      "num_words": [],
+      "relation": "less than"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "ko_all_kwargs": [
+      {
+        "num_words": [],
+        "relation": "less than"
+      }
+    ],
+    "ko_kwargs": {
+      "num_words": [],
+      "relation": "less than"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "002643cd7bbf44384907046c6bb7cbffc86227ffcf9564d6d732f10c4b3ea401",
+      "source_row_sha256": "002643cd7bbf44384907046c6bb7cbffc86227ffcf9564d6d732f10c4b3ea401",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "218735510d01963f00d2174862b58f796010143cfa5a1c55a0e05ccca6428731"
+    }
+  },
+  {
+    "case_id": "support_keyword_absent",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:existence",
+    "instruction_index": 0,
+    "checker": "KeywordChecker",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "keyword_absent",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:existence",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "original_all_kwargs": [
+      {}
+    ],
+    "original_kwargs": {},
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "ko_all_kwargs": [
+      {}
+    ],
+    "ko_kwargs": {},
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "ValueError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "5684572d237266c101f4e58f746bbacd0143961472bfaa187a8c8e2eef7a00c3",
+      "source_row_sha256": "5684572d237266c101f4e58f746bbacd0143961472bfaa187a8c8e2eef7a00c3",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "774116b4c9521a652a1847c2c3da35a0d1b7304d6b56852614f76e816c54be66"
+    }
+  },
+  {
+    "case_id": "support_keyword_null",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:existence",
+    "instruction_index": 0,
+    "checker": "KeywordChecker",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "keyword_null",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:existence",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "original_all_kwargs": [
+      {
+        "keywords": null
+      }
+    ],
+    "original_kwargs": {
+      "keywords": null
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "ko_all_kwargs": [
+      {
+        "keywords": null
+      }
+    ],
+    "ko_kwargs": {
+      "keywords": null
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "ValueError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "89120d9cbed15ceac19150ac8e6f995f2ef5a3525f732be09734fab30571961f",
+      "source_row_sha256": "89120d9cbed15ceac19150ac8e6f995f2ef5a3525f732be09734fab30571961f",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "93f1bddb380f838d9256de5f1a9474c9266e1ae8514b54e86ce4146445fecc55"
+    }
+  },
+  {
+    "case_id": "support_keyword_empty_string",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:existence",
+    "instruction_index": 0,
+    "checker": "KeywordChecker",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "keyword_empty_string",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:existence",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "original_all_kwargs": [
+      {
+        "keywords": ""
+      }
+    ],
+    "original_kwargs": {
+      "keywords": ""
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "ko_all_kwargs": [
+      {
+        "keywords": ""
+      }
+    ],
+    "ko_kwargs": {
+      "keywords": ""
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "ValueError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "7e5f5959aef1d98ce00db4009c4397ddf2fc641cfe73c4529b48d65b214d47fa",
+      "source_row_sha256": "7e5f5959aef1d98ce00db4009c4397ddf2fc641cfe73c4529b48d65b214d47fa",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "a027a88d84b7ae783a1baff8bddc69cba61e62b52c399c1193ca4f3af35d5c53"
+    }
+  },
+  {
+    "case_id": "support_keyword_empty_list",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:existence",
+    "instruction_index": 0,
+    "checker": "KeywordChecker",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "keyword_empty_list",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:existence",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "original_all_kwargs": [
+      {
+        "keywords": []
+      }
+    ],
+    "original_kwargs": {
+      "keywords": []
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:existence"
+    ],
+    "ko_all_kwargs": [
+      {
+        "keywords": []
+      }
+    ],
+    "ko_kwargs": {
+      "keywords": []
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "ValueError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "6c695062f934467dfe792a79e0121e615e5547673993cdb3ccab0c65c37fa8b6",
+      "source_row_sha256": "6c695062f934467dfe792a79e0121e615e5547673993cdb3ccab0c65c37fa8b6",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "125af6558e3cc96fc2a403aaedd89ebe1ad317c6545e04af4d446f2f2bb0f01d"
+    }
+  },
+  {
+    "case_id": "support_bad_relation",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "length_constraints:number_words",
+    "instruction_index": 0,
+    "checker": "NumberOfWords",
+    "group": "kwargs_contract",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "bad_relation",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "length_constraints:number_words",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가",
+    "test_response_ko": "평가",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "original_all_kwargs": [
+      {
+        "num_words": 2,
+        "relation": "invalid"
+      }
+    ],
+    "original_kwargs": {
+      "num_words": 2,
+      "relation": "invalid"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "length_constraints:number_words"
+    ],
+    "ko_all_kwargs": [
+      {
+        "num_words": 2,
+        "relation": "invalid"
+      }
+    ],
+    "ko_kwargs": {
+      "num_words": 2,
+      "relation": "invalid"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "ValueError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "742ec112c9695e36d794dc4e8dca1281b62c9e885ace81db4a7148caa1402055",
+      "source_row_sha256": "742ec112c9695e36d794dc4e8dca1281b62c9e885ace81db4a7148caa1402055",
+      "response_sha256": "24974ab634200ecf396fa9e846afa45e72a55151e9cc79ca9def46d480dcc5a4",
+      "cache_key": "3f47c7a4de5ffb152a7c8156fc2417642e3ac28daf6352260773cc21905e9d2e"
+    }
+  },
+  {
+    "case_id": "support_letter_a",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:letter_frequency",
+    "instruction_index": 0,
+    "checker": "LetterFrequencyChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "letter_a",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:letter_frequency",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "a",
+    "test_response_ko": "a",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:letter_frequency"
+    ],
+    "original_all_kwargs": [
+      {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      }
+    ],
+    "original_kwargs": {
+      "letter": "a",
+      "let_frequency": 2,
+      "let_relation": "at least"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:letter_frequency"
+    ],
+    "ko_all_kwargs": [
+      {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      }
+    ],
+    "ko_kwargs": {
+      "letter": "a",
+      "let_frequency": 2,
+      "let_relation": "at least"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          false
+        ],
+        "loose": [
+          false
+        ]
+      },
+      "prompt": {
+        "strict": false,
+        "loose": false
+      }
+    },
+    "hashes": {
+      "input_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "source_row_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "response_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+      "cache_key": "e32576f8972635b92385baa1ac725e2c0a937cc1cd8f6c71dcf73f9528937eef"
+    }
+  },
+  {
+    "case_id": "support_letter_aa",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:letter_frequency",
+    "instruction_index": 0,
+    "checker": "LetterFrequencyChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "letter_aa",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:letter_frequency",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "aa",
+    "test_response_ko": "aa",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:letter_frequency"
+    ],
+    "original_all_kwargs": [
+      {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      }
+    ],
+    "original_kwargs": {
+      "letter": "a",
+      "let_frequency": 2,
+      "let_relation": "at least"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:letter_frequency"
+    ],
+    "ko_all_kwargs": [
+      {
+        "letter": "a",
+        "let_frequency": 2,
+        "let_relation": "at least"
+      }
+    ],
+    "ko_kwargs": {
+      "letter": "a",
+      "let_frequency": 2,
+      "let_relation": "at least"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "source_row_sha256": "ef861db2330b256e2e3bbe2c9baa7bb73249c8c14643fc30e494fe9e6bef5bf4",
+      "response_sha256": "961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506",
+      "cache_key": "b418c4826853ec822d64fbb9afd569a139a9c3610b5ec4b2f460cf55a31f1381"
+    }
+  },
+  {
+    "case_id": "support_capital_T",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:english_capital",
+    "instruction_index": 0,
+    "checker": "CapitalLettersEnglishChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "capital_T",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:english_capital",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+    "test_response_ko": "THIS IS A CLEAR ENGLISH SENTENCE ABOUT SCIENCE AND NATURE.",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:english_capital"
+    ],
+    "original_all_kwargs": [
+      {}
+    ],
+    "original_kwargs": {},
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:english_capital"
+    ],
+    "ko_all_kwargs": [
+      {}
+    ],
+    "ko_kwargs": {},
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "source_row_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "response_sha256": "e676c422ee2354cd397c192c6ed90968c5846681ef76f3063f4d59946646d17a",
+      "cache_key": "cc04008f08411f6ee74ad0fb666408c32819fff44fa8949908feb6120a694b64"
+    }
+  },
+  {
+    "case_id": "support_capital_F",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:english_capital",
+    "instruction_index": 0,
+    "checker": "CapitalLettersEnglishChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "capital_F",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:english_capital",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "This is a clear English sentence about science and nature.",
+    "test_response_ko": "This is a clear English sentence about science and nature.",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:english_capital"
+    ],
+    "original_all_kwargs": [
+      {}
+    ],
+    "original_kwargs": {},
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:english_capital"
+    ],
+    "ko_all_kwargs": [
+      {}
+    ],
+    "ko_kwargs": {},
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          false
+        ],
+        "loose": [
+          false
+        ]
+      },
+      "prompt": {
+        "strict": false,
+        "loose": false
+      }
+    },
+    "hashes": {
+      "input_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "source_row_sha256": "05c815bcf53565eb7cb26b371941a80bd3916bf4e2b91073b29a406f972b412f",
+      "response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "cache_key": "6566bf8df668dd2d79324d918fd39a3205446668889594444e400dbc72e02445"
+    }
+  },
+  {
+    "case_id": "support_lowercase_T",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:english_lowercase",
+    "instruction_index": 0,
+    "checker": "LowercaseLettersEnglishChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "lowercase_T",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:english_lowercase",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "this is a clear english sentence about science and nature.",
+    "test_response_ko": "this is a clear english sentence about science and nature.",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:english_lowercase"
+    ],
+    "original_all_kwargs": [
+      {}
+    ],
+    "original_kwargs": {},
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:english_lowercase"
+    ],
+    "ko_all_kwargs": [
+      {}
+    ],
+    "ko_kwargs": {},
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          true
+        ],
+        "loose": [
+          true
+        ]
+      },
+      "prompt": {
+        "strict": true,
+        "loose": true
+      }
+    },
+    "hashes": {
+      "input_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "source_row_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "response_sha256": "a906c3419a1c92a24cf7487e2121c235e358918f152f7f9a275c07f379948a65",
+      "cache_key": "315782de08cceb330e83011c5368ba9e4eb43f9ada2cfbaf92be3315de31a445"
+    }
+  },
+  {
+    "case_id": "support_lowercase_F",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:english_lowercase",
+    "instruction_index": 0,
+    "checker": "LowercaseLettersEnglishChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "lowercase_F",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:english_lowercase",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "This is a clear English sentence about science and nature.",
+    "test_response_ko": "This is a clear English sentence about science and nature.",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:english_lowercase"
+    ],
+    "original_all_kwargs": [
+      {}
+    ],
+    "original_kwargs": {},
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:english_lowercase"
+    ],
+    "ko_all_kwargs": [
+      {}
+    ],
+    "ko_kwargs": {},
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "basis": "predeclared_from_pinned_code_and_review",
+      "full": {
+        "strict": [
+          false
+        ],
+        "loose": [
+          false
+        ]
+      },
+      "prompt": {
+        "strict": false,
+        "loose": false
+      }
+    },
+    "hashes": {
+      "input_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "source_row_sha256": "4a482ce9e8691d396cfef4f6af9ff50061f1da395cbbcd292a36c8448d67939e",
+      "response_sha256": "b78fc5a9b84c0dbdaa3039e78a94a5dd5af180fa4930faf8bdfb0d3e573365ed",
+      "cache_key": "c3de15163a96ba49b4b96d98d5ad34582a369883a0f8f9ee5c342bfbc89b6683"
+    }
+  },
+  {
+    "case_id": "support_capital_words_HELLO",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:capital_word_frequency",
+    "instruction_index": 0,
+    "checker": "CapitalWordFrequencyChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "capital_words_HELLO",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:capital_word_frequency",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "HELLO",
+    "test_response_ko": "HELLO",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:capital_word_frequency"
+    ],
+    "original_all_kwargs": [
+      {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      }
+    ],
+    "original_kwargs": {
+      "capital_frequency": 1,
+      "capital_relation": "at least"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:capital_word_frequency"
+    ],
+    "ko_all_kwargs": [
+      {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      }
+    ],
+    "ko_kwargs": {
+      "capital_frequency": 1,
+      "capital_relation": "at least"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "AttributeError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "source_row_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "response_sha256": "3733cd977ff8eb18b987357e22ced99f46097f31ecb239e878ae63760e83e4d5",
+      "cache_key": "8e9ece685407fe8a11bfa31e72b1534f07c7250f041deeb327831de54abdb9e6"
+    }
+  },
+  {
+    "case_id": "support_capital_words_hello",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "change_case:capital_word_frequency",
+    "instruction_index": 0,
+    "checker": "CapitalWordFrequencyChecker",
+    "group": "registry_unused",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "capital_words_hello",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "change_case:capital_word_frequency",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "hello",
+    "test_response_ko": "hello",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "change_case:capital_word_frequency"
+    ],
+    "original_all_kwargs": [
+      {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      }
+    ],
+    "original_kwargs": {
+      "capital_frequency": 1,
+      "capital_relation": "at least"
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "change_case:capital_word_frequency"
+    ],
+    "ko_all_kwargs": [
+      {
+        "capital_frequency": 1,
+        "capital_relation": "at least"
+      }
+    ],
+    "ko_kwargs": {
+      "capital_frequency": 1,
+      "capital_relation": "at least"
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "AttributeError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "source_row_sha256": "1eb8fcd2a1ff7cf1a1a9ddfa11f884d8c492431eb81e61189ea7ea6af4a503b5",
+      "response_sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      "cache_key": "a964d653a095250f7b0bd90e129d7ce2c6c904d8fd26e1220bf7336e04a62b9a"
+    }
+  },
+  {
+    "case_id": "support_unregistered",
+    "key": null,
+    "scope": "synthetic",
+    "origin": "support_18",
+    "instruction_id": "keywords:key_sentences",
+    "instruction_index": 0,
+    "checker": "UNREGISTERED",
+    "group": "unregistered",
+    "classification": "NEEDS_DISCUSSION",
+    "reason_for_test": "unregistered",
+    "targets": [
+      {
+        "instruction_index": 0,
+        "instruction_id": "keywords:key_sentences",
+        "input_partition": "outside_dataset_contract"
+      }
+    ],
+    "test_response_original": "평가합니다.",
+    "test_response_ko": "평가합니다.",
+    "original_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "original_instruction_id_list": [
+      "keywords:key_sentences"
+    ],
+    "original_all_kwargs": [
+      {
+        "key_sentences": [
+          "평가합니다."
+        ],
+        "num_sentences": 1
+      }
+    ],
+    "original_kwargs": {
+      "key_sentences": [
+        "평가합니다."
+      ],
+      "num_sentences": 1
+    },
+    "ko_prompt": "Synthetic evaluator contract diagnostic; not a dataset row.",
+    "ko_instruction_id_list": [
+      "keywords:key_sentences"
+    ],
+    "ko_all_kwargs": [
+      {
+        "key_sentences": [
+          "평가합니다."
+        ],
+        "num_sentences": 1
+      }
+    ],
+    "ko_kwargs": {
+      "key_sentences": [
+        "평가합니다."
+      ],
+      "num_sentences": 1
+    },
+    "comparison_input": "identical_ko",
+    "source_revisions": {
+      "harness": "d6de81643928d653435c431bae19945d41d32520",
+      "lighteval": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+      "original_dataset": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+      "ko": "54199e3801116897697babf341865741dcd06fc8"
+    },
+    "expected_ko": {
+      "error_type": "KeyError",
+      "basis": "pinned_source_error_contract"
+    },
+    "hashes": {
+      "input_sha256": "4aac9fb8b16a69181449b697ff216d20b8330e542a7c5482adc4c498a0d4731d",
+      "source_row_sha256": "4aac9fb8b16a69181449b697ff216d20b8330e542a7c5482adc4c498a0d4731d",
+      "response_sha256": "fc95dea9872b83e7adf2e0ba57c235f3d29611fa13b3fe6e914e19b2f98ddd53",
+      "cache_key": "2ac5fa25dcba4fe61b9df3c036cd6b0b8d95c17feff7b92ca2773508918ce5f5"
+    }
+  }
+]

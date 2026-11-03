@@ -226,7 +226,13 @@ def run(source_dir, out_dir):
               "", "데이터에 없는 누락·오류·난수 fallback, 추신의 기타 표지, 응답에 따른 분기, NFC/NFD·정규식·문장/단어 경계는 고정 응답 회귀 대상이다. 이 출력은 해당 검사를 실행하지 않는다.", ""]
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "coverage.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
-    (out_dir / "coverage.md").write_text("\n".join(lines))
+    from coverage_i18n import render_english
+    english = render_english(lines, report)
+    english += ["", "[Selection guide](README.en.md) · [Design](../../design.en.md#selection-rules)", ""]
+    korean = [lines[0], "", "**한국어** | [English](coverage.en.md)", ""] + lines[2:]
+    korean += ["", "[선정 안내](README.md) · [설계 문서](../../design.md#fixed-response-regression)", ""]
+    (out_dir / "coverage.md").write_text("\n".join(korean), encoding="utf-8")
+    (out_dir / "coverage.en.md").write_text("\n".join(english), encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 

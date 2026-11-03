@@ -1,285 +1,434 @@
-"""Validate recorded decisions and generate the Korean audit report."""
-from collections import Counter
-import hashlib
+"""Verify explicit oracles and emit same-input English/Ko comparison evidence."""
+import argparse
+import ast
+from collections import Counter, defaultdict
+import copy
+import importlib.util
 import json
 from pathlib import Path
 import unicodedata
 
-ROOT = Path(__file__).resolve().parent
+from case_utils import (ROOT, baseline_cases, baseline_cases_hash, baseline_run, read_baseline, input_hashes, ko_input, object_hash, partition, read_json,
+                        sha, validate_cases, validate_source_row, verify_sources, write_json)
+
+KINDS = ["strict", "loose"]
 
 
-def read(name):
-    return json.loads((ROOT / name).read_text(encoding="utf-8"))
-
-
-def dump(value):
-    return json.dumps(value, ensure_ascii=False, indent=2)
+def require(condition, message):
+    if not condition:
+        raise AssertionError(message)
 
 
 def tf(value):
     return "T" if value else "F"
 
 
-def target(result, mode):
-    return result["isolated"][mode]["instruction_results"][0]
+def pair(a, b):
+    return tf(a) + "," + tf(b)
 
 
-def decision(result, mode):
-    full = result["full"][mode]
-    return f"{tf(target(result, mode))} / [{','.join(map(tf, full['instruction_results']))}] / {tf(full['prompt_result'])}"
+def expected_candidates(response):
+    lines = response.split("\n")
+    first = "\n".join(lines[1:]).strip()
+    last = "\n".join(lines[:-1]).strip()
+    both = "\n".join(lines[1:-1]).strip()
+    return [response, response.replace("*", ""), first, last, both,
+            first.replace("*", ""), last.replace("*", ""), both.replace("*", "")]
 
 
-def source_link(info):
-    return f"[{info['function']}:{info['line']}]({info['path']}#L{info['line']})"
+def verify_phase(out, ids, kwargs, response, kind, label):
+    require("error" not in out, f"Unexpected scoring error: {label}")
+    flags = out["instruction_results"]
+    require(len(flags) == len(ids) and all(type(x) is bool for x in flags), f"Invalid flags: {label}")
+    require(out["prompt_result"] == all(flags), f"Prompt AND mismatch: {label}")
+    require(out["evaluated_response"] == response, f"Wrong response preparation: {label}")
+    builds, creates = out["checker_build_trace"], out["checker_creation_trace"]
+    require([x["instruction_index"] for x in builds] == list(range(len(ids))), f"Build order: {label}")
+    require([x["instruction_index"] for x in creates] == list(range(len(ids))), f"Creation order: {label}")
+    for i, build in enumerate(builds):
+        require(build["instruction_id"] == ids[i], f"Build index/ID: {label}")
+        require(creates[i]["instance"] == build["instance"], f"Creation/build instance mismatch: {label}")
+        require(build["filtered_kwargs"] == {k: v for k, v in kwargs[i].items() if v}, f"if-v filter changed: {label}")
+    candidates = expected_candidates(response) if kind == "loose" else []
+    require(out["loose_candidates_from_evaluator"] == candidates, f"Loose candidate order/duplicates: {label}")
+    eligible = [r for r in candidates if r.strip()]
+    for i, flag in enumerate(flags):
+        calls = [x for x in out["checker_call_trace"] if x["instruction_index"] == i]
+        require(all(c["instruction_id"] == ids[i] and c["instance"] == builds[i]["instance"] for c in calls), f"Checker reuse/index: {label}")
+        require(all(c["value"].strip() for c in calls), f"Empty response reached checker: {label}")
+        if kind == "strict":
+            require(len(calls) == int(bool(response.strip())), f"Strict call count: {label}")
+            require(not calls or calls[0]["value"] == response, f"Strict input: {label}")
+        else:
+            require([c["value"] for c in calls] == eligible[:len(calls)], f"Loose candidate call order: {label}")
+            require(not any(c["result"] for c in calls[:-1]), f"Missing loose short circuit: {label}")
+            require(flag or len(calls) == len(eligible), f"Loose failed without checking all nonempty candidates: {label}")
+        require(flag == any(c["result"] for c in calls), f"Instruction OR mismatch: {label}")
 
 
-def upstream_link(provenance, group, path, line, label):
-    entry = provenance[group]
-    return f"[{label}]({entry['repository']}/blob/{entry['revision']}/{path}#L{line})"
+def verify_record(case, result, side):
+    label = side + "/" + case["case_id"]
+    require(result["case_id"] == case["case_id"], f"Case order mismatch: {label}")
+    require(result["evaluated_input"] == ko_input(case), f"Not identical Ko input: {label}")
+    for key in ["input_sha256", "response_sha256", "cache_key"]:
+        require(result[key] == case["hashes"][key], f"Stale {key}: {label}")
+    raw_response = case["test_response_ko"]
+    response = unicodedata.normalize("NFC", raw_response) if side == "ko" else raw_response
+    ids = case["ko_instruction_id_list"]
+    kwargs = ko_input(case)["kwargs"]
+    require(result["phase_schedule"][:2] == ["full.strict", "full.loose"], f"Full phase order changed: {label}")
+    for kind in KINDS:
+        verify_phase(result["full"][kind], ids, kwargs, response, kind, label + "/full/" + kind)
+    require(all(not s or l for s, l in zip(result["full"]["strict"]["instruction_results"], result["full"]["loose"]["instruction_results"])), f"Strict success lost in loose: {label}")
+    instances = [{b["instance"] for b in result["full"][kind]["checker_build_trace"]} for kind in KINDS]
+    require(instances[0].isdisjoint(instances[1]), f"Checker instance shared across phases: {label}")
+    targets = result["isolated_targets"]
+    require([t["instruction_index"] for t in targets] == [t["instruction_index"] for t in case["targets"]], f"Missing target: {label}")
+    for target in targets:
+        i = target["instruction_index"]
+        require(target["instruction_id"] == ids[i], f"Isolated index/ID mismatch: {label}")
+        for kind in KINDS:
+            verify_phase(target[kind], [ids[i]], [kwargs[i]], response, kind, label + f"/isolated[{i}]/" + kind)
+            require(target[kind]["instruction_results"][0] == result["full"][kind]["instruction_results"][i], f"Isolated/full mismatch: {label}/{i}/{kind}")
+    if side == "ko":
+        for kind in KINDS:
+            require(result["full"][kind]["instruction_results"] == case["expected_ko"]["full"][kind], f"Predeclared Ko oracle mismatch: {label}/{kind}")
 
 
-def diagnostic_summary(result, form="raw"):
-    diag = result["diagnostics"][form]
-    if "count" in diag:
-        return f"count={diag['count']}; checker={tf(diag['checker_result'])}"
-    if "matches" in diag:
-        return f"match={json.dumps(diag['matches'], ensure_ascii=False)}; checker={tf(diag['checker_result'])}"
-    return f"checker={tf(diag['checker_result'])}"
+def metric_counts(results):
+    counts = {}
+    for kind in KINDS:
+        flags = [r["full"][kind]["instruction_results"] for r in results]
+        for level, numerator, denominator in [("prompt", sum(all(f) for f in flags), len(flags)),
+                                               ("instruction", sum(sum(f) for f in flags), sum(map(len, flags)))]:
+            counts[level + "_" + kind] = {"numerator": numerator, "denominator": denominator, "value": numerator / denominator}
+    return counts
+
+
+def verify_reproduction(case, record, archived):
+    """The retained-case oracle belongs to its row in the experiment."""
+    replay = record.get("baseline_reproduction")
+    if case["origin"] == "legacy_86":
+        require(replay is not None, "Retained case missing integrated reproduction")
+        require(replay["input_contract"] == "archived_language_specific", "Reproduction input provenance was lost")
+        require(replay["result"] == archived[case["case_id"]], "Integrated reproduction differs from archived result")
+    else:
+        require(replay is None, "A new case cannot be counted as an archived reproduction")
+
+
+def verify_environment(run, cases_path, side, provenance):
+    env = run["environment"]
+    require(env["cases_sha256"] == sha(cases_path.read_bytes()), "Stale results input hash")
+    require(env["runtime_sha256"] == sha((ROOT / "audit_runtime.py").read_bytes()), "Stale base runtime")
+    require(env["runner_sha256"] == sha((ROOT / "run_audit.py").read_bytes()), "Stale audit runner")
+    require(env["random_seed"] == 0 and env["langdetect_seed"] == 0, "Unrecorded seed")
+    require(env["nltk_resource_sha256"] == read_json(ROOT / "nltk_resources.json")["sha256"], "NLTK resource drift")
+    source = provenance["ko" if side == "ko" else "harness"]["files"]
+    prefix = "ifeval_ko/" if side == "ko" else "lm_eval/tasks/ifeval/"
+    require(all(h == source[prefix + n + ".py"]["sha256"] for n, h in env["module_sha256"].items()), "Wrong imported evaluator")
+
+
+def metadata_coverage(source_root):
+    spec = importlib.util.spec_from_file_location("metadata_coverage", ROOT.parent / "sample-coverage/audit_coverage.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    provenance = read_json(ROOT / "provenance.json")["ko"]
+    blobs = {name: (source_root / info["local_path"]).read_bytes() for name, info in provenance["files"].items()}
+    mapping, classes, constants = module.source_info(blobs)
+    import pyarrow.parquet as pq
+    rows = pq.read_table(source_root / "sources/ko/data/train-00000-of-00001.parquet").to_pylist()
+    specs = {iid: module.inspect_checker(classes[mapping[iid]], constants) for row in rows for iid in row["instruction_id_list"]}
+    ids, parts = module.summarize(rows, specs)
+    require((len(rows), sum(ids.values()), len(ids), len(parts), len(mapping)) == (342, 481, 21, 25, 25), "Data/registry denominator changed")
+    return rows, parts, specs
+
+
+def verify_baseline():
+    baseline = read_baseline()
+    return baseline_cases_hash(baseline)
+
+
+def legacy_coverage(cases, results):
+    table = defaultdict(lambda: {"isolated_strict": Counter(), "isolated_loose": Counter(), "full_strict": Counter(), "full_loose": Counter()})
+    for c, r in zip(cases, results):
+        i = r["instruction_index"]
+        kwargs = c.get("ko_eval_all_kwargs", c["ko_all_kwargs"])
+        target_key = (c["instruction_id"], partition(c["instruction_id"], kwargs[i]))
+        for kind in KINDS:
+            table[target_key]["isolated_" + kind][tf(r["isolated"][kind]["instruction_results"][0])] += 1
+            for iid, kw, flag in zip(c["ko_instruction_id_list"], kwargs, r["full"][kind]["instruction_results"]):
+                table[iid, partition(iid, kw)]["full_" + kind][tf(flag)] += 1
+    return [{"instruction_id": iid, "input_partition": part, **{n: dict(v) for n, v in stats.items()}} for (iid, part), stats in sorted(table.items())]
+
+
+def verify(output_dir, source_root):
+    provenance, verified_sources = verify_sources(source_root)
+    manifest = read_json(output_dir / "manifest.json")
+    require(manifest["builder_sha256"] == sha((ROOT / "build_cases.py").read_bytes()), "Stale builder manifest")
+    require(verify_baseline() == manifest["baseline_cases_lf_sha256"], "Baseline input hash mismatch")
+    for field, path in [("cases_sha256", output_dir / "cases.json"), ("support_cases_sha256", output_dir / "support_cases.json"),
+                        ("source_rows_sha256", output_dir / "source_rows.json"), ("baseline_sha256", ROOT / "baseline.json")]:
+        require(manifest[field] == sha(path.read_bytes()), f"Changed input: {field}")
+    for side in ["original", "ko"]:
+        require(manifest["baseline_" + side + "_results_object_sha256"] == object_hash(baseline_run(side)), "Baseline result hash mismatch")
+    cases = read_json(output_dir / "cases.json")
+    validate_cases(cases)
+    require(len(cases) == 156, "Incomplete normal suite")
+    runs = {side: read_json(output_dir / (side + "_results.json")) for side in ["original", "ko"]}
+    rows, parts, specs = metadata_coverage(source_root)
+    by_key = {r["key"]: r for r in rows}
+    original_rows = {r["key"]: r for r in map(json.loads, (source_root / "sources/original_dataset/ifeval_input_data.jsonl").read_text().splitlines())}
+    require(read_json(output_dir / "source_rows.json") == [by_key[k] for k in manifest["source_keys"]], "Source catalog changed")
+    for c in cases:
+        validate_source_row(c, by_key)
+        require(c["source_revisions"] == {name: info["revision"] for name, info in provenance.items()}, "Case source revision mismatch")
+        if c["key"] is not None:
+            source = original_rows[c["key"]]
+            require(all(c["original_" + field] == source[src] for field, src in [("prompt", "prompt"), ("instruction_id_list", "instruction_id_list"), ("all_kwargs", "kwargs")]), "Archival English source metadata changed")
+    for side, run in runs.items():
+        verify_environment(run, output_dir / "cases.json", side, provenance)
+        require(run["environment"]["comparison_input"] == "identical_ko", "Mixed language-specific comparisons")
+        require(len(run["results"]) == len(cases), "Missing scored cases")
+        for c, r in zip(cases, run["results"]):
+            verify_record(c, r, side)
+    coverage = defaultdict(lambda: {"strict": Counter(), "loose": Counter(), "pairs": Counter(), "cases": []})
+    boundaries = defaultdict(list)
+    primary_pairs = {kind: Counter() for kind in KINDS}
+    all_pairs = {kind: Counter() for kind in KINDS}
+    merged = []
+    for c, a, b in zip(cases, runs["original"]["results"], runs["ko"]["results"]):
+        i = c["instruction_index"]
+        differences = {}
+        for kind in KINDS:
+            av, bv = a["full"][kind], b["full"][kind]
+            differences["target_" + kind] = av["instruction_results"][i] != bv["instruction_results"][i]
+            differences["prompt_" + kind] = av["prompt_result"] != bv["prompt_result"]
+            primary_pairs[kind][pair(av["instruction_results"][i], bv["instruction_results"][i])] += 1
+            all_pairs[kind].update(pair(x, y) for x, y in zip(av["instruction_results"], bv["instruction_results"]))
+        merged.append({"case": c, "original": a, "ko": b, "differences": differences})
+        if c["scope"] != "dataset":
+            continue
+        for target in c["targets"]:
+            i, iid = target["instruction_index"], target["instruction_id"]
+            key = iid, target["input_partition"]
+            row = coverage[key]
+            flags = [b["full"][kind]["instruction_results"][i] for kind in KINDS]
+            row["pairs"][pair(*flags)] += 1
+            row["cases"].append({"case_id": c["case_id"], "key": c["key"], "instruction_index": i, "strict": flags[0], "loose": flags[1]})
+            for kind, flag in zip(KINDS, flags):
+                row[kind][tf(flag)] += 1
+            if "boundary" in target:
+                edge = target["boundary"]
+                group = (c["key"], i, edge["parameter"], edge["threshold"])
+                calls = [x for x in b["full"]["strict"]["checker_call_trace"] if x["instruction_index"] == i]
+                count_name = {"frequency": "actual_occurrences", "num_bullets": "num_bullet_lists"}.get(edge["parameter"], edge["parameter"])
+                require(calls and calls[0]["counts"].get(count_name) == edge["response_count"], f"Boundary count not observed: {c['case_id']}/{i}")
+                boundaries[group].append({"case_id": c["case_id"], **edge, "strict": flags[0], "loose": flags[1]})
+    require(set(coverage) == set(parts), "Missing normal-data input partition")
+    for key, row in coverage.items():
+        require(row["pairs"]["T,T"] and row["pairs"]["F,F"], f"No dedicated TT and FF: {key}")
+    require(len(boundaries) == 13, "Missing count-boundary family")
+    require(all({e["offset"] for e in edges} == {-1, 0, 1} for edges in boundaries.values()), "Incomplete N-1/N/N+1")
+    repeated = [r for r in merged if r["case"]["key"] == 1203]
+    for kind in KINDS:
+        require({tuple(r["ko"]["full"][kind]["instruction_results"]) for r in repeated} == {(True, True), (True, False), (False, True), (False, False)}, "Repeated-ID matrix incomplete")
+    metrics = {side: metric_counts(run["results"]) for side, run in runs.items()}
+    expected_numerators = {"prompt_strict": 71, "instruction_strict": 133, "prompt_loose": 79, "instruction_loose": 142}
+    require(all(metrics["ko"][name]["numerator"] == n for name, n in expected_numerators.items()), "Ko aggregate oracle mismatch")
+    require(metrics["ko"]["prompt_strict"]["denominator"] == 156 and metrics["ko"]["instruction_strict"]["denominator"] == 247, "Wrong regression denominators")
+
+    legacy_cases = baseline_cases()
+    reproduction = {}
+    for side in ["original", "ko"]:
+        old = baseline_run(side)
+        run = runs[side]
+        verify_environment(run["reproduction"], ROOT / "baseline.json", side, provenance)
+        archived = {r["case_id"]: r for r in old["results"]}
+        require(len(old["results"]) == run["reproduction"]["retained_cases"] == 86, "Incomplete integrated reproduction")
+        for case, record in zip(cases, run["results"]):
+            verify_reproduction(case, record, archived)
+        require(sum("baseline_reproduction" in r for r in run["results"]) == 86, "Wrong reproduced-case count")
+        require(run["reproduction"]["exact_result_rows_matched"] == 86, "Reproduction summary mismatch")
+        reproduction[side] = {"retained_cases": 86, "exact_result_rows_matched": 86, "included_in_experiment": True}
+
+    support_cases = read_json(output_dir / "support_cases.json")
+    validate_cases(support_cases, require_expected=False)
+    supports = {side: read_json(output_dir / ("support_" + side + "_results.json")) for side in ["original", "ko"]}
+    support_rows = []
+    for side, run in supports.items():
+        verify_environment(run, output_dir / "support_cases.json", side, provenance)
+        require([r["case_id"] for r in run["results"]] == [c["case_id"] for c in support_cases], "Missing support input")
+    for c, a, b in zip(support_cases, supports["original"]["results"], supports["ko"]["results"]):
+        require(a["evaluated_input"] == b["evaluated_input"] == ko_input(c), "Support inputs differ")
+        for kind in KINDS:
+            if "error_type" in c["expected_ko"]:
+                require(b["full"][kind].get("error", {}).get("type") == c["expected_ko"]["error_type"], "Expected Ko exception not preserved")
+            else:
+                require("error" not in b["full"][kind] and b["full"][kind]["instruction_results"] == c["expected_ko"]["full"][kind], "Support oracle mismatch")
+                verify_phase(b["full"][kind], c["ko_instruction_id_list"], ko_input(c)["kwargs"], unicodedata.normalize("NFC", c["test_response_ko"]), kind, c["case_id"])
+        support_rows.append({"case": c, "original": a, "ko": b})
+    require(sum("error_type" in c["expected_ko"] for c in support_cases) == 8, "Wrong exception-contract count")
+
+    # Validate the actual original aggregation utility on uneven instructions.
+    from audit_runtime import load_modules
+    import os
+    os.environ["IFEVAL_AUDIT_SOURCE_ROOT"] = str(source_root)
+    import audit_runtime
+    audit_runtime.SOURCE_ROOT = source_root
+    modules = load_modules("ko", "isolated-source")
+    require(modules["utils"].agg_inst_level_acc([[True, True, True], [False]]) == 0.75, "Instruction aggregation changed")
+    require(sum(map(all, [[True, True, True], [False]])) / 2 == 0.5, "Prompt aggregation changed")
+    star = next(r for r in merged if r["case"]["case_id"] == "markdown_star_balanced_136")
+    require(star["ko"]["full"]["loose"]["prompt_result"] and not any(x["prompt_result"] for x in star["ko"]["strict_on_actual_loose_candidates"]), "Instruction-wise OR witness lost")
+    by_name = {r["case"]["case_id"]: r["ko"] for r in merged}
+    for name in ["expanded_sent_lt_6_multiline", "expanded_bullets_10_unpadded", "expanded_nth_paragraphs_5"]:
+        require(not by_name[name]["isolated"]["strict"]["instruction_results"][0] and by_name[name]["isolated"]["loose"]["instruction_results"][0], "Loose recovery witness lost")
+
+    coverage_rows = [{"instruction_id": iid, "input_partition": part, "check_line": specs[iid]["check_line"],
+                      **{kind: dict(stats[kind]) for kind in KINDS}, "strict_loose_pairs": dict(stats["pairs"]), "cases": stats["cases"]}
+                     for (iid, part), stats in sorted(coverage.items())]
+    summary = {"normal_cases": 156, "support_cases": 18, "normal_full_instruction_occurrences": 247,
+               "normal_scope_counts": manifest["normal_scope_counts"], "source_keys": 32, "source_instructions": 55,
+               "dataset_rows": 342, "dataset_instructions": 481, "dataset_ids": 21, "dataset_input_partitions": 25,
+               "explicit_ids_with_TT_and_FF": 21, "explicit_partitions_with_TT_and_FF": 25,
+               "boundary_families": 13, "boundary_offsets_per_family": [-1, 0, 1],
+               "primary_pairs_english_ko": {kind: dict(primary_pairs[kind]) for kind in KINDS},
+               "full_instruction_pairs_english_ko": {kind: dict(all_pairs[kind]) for kind in KINDS},
+               "metrics": metrics, "baseline_reproduction": reproduction,
+               "experiment": {"retained_cases": 86, "added_cases": 70, "normal_cases": 156, "reproduction_integrated": True},
+               "baseline_cases_hash_verified": True,
+               "support_normal_returns": 10, "support_expected_exceptions": 8,
+               "normal_unhandled_exceptions": 0, "unresolved_ko_oracle_mismatches": 0,
+               "identical_input_hashes_verified": 156, "comparison_scope": "English reference vs Ko reference; identical Ko input",
+               "model_inference_run": False, "new_lighteval_ko_parity_run": False,
+               "existing_lighteval_english_french_regression_run": False}
+    return {"summary": summary, "manifest": manifest, "provenance": provenance,
+            "environments": {s: r["environment"] for s, r in runs.items()}, "cases": merged,
+            "coverage": coverage_rows, "boundaries": [{"key": k, "instruction_index": i, "parameter": p, "threshold": n, "cases": e} for (k, i, p, n), e in sorted(boundaries.items())],
+            "legacy_coverage": legacy_coverage(legacy_cases, baseline_run("ko")["results"]),
+            "support": support_rows, "verifier_sha256": sha(Path(__file__).read_bytes()), "verified_sources": verified_sources}
+
+
+def decision(result, kind, index):
+    row = result["full"][kind]
+    if "error" in row:
+        return row["error"]["type"]
+    return tf(row["instruction_results"][index]) + " / [" + ",".join(map(tf, row["instruction_results"])) + "] / " + tf(row["prompt_result"])
+
+
+def report(result, output_dir):
+    from report_i18n import catalog_en, issue_ko, report_en, with_language_link
+
+    summary = result["summary"]
+    write_json(output_dir / "results.json", result)
+    write_json(output_dir / "coverage.json", {"summary": summary, "input_partitions": result["coverage"], "boundaries": result["boundaries"], "legacy_coverage": result["legacy_coverage"]})
+    lines = ["# IFEval / IFEval-Ko 확장 고정 응답 비교", "",
+             "원본 영어·Ko 평가기에 **동일한 Ko prompt·instruction 순서·실제 적용 kwargs·응답**을 전달했다. 회귀 검증의 기준은 원본 Ko의 기대값과 일치하는지 여부다.", "",
+             "기존 `case/full/isolated/diagnostics` 형식을 유지했다. `original_*` 필드는 원래 영어 문항의 출처를 보존하며, 실제 비교 입력은 각 원시 결과의 `evaluated_input`에 기록했다.", "",
+             "156건의 실험은 실제 데이터 조건 116건·메모리 override 2건·합성 입력 38건으로 구성된다. 사용한 원본 문항은 32개이며 instruction 55개를 포함한다. full 평가에서 검사한 instruction은 247개다.", "",
+             "보조 호환성·오류 입력 18건 중 10건은 정상 반환하고, 8건은 원본에서 예상한 예외가 발생한다. 보조 입력은 주 실험의 경로별 검증과 지표에 포함하지 않는다. 모델 생성, 새 Lighteval-Ko 검증과 기존 Lighteval 영어/French 회귀는 미수행이다.", "",
+             "## 1. 판정 방향 — (영어, Ko)", "", "| 단계 | T,T | T,F | F,T | F,F | 분모 |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
+    for kind in KINDS:
+        counts = summary["primary_pairs_english_ko"][kind]
+        lines.append(f"| 대상 {kind} | " + " | ".join(str(counts.get(p, 0)) for p in ["T,T", "T,F", "F,T", "F,F"]) + " | 156 |")
+    lines += ["", "각 case의 주 검사 대상 하나씩을 집계했다. 추가로 지정한 검사 대상과 full 평가의 모든 개별 판정은 아래 비교표와 JSON에 보존했다. 이 표의 `(영어, Ko)` 순서와 경계 표의 `(strict, loose)` 순서를 구별해 읽는다.", "",
+              "## 2. 네 지표의 분자·분모", "", "고정 응답 실험의 집계다. 모델의 벤치마크 성능 점수를 나타내지 않는다.", "", "| 지표 | 영어 | Ko |", "| --- | --- | --- |"]
+    for name, stat in summary["metrics"]["ko"].items():
+        en = summary["metrics"]["original"][name]
+        lines.append(f"| {name} | {en['numerator']}/{en['denominator']} | {stat['numerator']}/{stat['denominator']} |")
+    lines += ["", "## 3. 전용 입력 경로 coverage", "", "실제 데이터 조건을 유지한 사례 중 `targets`로 지정한 instruction만 집계한다. 25개 입력 경로마다 strict·loose 모두 통과하는 응답(TT)과 모두 실패하는 응답(FF)을 확보했다. 이는 정상 kwargs에 따른 입력 경로의 검증 범위다.", "",
+              "| instruction ID | 입력 경로 | strict T/F | loose T/F | 전용 TT | 전용 FF |", "| --- | --- | --- | --- | ---: | ---: |"]
+    for r in result["coverage"]:
+        lines.append(f"| `{r['instruction_id']}` | `{r['input_partition']}` | {r['strict'].get('T',0)}/{r['strict'].get('F',0)} | {r['loose'].get('T',0)}/{r['loose'].get('F',0)} | {r['strict_loose_pairs']['T,T']} | {r['strict_loose_pairs']['F,F']} |")
+    lines += ["", "## 4. 경계·반복 ID·loose 복구", "", "| key:index | 조건 | N−1의 strict/loose | N | N+1 |", "| --- | --- | --- | --- | --- |"]
+    for b in result["boundaries"]:
+        edges = {c["offset"]: c for c in b["cases"]}
+        cells = [pair(edges[o]["strict"], edges[o]["loose"]) for o in [-1, 0, 1]]
+        lines.append(f"| {b['key']}:{b['instruction_index']} | {b['parameter']}={b['threshold']} | " + " | ".join(cells) + " |")
+    lines += ["", "key 1203의 두 빈도 조건은 index 0이 전쟁≥8, index 1이 peace≥10이다. strict와 loose 각각에서 `[T,T]`, `[T,F]`, `[F,T]`, `[F,F]` 네 조합을 확인했다. prompt의 평화와 kwargs의 peace는 원본대로 유지했다.", "",
+              "1268의 6문장은 한 줄로 쓰면 F/F, 여러 줄로 쓰면 F/T다. 136의 10개 bullet은 앞뒤에 빈 줄을 2개씩 두면 F/F, 빈 줄이 없으면 F/T다. 3073의 5문단도 F/T다. 여기서 F/T는 strict 실패·loose 통과를 뜻하므로 두 기대값을 각각 기록한다.", "",
+              "## 5. 전체 비교표", "", "각 셀은 **대상 instruction의 판정 / 전체 instruction의 판정 목록 / 문항 전체 통과 여부** 순서다. 모든 행에서 양쪽 평가기에 동일 Ko 입력을 전달했다. 원본 조건·응답·기대값·관측값·해시는 cases.json과 results.json에 각각 기록했다.", "",
+              "| key:index | Checker | Test | Original strict | Original loose | Ko strict | Ko loose | strict (EN,Ko) | loose (EN,Ko) | Scope | 실험 구성 |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for row in result["cases"]:
+        c, a, b = row["case"], row["original"], row["ko"]
+        i = c["instruction_index"]
+        cells = [decision(r, kind, i) for r, kind in [(a,"strict"),(a,"loose"),(b,"strict"),(b,"loose")]]
+        pairs = [pair(a["full"][k]["instruction_results"][i], b["full"][k]["instruction_results"][i]) for k in KINDS]
+        composition = "기존·양쪽 재현 일치" if c["origin"] == "legacy_86" else "신규"
+        lines.append(f"| {c['key']}:{i} | {c['checker']} | `{c['case_id']}` | " + " | ".join(cells + pairs + [c["scope"], composition]) + " |")
+    lines += ["", "## 6. 별도 호환성·오류 입력", "", "| case | checker | 영어 strict/loose | Ko strict/loose | 분류 |", "| --- | --- | --- | --- | --- |"]
+    for r in result["support"]:
+        c = r["case"]
+        vals = ["; ".join(decision(r[side], k, 0) for k in KINDS) for side in ["original","ko"]]
+        lines.append(f"| `{c['case_id']}` | `{c['instruction_id']}` | {vals[0]} | {vals[1]} | {'예상한 예외 확인' if 'error_type' in c['expected_ko'] else '합성 호환성'} |")
+    lines += ["", "## 7. 재현·이식 인계", "", "156건의 실험 결과에 입력 재현의 검증 근거를 포함했다. 기준 결과와의 일치 여부는 원시 결과의 `baseline_reproduction`과 `summary`에서 확인할 수 있다. 비교표는 동일 Ko 입력을 전달한 156건을 기준으로 집계한다.", "",
+              "고정한 코드·데이터 21개 파일, 실제로 불러온 네 모듈, NLTK 자원과 입력·응답의 해시를 확인했다. 실행 단계·객체 생성·초기화·후보 처리 기록을 검사하고, instruction별 후보 OR·문항별 AND·단계별 새 객체·`if v` 필터·문항별 instruction 수가 다른 집계도 확인했다.", "",
+              "A안은 원본 Ko의 채점 규칙을 가깝게 보존하고 기존 영어/French 코드의 변경 범위를 줄이기 위한 선택이다. B안도 같은 정책과 객체 생성 방식을 보존하면 구현할 수 있다.", "",
+              "재현 명령은 README에 정리했다. [영문 이슈 첨부 초안](issue-1463.md)은 로컬에 준비했으며 아직 게시하지 않았다. [manifest](manifest.json), [검증 범위](coverage.json), [원본 문항 목록](source_rows.md)을 함께 확인할 수 있다.", ""]
+    (output_dir / "results.en.md").write_text("\n".join(with_language_link(report_en(lines), "results.md", "en")), encoding="utf-8")
+    korean_lines = [line.replace("[영문 이슈 첨부 초안](issue-1463.md)", "[이슈 첨부 초안](issue-1463.ko.md)") for line in lines]
+    (output_dir / "results.md").write_text("\n".join(with_language_link(korean_lines, "results.en.md", "ko")), encoding="utf-8")
+    ko_source = result["provenance"]["ko"]
+    source_base = ko_source["repository"] + "/blob/" + ko_source["revision"] + "/"
+    code_lines = {c["instruction_id"]: c["check_line"] for c in result["coverage"]}
+    catalog = ["# 고정 Ko 원본 문항 목록", "", "`source_rows.json`에 원본 prompt·instruction 순서·24개 kwargs 필드를 보존했다. 아래 표에서는 null 필드만 생략했다.", "",
+               "고정 데이터: [train Parquet](" + source_base + "data/train-00000-of-00001.parquet). 각 ID 링크는 같은 revision의 checker 코드를 가리킨다.", ""]
+    for row in read_json(output_dir / "source_rows.json"):
+        catalog += [f"## key {row['key']}", "", "```text", row["prompt"], "```", "", "| index | instruction_id | kwargs (null 생략) |", "| ---: | --- | --- |"]
+        for i, (iid, kw) in enumerate(zip(row["instruction_id_list"], row["kwargs"])):
+            url = source_base + "ifeval_ko/instructions.py#L" + str(code_lines[iid])
+            catalog.append(f"| {i} | [`{iid}`]({url}) | `{json.dumps({k:v for k,v in kw.items() if v is not None}, ensure_ascii=False)}` |")
+        catalog.append("")
+    (output_dir / "source_rows.en.md").write_text("\n".join(with_language_link(catalog_en(catalog), "source_rows.md", "en")), encoding="utf-8")
+    (output_dir / "source_rows.md").write_text("\n".join(with_language_link(catalog, "source_rows.en.md", "ko")), encoding="utf-8")
+    issue = ["# Local experiment attachment for huggingface/lighteval#1463", "",
+             "This draft summarizes a reference-evaluator experiment for https://github.com/huggingface/lighteval/issues/1463. It has not been posted. The new Lighteval-Ko task and model evaluation remain pending.", "",
+             "## Experiment", "",
+             "We conducted a **156-case experiment** and checked **18 auxiliary inputs** for compatibility and error handling. Of the 156 cases, 116 use unchanged dataset conditions, 2 use explicit in-memory overrides, and 38 are synthetic. Full evaluation checks 247 instruction occurrences across these responses. These figures describe test results, not model benchmark accuracy.", "",
+             "Both evaluators, at the pinned revisions, received the **same Ko prompt, ordered instruction IDs, effective kwargs and response**. Input and response hashes confirm this. The `original_*` fields in cases.json preserve the English source metadata; `evaluated_input` in each raw result records the Ko input used for the comparison.", "",
+             "Each of the 21 instruction IDs and 25 input partitions used by the dataset has an explicitly targeted response that passes both strict and loose checks and one that fails both. Thirteen count conditions have N−1/N/N+1 checks. The two frequency instructions in key 1203 are identified by index and tested with [T,T], [T,F], [F,T] and [F,F]. The 25 partitions describe normal kwargs paths, not all source-code branches.", "",
+             "## Same-input decision matrix", "", "Pairs below mean **(English, Ko)** for the primary target of each case.", "", "| Phase | T,T | T,F | F,T | F,F | Cases |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
+    for kind in KINDS:
+        counts = summary["primary_pairs_english_ko"][kind]
+        issue.append(f"| {kind} | " + " | ".join(str(counts.get(p,0)) for p in ["T,T","T,F","F,T","F,F"]) + " | 156 |")
+    issue += ["", "Representative results using identical responses:", "", "| Key / case | English strict/loose | Ko strict/loose | Observation |", "| --- | --- | --- | --- |"]
+    witnesses = [("markdown_quote_valid_highlights_349", "word counts 39 vs 40 at <40; blockquote marker contributes a Ko whitespace token"),
+                 ("comma_boundary_compact", "word counts 20 vs 18 at <20; compact comma-separated text"),
+                 ("markdown_star_balanced_136", "strict difference recovers in loose; instruction-wise candidate OR"),
+                 ("expanded_constrained_T", "Ko fixed response phrase is absent from the English options")]
+    by_id = {r["case"]["case_id"]: r for r in result["cases"]}
+    for name, observation in witnesses:
+        r = by_id[name];i=r["case"]["instruction_index"]
+        values = ["/".join(tf(r[side]["full"][k]["instruction_results"][i]) for k in KINDS) for side in ["original","ko"]]
+        issue.append(f"| {r['case']['key']} / `{name}` | {values[0]} | {values[1]} | {observation} |")
+    issue += ["", "## Interpretation and proposed implementation", "",
+              "These results support a separate `ifeval_ko` package and scorer for the initial port (option A). This keeps the Ko word and sentence utilities, fixed phrases and NFC handling close to the reference. It also preserves the order of running all strict checks before all loose checks, with fresh checker instances in each phase. The approach limits changes to the existing English and French paths, at the cost of duplicating a small scoring loop. Option B can also work if it preserves the same policies and checker lifecycle.", "",
+              "The port must **match the Ko reference**. If English passes a response and Ko fails it, the port must also fail it. We preserve the known prompt/kwargs mismatches in 1203, 2142, 1268 and 3538, as well as the `first_word` normalization asymmetry.", "",
+              "## Verification and limitations", "",
+              "- All 156 cases match the Ko expectations declared before execution, with no unhandled scoring exceptions or unresolved mismatches. Full and isolated evaluations agree for every specified target.",
+              "- Input reproduction is checked against the stored reference results and recorded with the raw results. The comparison table and metrics use identical Ko inputs throughout.",
+              "- Auxiliary inputs cover four registered instruction types absent from the dataset. Ko `capital_word_frequency` raises AttributeError because `instructions_util` has no `nltk` attribute; the unregistered `key_sentences` ID raises KeyError. Eight auxiliary inputs raise expected exceptions and are excluded from normal scoring.",
+              "- Traces from the original functions confirm candidate order and duplicates, exclusion of empty candidates, instruction-level OR and prompt-level AND, the original `if v` filter, and checker construction. The control with unequal instruction counts yields prompt accuracy 0.5 and instruction accuracy 0.75.",
+              "- Parity testing for the new Lighteval-Ko task, regression checks for the existing Lighteval English/French paths, 23-prompt model integration and full-split evaluation on 342 prompts remain pending.", "",
+              "## Pinned sources", ""]
+    for name, p in result["provenance"].items():
+        issue.append(f"- {name}: `{p['revision']}` — {p['repository']}")
+    issue += ["", "The English reference in this experiment is the pinned lm-evaluation-harness evaluator. Both evaluators ran through full-package imports after source-file hashes were verified. The Lighteval implementation was used as a design reference.", "",
+              "## Attachment contents and reproduction", "",
+              "The ZIP contains fixtures, predeclared Ko expectations, raw results and traces, comparison tables, provenance, checksums and reproduction scripts. Start with [README.en.md](README.en.md) and [results.en.md](results.en.md) in `team-c-ifeval-ko/evidence/checker-audit/`. Downloaded evaluator sources, dependencies and model weights are excluded; the README explains how to restore the required versions. Private context, caches and credentials are also excluded.", "",
+              "The ZIP and this note are ready for a later issue attachment. Relative links refer to files inside the archive.", ""]
+    (output_dir / "issue-1463.ko.md").write_text("\n".join(with_language_link(issue_ko(issue), "issue-1463.md", "ko")), encoding="utf-8")
+    (output_dir / "issue-1463.md").write_text("\n".join(with_language_link(issue, "issue-1463.ko.md", "en")), encoding="utf-8")
 
 
 def main():
-    cases = read("cases.json")
-    provenance = read("provenance.json")
-    for entry in provenance.values():
-        for info in entry["files"].values():
-            assert hashlib.sha256((ROOT / info["local_path"]).read_bytes()).hexdigest() == info["sha256"], "source/data snapshot changed"
-    import pyarrow.parquet as pq
-    assert read("sources/ko/data/rows.json") == pq.read_table(
-        ROOT / "sources/ko/data/train-00000-of-00001.parquet").to_pylist(), "parquet/derived JSON mismatch"
-    runs = {s: read(s + "_results.json") for s in ["original", "ko"]}
-    datasets = {
-        "original": {r["key"]: r for r in map(json.loads, (ROOT / "sources/original_dataset/ifeval_input_data.jsonl").read_text().splitlines())},
-        "ko": {r["key"]: r for r in read("sources/ko/data/rows.json")}}
-    expected_case_hash = hashlib.sha256((ROOT / "cases.json").read_bytes()).hexdigest()
-    for side, run in runs.items():
-        assert run["environment"]["cases_sha256"] == expected_case_hash, f"stale {side} results"
-        assert len(run["results"]) == len(cases)
-        assert all("error" not in r for r in run["results"]), f"failed {side} cases"
-        assert [r["case_id"] for r in run["results"]] == [c["case_id"] for c in cases]
-        assert run["environment"]["nltk_resource_sha256"] == read("nltk_resources.json")["sha256"], "NLTK resource drift"
-        expected_files = provenance["harness" if side == "original" else "ko"]["files"]
-        for name, sha in run["environment"]["module_sha256"].items():
-            file = ("lm_eval/tasks/ifeval/" if side == "original" else "ifeval_ko/") + name + ".py"
-            assert sha == expected_files[file]["sha256"], f"upstream module modified: {side}/{file}"
-
-    merged = []
-    for i, case in enumerate(cases):
-        original, ko = runs["original"]["results"][i], runs["ko"]["results"][i]
-        for side, result in [("original", original), ("ko", ko)]:
-            if case["key"] is not None:
-                row = datasets[side][case["key"]]
-                assert case[side + "_prompt"] == row["prompt"]
-                assert case[side + "_instruction_id_list"] == row["instruction_id_list"]
-                assert case[side + "_all_kwargs"] == row["kwargs"]
-            for mode in ["strict", "loose"]:
-                full = result["full"][mode]
-                assert full["prompt_result"] == all(full["instruction_results"])
-                assert target(result, mode) == full["instruction_results"][result["instruction_index"]]
-            assert not target(result, "strict") or target(result, "loose")
-        differences = {
-            "target_strict": target(original, "strict") != target(ko, "strict"),
-            "target_loose": target(original, "loose") != target(ko, "loose"),
-            "prompt_strict": original["full"]["strict"]["prompt_result"] != ko["full"]["strict"]["prompt_result"],
-            "prompt_loose": original["full"]["loose"]["prompt_result"] != ko["full"]["loose"]["prompt_result"]}
-        merged.append({"case": case, "original": original, "ko": ko, "differences": differences})
-    by_id = {r["case"]["case_id"]: r for r in merged}
-    balanced_star = by_id["markdown_star_balanced_136"]["ko"]
-    assert balanced_star["full"]["loose"]["prompt_result"]
-    assert not any(r["prompt_result"] for r in balanced_star["strict_on_actual_loose_candidates"])
-    persistent_dash = by_id["markdown_dash_persistent_136"]["ko"]
-    assert min(r["count"] for r in persistent_dash["isolated"]["loose"]["checker_call_trace"]) == 104
-
-    non_nfc = []
-    def inspect_nfc(value, path):
-        if isinstance(value, str) and unicodedata.normalize("NFC", value) != value:
-            non_nfc.append(path)
-        elif isinstance(value, list):
-            for i, v in enumerate(value): inspect_nfc(v, path + [i])
-        elif isinstance(value, dict):
-            for k, v in value.items(): inspect_nfc(v, path + [k])
-    for key, row in datasets["ko"].items(): inspect_nfc(row, [key])
-    summary = {"cases": len(merged), "keys": sorted({c["key"] for c in cases if c["key"] is not None}),
-               "scope_counts": dict(Counter(c["scope"] for c in cases)),
-               "original_rows": len(datasets["original"]), "ko_rows": len(datasets["ko"]),
-               "common_keys": len(datasets["original"].keys() & datasets["ko"].keys()),
-               "ko_non_nfc_field_paths": non_nfc,
-               "differences": {k: sum(r["differences"][k] for r in merged) for k in merged[0]["differences"]},
-               "target_same_strict_and_loose": sum(not r["differences"]["target_strict"] and not r["differences"]["target_loose"] for r in merged),
-               "difference_classifications": dict(Counter(r["case"]["classification"] for r in merged
-                   if r["differences"]["target_strict"] or r["differences"]["target_loose"]))}
-    (ROOT / "dataset_checks.json").write_text(dump({k: summary[k] for k in
-        ["original_rows", "ko_rows", "common_keys", "ko_non_nfc_field_paths"]}) + "\n", encoding="utf-8")
-    result = {"summary": summary, "environments": {s: run["environment"] for s, run in runs.items()},
-              "provenance": provenance, "nltk_resources": read("nltk_resources.json"), "cases": merged}
-    (ROOT / "results.json").write_text(dump(result) + "\n", encoding="utf-8")
-    lines = ["# IFEval / IFEval-Ko checker 검증 보고서", "",
-        "실제 evaluator 함수를 import해 통제한 응답을 검사했다. 모델 생성·성능 평가가 아니다. LightEval 코드는 참고용 원본으로만 저장했으며 수정·commit·PR·원격 쓰기는 하지 않았다.", "",
-        "## 1. 실행 환경과 명령어", ""]
-    for side, run in runs.items():
-        env = run["environment"]
-        lines += [f"- {side}: Python `{env['python'].splitlines()[0]}`, `{env['platform']}`, import mode `{env['import_mode']}`."]
-    lines += ["", "```bash", "ifeval_checker_audit/.venv/bin/python ifeval_checker_audit/build_cases.py",
-              "ifeval_checker_audit/.venv/bin/python ifeval_checker_audit/run_original.py",
-              "ifeval_checker_audit/.venv/bin/python ifeval_checker_audit/run_ko.py",
-              "ifeval_checker_audit/.venv/bin/python ifeval_checker_audit/compare.py", "```", "",
-              "설치·재구성 명령은 [README.md](README.md)에 있다. 실제 command, module path, SHA-256, 패키지 버전은 [results.json](results.json)의 `environments`에 기록했다.", "",
-              "`full-package`는 로컬에 설치한 실제 harness 패키지의 `InputExample`, `test_instruction_following_strict`, `test_instruction_following_loose` 실행을 뜻한다. Ko의 원본 파일은 `lm_eval.tasks.__path__`에 로컬 snapshot 경로를 추가해 원래 import 이름 그대로 불러온다. 함수 복제·checker 재구현·monkey patch는 없다. 모델을 연결한 `lm_eval.simple_evaluate`/CLI 전체 benchmark는 실행하지 않았다.", "",
-              "설치 대기 중에는 `isolated-source`로 원본 네 모듈을 먼저 실행했다. 그 예비 결과는 최종 결과에 사용하지 않는다. `isolated-source`는 package 상위 namespace를 구성하는 명시적 fallback이며 정식 harness 전체 package 실행과 구분한다. 최종 import 실패·case 실행 실패 여부는 아래 환경 및 검증 결과를 기준으로 한다.", "",
-              "NLTK English Punkt는 `punkt_tab/english` 데이터로 실행했고, [nltk_resources.json](nltk_resources.json)에 자원 hash를 고정했다. 다운로드 시 현재 WSL 경로의 group/world-writable 속성에 대한 NLTK 경고가 있었다. 실제 tokenizer 로딩 및 모든 case 실행은 성공했다. Ko 원본의 `\\s` 일반 문자열은 Python 3.12에서 SyntaxWarning을 내며, 원본을 수정하지 않았다.", "",
-              "## 2. Repository / dataset revision", "", "| Source | Revision | Reference |", "| --- | --- | --- |"]
-    for name, entry in provenance.items():
-        title = {"harness": "EleutherAI/lm-evaluation-harness", "lighteval": "Hugging-Face-KREW/lighteval",
-                 "original_dataset": "google/IFEval", "ko": "allganize/IFEval-Ko"}[name]
-        lines.append(f"| {name} | `{entry['revision']}` | [{title}]({entry['repository']}) |")
-    lines += ["", "모든 다운로드는 지정 revision의 read-only HTTP 요청이다. 파일별 URL/hash는 [provenance.json](provenance.json)에 있다. 영어 데이터는 JSONL, Ko는 train parquet 원본을 읽었다. Ko의 코드와 데이터는 동일 HF repository revision이다.", "",
-              "## 3. 검증 key와 실제 문항 대조", "",
-              f"검증 key: `{', '.join(map(str, summary['keys']))}`. 영어 {summary['original_rows']}행, Ko {summary['ko_rows']}행, 공통 {summary['common_keys']}개이며 중복 key는 없다. {summary['cases']}개 테스트: 실제 dataset 조건 {summary['scope_counts']['dataset']}개, 메모리 override {summary['scope_counts']['controlled_override']}개, 합성 fixture {summary['scope_counts']['synthetic']}개.", "",
-              "`dataset`은 실제 prompt/IDs/kwargs 그대로 사용한다. `controlled_override`는 실제 행을 바탕으로 지정 kwargs만 실행 중 변경한다. `synthetic`은 key가 null인 합성 fixture이며 데이터셋 문항에 대한 판정으로 해석하면 안 된다. 원문/한국어 대응 응답과 동일 한국어 입력을 사용하는 알고리즘 격리 응답을 구분했다. 짧은 응답은 주제 적합성을 평가하지 않는다.", "",
-              "Parquet kwargs에는 많은 null 필드가 있다. cases.json은 이를 원본 그대로 보존한다. 아래 표시는 null만 생략했다. evaluator는 양쪽 모두 실제 `{k:v for k,v in kwargs.items() if v}`를 사용한다. full instruction ID 순서와 모든 instruction 결과를 보존하고, 대상 instruction만 넣은 InputExample도 같은 실제 evaluator로 따로 실행했다.", ""]
-    for key in summary["keys"]:
-        lines += [f"### Key {key}", ""]
-        for side in ["original", "ko"]:
-            row = datasets[side][key]
-            lines += [f"**{side} prompt**", "", "```text", row["prompt"], "```", "",
-                      f"**{side} instruction_id_list / kwargs**", "", "```json",
-                      dump({"instruction_id_list": row["instruction_id_list"],
-                            "kwargs": [{k: v for k, v in kw.items() if v is not None} for kw in row["kwargs"]]}), "```", ""]
-    lines += ["## 4. 판정이 동일했던 사례", "",
-              f"대상 instruction의 strict와 loose가 모두 동일한 테스트는 {summary['target_same_strict_and_loose']}개다. 개별 결과는 전체 표와 아래 상세 기록에서 확인할 수 있다.", "",
-              "- 짧은 `사과,배,포도`는 count 3/1이지만 실제 key 3442의 <20에서는 둘 다 통과한다. 공백을 넣으면 count도 3/3으로 같아진다.",
-              "- punctuation 없는 두 줄은 양쪽 모두 1문장, 마침표 있는 두 줄은 2문장이다. Markdown heading은 별도 sentence를 만들지 않는다.",
-              "- trailing `---`는 양쪽 모두 추가 sentence로 센다. 두 문장+divider는 strict 실패/loose 성공으로 동일하다.",
-              "- 소수점 3.14/2.71과 Dr. 예시는 양쪽 모두 2문장이다.",
-              "- 붙여 쓴 강조 `*사과* *배* *포도*`의 39-word case는 양쪽 strict/loose 통과한다.",
-              "- 합성 사과 경계 fixture에서 양쪽 ForbiddenWords는 사과만 거부하고 사과를/사과가/사과나무는 허용한다. 양쪽 KeywordChecker/FrequencyChecker는 네 입력에서 모두 사과를 찾는다.",
-              "- 실제 한국어 kwargs가 NFC인 데이터 문항에서 response를 NFD로 바꾸어도 Ko evaluator가 NFC로 복원한다. 영어 대응 응답 결과와 대상 instruction 판정이 같다.", "",
-              "## 5. 판정이 달랐던 사례", "",
-              f"대상 strict 차이 {summary['differences']['target_strict']}개, 대상 loose 차이 {summary['differences']['target_loose']}개, prompt strict 차이 {summary['differences']['prompt_strict']}개, prompt loose 차이 {summary['differences']['prompt_loose']}개. 합성/대조군을 포함한 audit 건수이며 benchmark accuracy가 아니다.", "",
-              "### Keyword / kwargs mismatch: key 3345", "",
-              "`강도 강도는 등장합니다.`에서 Ko는 kwargs의 robber를 그대로 `re.findall`로 검색해 0회로 판정한다. 영어 대응 응답은 robber 2회여서 대상 strict/loose가 T/T, Ko는 F/F다. 이 최소 응답은 bullet instruction을 실패하므로 full prompt는 둘 다 F다. `* robber\\n* robber`와 `* 강도\\n* 강도`는 bullet과 forbidden 제약도 만족해 full prompt까지 T/T 대 F/F다. Ko keyword만 강도로 메모리 override하면 2회·T/T가 되며 full prompt도 T/T로 복원된다. 이 차이는 DATA이며 검색 알고리즘 변경 근거가 아니다.", "",
-              "### 단어 수: 실제 threshold와 loose", "",
-              "key 3442의 `<<제목>>`+항목 16개+`사과,배,포도`는 영어 count 20으로 <20 실패, Ko 18로 통과한다. 쉼표 뒤에 공백을 넣으면 Ko도 20이 되어 strict/loose 실패한다. 한 줄이라 loose의 첫/마지막 줄 삭제 후보는 빈 문자열이며 evaluator가 제외한다.", "",
-              "key 136의 99 lexical words는 heading 또는 단일 줄 `>`를 넣으면 Ko 100이 된다. heading은 첫 줄 제거로 loose가 복구되지만 단일 줄 quote는 F가 남는다. 9개 균등 bullet은 count 99/108, Ko strict F·loose T다. 같은 99 words에서 양 끝 bullet을 짧게 만들면 dash의 loose count가 최소 104로 남아 F다. star는 실제 loose `*` 제거 후보에서 99가 되어 T다. key 349에서 별도 공백으로 분리된 강조 marker는 39/45로 strict를 바꾸지만 loose star 제거로 39가 되어 복구된다.", "",
-              "공백으로 둘러싼 `* 사과 *`는 실제 CommonMark italic이 아니며 위 separated-marker case는 regex/token control이다. 별도 `markdown_quote_valid_highlights_349`는 유효한 `> *사과* *배* *포도*` 형식에 39 lexical words를 넣어 강조 3개를 충족한다. Original count 39·strict/loose T, Ko count 40·strict/loose F로 full prompt 차이까지 재현한다. 유효한 자연스러운 출력 형식과 단순 matcher control을 구분한다.", "",
-              "key 136의 균등 star bullet은 Ko prompt-level loose=T여도 하나의 변환 응답이 두 instruction을 함께 통과하는 것은 아니다. bullet instruction은 원본, word instruction은 star 제거/줄 제거 후보에서 각각 통과한다. 실제 loose 후보 8개 각각을 strict evaluator로 재검사한 `strict_on_actual_loose_candidates`에서도 모든 prompt가 F임을 확인했다. loose는 instruction마다 독립적으로 후보 OR를 취한다.", "",
-              "word count의 공백 기준은 Ko count_words docstring에 명시된 선택(INTENTIONAL)이다. Markdown 기호를 독립 word로 포함해야 하는지와 loose 이후 잔존 차이를 허용할지는 NEEDS_DISCUSSION이다. 어느 tokenizer가 더 옳은지는 이 실행만으로 결정하지 않는다.", "",
-              "### 문장 수", "",
-              "실제 key 3739의 <3 조건에서 `가.`/`나.` 목록은 NLTK 4문장, Ko 2문장으로 strict F/T다. 줄을 나누면 original loose가 첫 줄 제거로 T가 되지만 한 줄이면 F/T가 그대로 남는다. e.g. 및 가.나.다. 예시도 3/2로 strict·loose F/T다. Ko 코드는 한국어 list marker·혼합 한영 abbreviation을 명시적으로 보호한다. 이 범위의 차이는 INTENTIONAL로 분류하며 올바른 문장 정책의 일반적 증명은 아니다.", "",
-              "### ForbiddenWords", "",
-              "양쪽 모두 `\\b + word + \\b`를 사용한다. Python Unicode regex의 word boundary는 한국어 조사나 합성어의 의미 경계가 아니다. 실제 key 1242의 JSON 응답 nickname/별명은 둘 다 금지하지만 nickname/별명을 대응시키면 영어 F, Ko T다. 구현이 다른 사례가 아니라 동일 경계 구현의 언어 적용 결과이므로 NEEDS_DISCUSSION이다. 조사를 붙인 형태까지 금지할지와 사과나무 같은 합성어까지 금지할지는 별도의 정책 선택이다.", "",
-              "### NFC: evaluator와 direct checker를 구분", "",
-              "합성 `가`는 U+AC00이고 분해형 `가`는 U+1100 U+1161의 두 코드 포인트다. 두 문자는 canonical equivalent이며 NFC 후 같은 문자열이다. 각 case의 unicode_response에도 전후 코드 포인트를 기록했다.", "",
-              "Ko utils strict/loose는 response를 NFC로 만든 뒤 checker를 호출한다. KeywordChecker의 keywords, KeywordFrequencyChecker의 keyword, ForbiddenWords의 forbidden_words, EndChecker의 end_phrase, RepeatPromptThenAnswer의 prompt_to_repeat는 build_description에서 NFC가 된다. 따라서 direct check_following(NFD response)는 False일 수 있어도 실제 Ko evaluator는 True가 될 수 있다. ForbiddenWords에서는 통과/실패의 방향이 반대다.", "",
-              "InputExample.prompt 전체나 kwargs 전체를 일괄 NFC 처리하는 코드는 없다. repeat checker는 prompt_to_repeat 인자를 비교하며 utils의 `args에 prompt가 있으면 재build` 분기를 사용하지 않는다. KeySentenceChecker는 key_sentences를 NFC 처리하지만 registry에서 비활성화되어 실제 evaluator case를 만들지 않았다.", "",
-              "추가로 ParagraphFirstWordCheck는 first_word를 lower만 하고 NFC 처리하지 않는다. 합성 NFD first_word+NFD response는 original T/T, Ko F/F다. Ko가 response만 NFC로 바꾸어 대상과 불일치하는 결과다. 실제 key 3073에서도 first_word=회사를 canonical equivalent NFD로 메모리 override하면 Ko F/F, 외부에서 대상까지 NFC로 만들면 T/T다. 이는 응답/비교 대상 정규화의 비대칭 CHECKER 사례다. 현재 Ko 데이터 342행의 모든 문자열은 NFC였으므로 현 revision의 데이터에서 이 실패가 발생했다고 주장하지 않는다.", "",
-              "각 NFC case에는 raw direct checker, NFC response direct checker, 실제 evaluator, 외부 NFC(response only), 외부 NFC(response+kwargs+prompt) 결과를 따로 저장했다. kwargs가 NFD인 original checker는 response만 정규화해도 실패할 수 있으며, 대상도 정규화한 control이 이를 분리한다.", "",
-              "## 6. 분류와 수정 판단", "", "| Classification | 근거 | 지금 판단 가능한 범위 |", "| --- | --- | --- |",
-              "| DATA | key 3345 prompt 강도 ↔ kwargs robber 불일치; override 대조군으로 복원 | 데이터 alignment 검토 필요. checker 알고리즘 수정 대상 아님 |",
-              "| CHECKER | ParagraphFirstWordCheck에서 response NFC / first_word 비정규화의 비대칭 | canonical equivalence를 지원하려면 대상 정규화가 필요. 현재 dataset에 NFD first_word가 있다는 근거는 없음 |",
-              "| INTENTIONAL | Ko 공백 word count docstring, 한국어 list/혼합 abbreviation 보호 코드, README의 NFC 및 sentence 변경 | 호환성 차이 재현 가능. 영어 checker를 대체해야 한다는 근거는 아님 |",
-              "| NEEDS_DISCUSSION | Markdown marker word 포함 정책, forbidden 경계의 조사/합성어 의미, divider 같은 sentence 정책 | 실행 결과만으로 정책 우열·수정 여부 확정 불가 |", "",
-              "분류는 관찰 원인의 분류다. 같은 결과의 control도 정책 확인 목적으로 분류가 붙어 있으며 bug 목록이 아니다. count 함수가 다르다는 사실과 instruction 판정이 다른 사실을 분리했다. 모든 차이의 count/match·source·수정 판단은 상세 기록에 있다.", "",
-              "## 7. 이번 주 발표용 사례", "",
-              "1. key 3345: 강도 2회인데 robber match 0 → keyword-only override로 2회/T 복원. DATA와 CHECKER 구분에 가장 분명하다.",
-              "2. key 3442: 같은 쉼표 목록의 공백만 변경 → Original 20/20·F/F, Ko 18/20·T/F. 짧은 3/1 count 예시에서는 실제 threshold 판정은 둘 다 T라는 control도 함께 제시한다.",
-              "3. key 136: star/dash 각각 99/108; 균등 list는 loose T지만 양 끝이 짧은 dash list는 loose F. 실제 loose 후보와 instruction별 OR를 설명하기 좋다.",
-              "4. key 3739: 한 줄 가./나. 목록에서 4/2문장 → strict와 loose 모두 F/T. 명시적인 한국어 list marker 처리를 보여준다.",
-              "5. NFC: 가/가 keyword에서 direct checker와 evaluator가 다름. first_word에는 대상 NFC 누락이 있어 합성 NFD/NFD가 original T, Ko F. 의도된 개선과 불완전 적용을 구분한다.", "",
-              "## 8. 다음 단계 LightEval 반영 후보", "",
-              "- 영어 task와 분리된 Ko task의 dataset snapshot, instruction registry, 길이 계산·NFC 정책을 명시하고 회귀 fixture를 유지한다.",
-              "- key 3345는 upstream dataset issue/로컬 overlay 후보. 이번 작업에서는 원격 issue 생성이나 수정도 하지 않았다.",
-              "- NFC를 도입한다면 response와 실제 비교 대상의 정규화 범위를 함께 설계하고 first_word 누락 대조군을 유지한다.",
-              "- Word/sentence 정책 선택 전에 Markdown strict/loose와 한국어 list/약어의 호환성 표를 검토한다.", "",
-              "LightEval 네 파일은 정적 확인만 했다. instructions_utils.count_words는 RegexpTokenizer, count_sentences는 English Punkt다. instructions의 ForbiddenWords는 word boundary, KeywordChecker/FrequencyChecker는 boundary 없는 regex이고 main.py는 동일한 8개 loose 후보와 instruction별 OR를 사용한다. 이 구조는 후속 반영 위치를 설명하지만 이 보고서의 Original 결과는 LightEval 실행 결과가 아니다.", "",
-              "## 9. 근거가 부족하여 수정하면 안 되는 부분", "",
-              "- 공백 단위와 regex 단위 중 하나를 일반적으로 더 옳다고 단정하거나 영어 IFEval 길이 로직을 일괄 교체하는 것.",
-              "- 한국어 ForbiddenWords를 조사/합성어까지 무조건 포함하도록 변경하는 것. 의미 정책 합의 및 추가 근거가 필요하다.",
-              "- heading/divider를 sentence나 word에서 일괄 제거하는 것. 여기서는 양쪽 divider가 같은 결과였으며 정책 정답을 확정하지 않았다.",
-              "- first_word 합성 실패를 현 데이터셋의 실제 대량 실패·모델 성능 저하로 보고하는 것.",
-              "- 최소 응답이 주제·문항 전체 의도를 충족한다고 해석하거나 테스트 차이 건수를 benchmark accuracy 차이로 제시하는 것.", "",
-              "추가 데이터 관찰: key 127은 Ko prompt 5회 이상 / kwargs frequency=6이며 original은 more than 5/6으로 맞는다. key 3739는 '3문장 이하'라는 표현과 '1 또는 2문장' 설명이 함께 있고 kwargs는 <3이다. key 1268의 <6→6문장 이하 번역도 소스 탐색에서 확인했다. 이들은 데이터 문구 검토 후보이며 별도의 완전한 evaluator 반례를 구성하지 않은 것은 검증 완료 DATA 건수에 넣지 않았다.", "",
-              "## 전체 판정 표", "",
-              "각 셀은 **대상 instruction / 전체 instruction 리스트 / prompt-level** 순서다. I=strict 대상 차이, L=loose 대상 차이, P=strict prompt 차이, PL=loose prompt 차이. `합성`은 실제 dataset key가 없다. `override`는 실행 중 값 변경이다.", "",
-              "| Key | Checker | Test | Original strict | Original loose | Ko strict | Ko loose | Difference | Classification |",
-              "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
-    for row in merged:
-        c, a, b = row["case"], row["original"], row["ko"]
-        key = "합성" if c["key"] is None else str(c["key"]) + (" override" if c["scope"] == "controlled_override" else "")
-        diff = ", ".join(label for label, k in [("I", "target_strict"), ("L", "target_loose"), ("P", "prompt_strict"), ("PL", "prompt_loose")] if row["differences"][k]) or "동일"
-        lines.append(f"| {key} | {c['checker']} | `{c['case_id']}` | {decision(a,'strict')} | {decision(a,'loose')} | {decision(b,'strict')} | {decision(b,'loose')} | {diff} | {c['classification']} |")
-    lines += ["", "## 상세 실행 기록", "",
-              "count/match는 실제 imported count 함수와 checker의 build 결과를 이용한다. `checker_call_trace`와 `loose_candidates_from_evaluator`는 실제 evaluator 실행 frame에서 수집한 것으로 loose를 재구현하지 않았다. source는 로컬 snapshot의 원래 line 번호다.", ""]
-    for row in merged:
-        c, a, b = row["case"], row["original"], row["ko"]
-        lines += [f"### {c['case_id']}", "", f"Key={c['key']}, scope={c['scope']}, `{c['instruction_id']}`, {c['classification']}.", "", c["reason_for_test"], ""]
-        if "expected_observation" in c:
-            lines += ["사전 예상(실행 결과 아님): `" + json.dumps(c["expected_observation"], ensure_ascii=False) + "`.", ""]
-        for side, r in [("original", a), ("ko", b)]:
-            lines += [f"**{side} response**", "", "```text", c["test_response_" + side], "```", "",
-                      f"Raw: {diagnostic_summary(r)}. NFC(response): {diagnostic_summary(r, 'nfc')}. strict `{decision(r,'strict')}`, loose `{decision(r,'loose')}`.", "",
-                      "Code: " + ", ".join(source_link(info) for info in r["source"].values()) + ".", ""]
-            diag = r["diagnostics"]["raw"]
-            if "tokens" in diag or "sentences" in diag:
-                field = "tokens" if "tokens" in diag else "sentences"
-                lines += [f"실제 {field}: `{json.dumps(diag[field], ensure_ascii=False)}`.", ""]
-            if c["group"].startswith("nfc"):
-                lines += ["Built args: `" + json.dumps(diag["built_args"], ensure_ascii=False) + "`.", "",
-                          "외부 NFC response only strict/loose: `" + "/".join(tf(r["isolated_nfc_response"][k]["instruction_results"][0]) for k in ["strict", "loose"]) + "`; 외부 NFC response+대상 strict/loose: `" + "/".join(tf(r["isolated_nfc_both"][k]["instruction_results"][0]) for k in ["strict", "loose"]) + "`.", ""]
-            trace = r["isolated"]["loose"]["checker_call_trace"]
-            if row["differences"]["target_strict"] or row["differences"]["target_loose"]:
-                lines += ["실제 loose에서 호출한 대상 checker 결과: `" + json.dumps([x["result"] for x in trace]) + "`.", ""]
-                if trace and "count" in trace[0]:
-                    lines += ["실제 loose checker 입력의 count: `" + json.dumps([x["count"] for x in trace]) + "`.", ""]
-                if c["instruction_id"] in {"length_constraints:number_words", "length_constraints:number_sentences"}:
-                    # Counts are obtained from recorded actual checker inputs. For
-                    # these exact fixtures word tokens are available in the raw
-                    # diagnostics; full traced inputs remain in results.json.
-                    witness = next((x["value"] for x in trace if x["result"]), None)
-                    if witness is not None:
-                        lines += ["loose 성공 후보(실제 호출값):", "", "```text", witness, "```", ""]
-        if c.get("runtime_override"):
-            lines += ["명시적 runtime override: `" + json.dumps(c["runtime_override"], ensure_ascii=False) + "`.", ""]
-        judgment = {"DATA": "dataset alignment 문제. key 3345의 keyword correction 필요성을 대조군으로 확인했으나 원본 데이터·checker는 수정하지 않았다.",
-                    "CHECKER": "응답 NFC와 first_word 대상의 비정규화 비대칭. canonical equivalence 지원 범위에서는 개선 후보지만 현 dataset에서의 발생을 의미하지 않는다.",
-                    "INTENTIONAL": "Ko 코드/docstring/README에 명시된 기준 선택 또는 해당 기준의 control. 차이를 자동으로 bug라 결론내리지 않는다.",
-                    "NEEDS_DISCUSSION": "정책 우열은 코드와 README만으로 확정할 수 없다. 동일 결과인 control도 포함하며 즉시 수정 근거가 아니다."}[c["classification"]]
-        lines += ["수정 판단: " + judgment, ""]
-    lines += ["## 핵심 소스 위치", "", "| 동작 | Original | Ko |", "| --- | --- | --- |"]
-    for label, opath, oline, kpath, kline in [
-        ("Word tokenizer", "instructions_util.py", 1681, "instructions_util.py", 147),
-        ("Sentence count", "instructions_util.py", 1692, "instructions_util.py", 150),
-        ("Keyword search", "instructions.py", 791, "instructions.py", 781),
-        ("Keyword frequency search", "instructions.py", 859, "instructions.py", 850),
-        ("Forbidden word boundary", "instructions.py", 1160, "instructions.py", 1158),
-        ("Strict entry", "utils.py", 25, "utils.py", 30),
-        ("Loose candidates", "utils.py", 63, "utils.py", 64),
-        ("ParagraphFirstWordCheck build", "instructions.py", 963, "instructions.py", 955)]:
-        lines.append("| " + label + " | " + upstream_link(provenance, "harness", "lm_eval/tasks/ifeval/" + opath, oline, opath + ":" + str(oline))
-                     + " | " + upstream_link(provenance, "ko", "ifeval_ko/" + kpath, kline, kpath + ":" + str(kline)) + " |")
-    lines += ["", "| LightEval 참고 파일 | 정적 확인 |", "| --- | --- |"]
-    for label, name, line in [("count_words / count_sentences", "instructions_utils.py", 1664),
-                              ("KeywordFrequencyChecker / ForbiddenWords", "instructions.py", 818),
-                              ("INSTRUCTION_DICT", "instructions_registry.py", 40),
-                              ("Loose preprocessing / IFEvalMetrics.compute", "main.py", 66)]:
-        lines.append("| " + upstream_link(provenance, "lighteval", "src/lighteval/tasks/tasks/ifeval/" + name, line, name + ":" + str(line)) + " | " + label + " |")
-    lines += ["", "## 검증 완료 조건", "",
-              f"- final 양쪽 {summary['cases']}개 case 실행 성공, 기록된 실패 없음.",
-              "- 실행한 네 모듈의 hash가 원격에서 고정 revision으로 받은 원본과 같음을 검증했다.",
-              "- 모든 실제 key의 prompt/IDs/kwargs가 보존된 데이터 원본과 같음을 검증했다.",
-              "- isolated 대상 결과와 full instruction 리스트의 대상 결과, prompt=all(instructions), strict 성공→loose 성공을 검증했다.",
-              "- final case hash 일치로 오래된 실행 결과의 혼입을 막았다. NLTK 자원 hash와 dependency lock을 보존했다.", ""]
-    (ROOT / "results.md").write_text("\n".join(lines), encoding="utf-8")
-    print(dump(summary))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source-root", type=Path, default=ROOT)
+    parser.add_argument("--output-dir", type=Path, default=ROOT)
+    args = parser.parse_args()
+    result = verify(args.output_dir, args.source_root.resolve())
+    report(result, args.output_dir)
+    print(json.dumps(result["summary"], ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
