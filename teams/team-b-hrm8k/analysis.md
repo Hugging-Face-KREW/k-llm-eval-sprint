@@ -196,7 +196,7 @@ MMMLU도 다른 네 묶음처럼 풀이를 생성하게 하고, 보기 번호를
     1. 논문 수치와 비교할 수 없다.
     2. 같은 470문항을 같은 방식으로 채점하는 `openai_mmlu_kor_*`와 완전히 겹친다.
     3. 보기 라벨이 숫자라서, 보기 내용이 숫자인 87문항에서 라벨과 보기 값이 헷갈린다.
-- **확률 방식의 한국어 MMMLU가 필요하면** 기존 `openai_mmlu_kor_*`가 그 역할을 한다. 지금은 한국어 단어장 문제로 실행되지 않으므로, 단어장을 채우는 작은 PR(#1179와 겹침)을 메인테이너에게 제안한다.
+- **확률 방식의 한국어 MMMLU가 필요하면** 기존 `openai_mmlu_kor_*`가 그 역할을 한다. 지금은 한국어 단어장 문제로 실행되지 않지만, 이 문제는 HRM8K 범위 밖이라 이번 작업에서는 고치거나 제안하지 않는다.
 - **생성형에서 남는 주의점**: 보기 내용이 숫자인 87문항은 모델이 번호 대신 보기 값을 `\boxed{}`에 쓰면 다른 번호로 채점될 수 있다(Known Issues).
 - KSM 안의 객관식 약 76문항도 생성형으로 채점한다. 다른 문항과 섞여 있고 보기 수도 4–5개로 다르다.
 
@@ -238,7 +238,7 @@ HRM8K 자체는 중복이 없다. MMMLU 묶음만 기존 `openai_mmlu_kor`와 �
 4. **디코딩.** 논문은 T 0.7 샘플링, lm-eval은 greedy다. 제안은 greedy다(5-5). greedy에서는 모델이 풀이를 영어나 중국어로 바꾸거나(논문 부록 B), 작은 모델이 같은 문장을 반복해 2,048토큰을 다 채울 수 있다.
 5. **채팅 템플릿.** Lighteval은 instruct 모델이면 채팅 템플릿을 자동으로 켜고, lm-eval은 기본이 꺼져 있다. 비교할 때 어느 쪽인지 적어야 한다.
 6. **생성 길이와 stop.** 2,048토큰이 필요하고, `math` 태스크처럼 `"\n"`을 stop으로 쓰면 풀이가 잘린다.
-7. **`Language.KOREAN`을 쓰면 지표가 바로 죽는다.** Lighteval의 한국어 번역 문구에 `answer`(그리고 `and_word`, `or_word`)가 없어서 `MultilingualExtractiveMatchMetric(language=Language.KOREAN)`이 `AttributeError`를 낸다. PR #1179가 일부를 채우지만 머지되지 않았고 `and_word`는 빠져 있다. 당장은 English 설정으로 `\boxed{}` 위주 추출을 하게 되고, "정답:" 같은 한국어 앵커는 인식되지 않는다. 이 문제는 HRM8K 이슈와 분리해 별도 이슈 초안(`issue-draft-korean-literals.md`)으로 올린다.
+7. **`Language.KOREAN`을 쓰면 지표가 바로 죽는다.** Lighteval의 한국어 번역 문구에 `answer`(그리고 `and_word`, `or_word`)가 없어서 `MultilingualExtractiveMatchMetric(language=Language.KOREAN)`이 `AttributeError`를 낸다. PR #1179가 일부를 채우지만 머지되지 않았고 `and_word`는 빠져 있다. 당장은 English 설정으로 `\boxed{}` 위주 추출을 하게 되고, "정답:" 같은 한국어 앵커는 인식되지 않는다. 이 문제는 HRM8K 범위 밖이라 이번 작업에서 제외하고, 별도 초안(`issue-draft-korean-literals.md`)만 남긴다. 업스트림에는 올리지 않는다.
 8. **`\boxed{}`가 없을 때 숫자를 줍는 대체 규칙.** 10/18 세션에서 lm-eval처럼 **마지막 숫자로 대체**하기로 정했다. 연습 태스크를 SmolLM2-135M으로 돌렸을 때 모델이 문제 문장("하루에 5번")을 반복했는데 채점기가 그 숫자를 뽑아 정답(5)과 맞은 사례가 있었다(가짜 정답). 그래서 검증 실행에서 대체 규칙이 쓰인 답의 수를 세어 함께 보고한다.
 9. **기준 수치가 출처마다 다르다.** 같은 모델이라도 논문 Table 3 상단, 논문 Table 9 K2K, 2저자 README 리더보드의 수치가 다르다.
 
