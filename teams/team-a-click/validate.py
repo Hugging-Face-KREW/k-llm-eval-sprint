@@ -1,4 +1,4 @@
-"""Explicit D01-D03 integration check. Run with python -m validation.click.validate."""
+"""Explicit D01-D03 integration check. Run with python teams/team-a-click/validate.py."""
 
 import argparse
 import hashlib
@@ -12,10 +12,10 @@ from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+from provenance import SourceIndex, SourceRow, file_documents, inventory
+
 from lighteval.tasks.tasks import click
 from lighteval.tasks.tasks.click import CATEGORY_FILES, HF_REPO, HF_REVISION, PROMPT_VERSION, click_prompt
-
-from .provenance import SourceIndex, SourceRow, file_documents, inventory
 
 
 # (rows, five-option rows, nonblank paragraphs), copied from design.md §2.

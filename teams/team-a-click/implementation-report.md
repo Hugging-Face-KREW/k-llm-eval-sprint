@@ -10,8 +10,8 @@
 | Prompt function·입력 단위 테스트 | `build_click_payload`, `click_prompt`, 4·5지선다 전체 후보, 원문 보존과 입력 오류 처리 | U01–U07에 해당하는 테스트 66개 통과 |
 
 구현은 Lighteval 로컬 커밋 `cfbc8167c87009bbe60c897d032a8a568881787f`에,
-실행 방법·검증 범위·주의할 버전 차이는 [검증 README](../../validation/click/README.md)에 있습니다.
-[원본 목록](../../validation/click/manifest.json)과 [실제 검사 결과](../../validation/click/results.json)에는
+실행 방법·검증 범위·주의할 버전 차이는 [검증 README](README.md)에 있습니다.
+[원본 목록](manifest.json)과 [실제 검사 결과](results.json)에는
 원문 대신 경로·ID·해시·통계만 저장했습니다.
 
 원본 고유 ID는 1,987개지만 중복 ID 행을 제거하지 않아 평가 대상 1,995행을 유지합니다.

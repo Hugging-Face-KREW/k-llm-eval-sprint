@@ -5,12 +5,11 @@ import hashlib
 import json
 from dataclasses import asdict
 
+import provenance
 import pytest
+from provenance import AmbiguousSourceError, SourceIndex, SourceRow, file_documents, inventory
 
 from lighteval.tasks.tasks.click import click_prompt
-
-from . import provenance
-from .provenance import AmbiguousSourceError, SourceIndex, SourceRow, file_documents, inventory
 
 
 @pytest.fixture
