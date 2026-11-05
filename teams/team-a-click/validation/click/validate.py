@@ -1,4 +1,4 @@
-"""Explicit D01-D03 integration check. Run with python teams/team-a-click/validate.py."""
+"""Explicit D01-D03 integration check. Run with python teams/team-a-click/validation/click/validate.py."""
 
 import argparse
 import hashlib

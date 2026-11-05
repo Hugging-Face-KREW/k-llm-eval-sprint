@@ -20,7 +20,7 @@
 | 내부 변환 함수 | `build_click_payload()` — 입력 검사와 `query`, `choices`, `gold_index` 구성 |
 | 태스크 등록 | 분야별 `LightevalTaskConfig` 11개를 모듈의 `TASKS_TABLE`에 등록 |
 | 단위 테스트 파일 | `tests/tasks/test_click.py` **신설 제안**. 최종 위치는 제출 브랜치의 테스트 관례에 맞춤 |
-| 팀 검증 자료 | 팀 저장소의 `teams/team-a-click/`. 파일 목록·실행 설정·하네스 패치·비교 결과 보관 |
+| 팀 검증 자료 | 팀 저장소의 `teams/team-a-click/validation/click/`. 파일 목록·실행 설정·하네스 패치·비교 결과 보관 |
 
 Lighteval의 [태스크 추가 가이드][le-custom]에 맞춰 **데이터 연결·문항 변환·기존 로그 확률 지표 연결**을 구현한다. 공통 추론 엔진을 교체하는 작업은 아니다. 모듈 import나 prompt function 안에서 다운로드·모델 로딩을 수행하지 않는다.
 

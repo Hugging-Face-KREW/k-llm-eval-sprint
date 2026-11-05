@@ -1,7 +1,7 @@
 # CLIcK 데이터와 프롬프트 검증
 
 2026-11-05 기준으로 `@GeonRyoung` 담당인 분야별 파일 목록·데이터 검사·추적 연결과
-prompt function·입력 단위 테스트를 구현했습니다. [설계 문서](design.md)의
+prompt function·입력 단위 테스트를 구현했습니다. [설계 문서](../../design.md)의
 U01–U07, D01–D03을 대상으로 합니다.
 
 ## 코드와 검증 자료
@@ -88,10 +88,10 @@ cd "$CLICK_LIGHTEVAL"
 HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1 "$CLICK_PYTHON" -m pytest tests/unit/tasks/test_click.py -q
 
 cd "$CLICK_SPRINT"
-HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1 "$CLICK_PYTHON" -m pytest teams/team-a-click/test_provenance.py -q
+HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1 "$CLICK_PYTHON" -m pytest teams/team-a-click/validation/click/test_provenance.py -q
 
 # 별도 통합 검사: 고정 HF 원본을 다운로드하고 실제 repo/default 로더를 사용
-"$CLICK_PYTHON" teams/team-a-click/validate.py --report /tmp/click-results.json
+"$CLICK_PYTHON" teams/team-a-click/validation/click/validate.py --report /tmp/click-results.json
 ```
 
 기존 스냅샷 폴더에 `Dataset/`가 있으면 `--snapshot /path/to/snapshot`을 추가합니다.
