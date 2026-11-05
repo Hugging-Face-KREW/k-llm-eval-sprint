@@ -1,0 +1,8 @@
+.venv/
+.cache/
+sources/
+__pycache__/
+*.py[cod]
+*.egg-info/
+results.md
+dataset_checks.json
