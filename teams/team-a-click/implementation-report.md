@@ -1,4 +1,4 @@
-# CLIcK 5주차 데이터와 프롬프트 구현
+# CLIcK 데이터와 프롬프트 구현 보고서
 
 2026-11-05 · @GeonRyoung · `docs/week5-basicfive`
 
