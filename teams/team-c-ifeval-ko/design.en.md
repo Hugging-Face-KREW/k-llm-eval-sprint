@@ -512,39 +512,24 @@ Record integration execution settings, selected keys, results and artifacts in t
 
 The script in section 6.5 has counted and attached coverage for 23 prompts/40 instructions. Sections 6.2.1–6.2.4 record the 156-case reference experiment and 18 auxiliary inputs. These are not model-integration or new-task parity results.
 
-## 7. Work allocation: owners and dates
+## 7. Work allocation and schedule
 
-### 7.1. Assignment and schedule status
+Detailed contributions by each member are recorded under [people](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/tree/main/people) on the `main` branch.
 
-This is a **proposed schedule** assuming 2026-11-01 as design-finalization day D0. It does not establish that deadlines were met or assignments accepted. Delay dependent work if architecture, owners or environment are finalized later.
-
-Existing PR records associate `joony0905` with analysis/design/evidence links and `SubJeeLee` with issue-draft preparation/review. A comment asks `kiimyjun` to run integration after model/environment/sample confirmation. Implementation owners and confirmed deadlines remain unknown. GitHub identities below support proposals only; no Notion assignments or notifications are created.
-
-| Work | Proposed owner/collaboration | Target date KST | Deliverable/completion |
+| Week | Owner | Work | Related records |
 | --- | --- | --- | --- |
-| Confirm design, A/B and support scope | `joony0905` coordinates; team/maintainer review |  | Chosen architecture, files, API and validation scope |
-| Port Ko checkers/registry/utilities | Implementer A — TBD |  | Preserve provenance/headers; verify source hashes/imports |
-| Connect scorer/task/metrics | Implementer B — TBD; align contract with A |  | A: dedicated scorer; B: shared core/policy; registry discovery, Doc and four metrics |
-| Add 21-type fixtures and 86-case regression | Validator — TBD; proposed evidence review with `joony0905` |  | Cover 8 absent and 5 incidental types; repeated IDs, NFC, schedule and aggregation |
-| English/French regression if B chosen | Implementer B and validator — TBD |  | Preserve judgments, exports and cross-language state isolation |
-| Confirm model/environment/N and run integration | `kiimyjun` — proposal based on existing request; confirmation needed |  | Revisions, dtype, backend, template, actual settings, responses and rescoring |
-| Generate/full-split identical-response rescoring | Proposed `kiimyjun`/validator collaboration |  | Process 342 keys/481 conditions; four metrics and mismatch list |
-| Synchronize analysis/design/issue draft | Proposed `joony0905` analysis/design and `SubJeeLee` issue-draft roles |  | Consistent architecture, scope, status and evidence links |
-| Peer review/submission preparation | Team; reviewer TBD |  | Review acceptance, pending items, sources/licenses and reproduction |
-
-Reestimate after measuring extra English/French refactoring under B or model resource constraints. Do not promise implementation/full-evaluation completion dates before architecture is agreed.
-
-### 7.2. Dependencies and open decisions
-
-- Architecture A/B → scorer/policy contract → registered-task/stored-response regression → N-prompt integration → full split.
-- Fixture expansion and model-environment preparation can proceed independently after architecture confirmation.
-- For B: freeze English results → extract shared code without behavior changes → pass English/French regression → connect Ko.
-
-| Decision | Current status | Basis |
-| --- | --- | --- |
-| Final architecture | A recommended, B alternative; team/maintainer agreement pending | Small-change versus shared-code costs, both schedules and regression evidence |
-| Implementers/validator | TBD | Actual team availability |
-| Model/revisions/backend/dtype | Candidate stage | Loading/generation resources and reproducibility |
-| Final N/keys | Coverage counted for proposed 23 prompts/40 instructions; team confirmation pending | 21 types/25 paths and diagnostic purposes; add prompts for gaps |
-| Inspect | Proposed separate scope | Explicit demand and scorer contract |
-| Data corrections | Separate from default port | Author reports, explicit overlays and separate validation |
+| Week 1 | Entire team | Each member opened their first PR. Team members reviewed one another's PRs and opened the team's PR. | [Yejun's contribution record](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/joony0905.md) · [Junseop's contribution record](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/SubJeeLee.md) · [Hyeongjun's contribution record](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/kiimyjun.md) |
+| Week 2 | [Yejun Song](https://github.com/joony0905), [Junseop Lee](https://github.com/SubJeeLee), [Hyeongjun Kim](https://github.com/kiimyjun) | Yejun wrote the IFEval-Ko benchmark report and requested review. Junseop and Hyeongjun reviewed the report and each made revisions based on their review. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| Week 3 | [Yejun Song](https://github.com/joony0905) | Revised the benchmark report in response to review feedback and drafted `design.md`. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| Week 3 | [Junseop Lee](https://github.com/SubJeeLee) | Wrote `issue-draft.md`, the draft upstream issue for Lighteval. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| Week 3 | [Hyeongjun Kim](https://github.com/kiimyjun) | Reviewed candidate comparison models and selected the model for the initial experiment. Documented the rationale for selecting validation prompts by instruction type. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| Week 4 | [Yejun Song](https://github.com/joony0905) | Documented judgment differences between the original English and Ko evaluators, expanded fixed-response regression cases **from 86 to 156**, and added English documentation. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| Week 4 | [Junseop Lee](https://github.com/SubJeeLee) | Opened an upstream issue proposing a dedicated Ko package and requesting feedback on the scope of Inspect support. | [Upstream issue #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| Week 4 | [Hyeongjun Kim](https://github.com/kiimyjun) | Aligned the integration validation sample in `analysis.md` and `design.md` to **23 prompts and 40 instructions**. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| Week 4 | [Yejun Song](https://github.com/joony0905) | Implement NFC normalization and strict/loose scoring in `scoring.py`. Verify 100% agreement with the original Ko evaluator for each instruction and prompt across **156 fixed-response cases**. Open a PR in the team fork `Hugging-Face-KREW/lighteval` targeting `team-c/ifeval-ko`. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| Week 4 | [Junseop Lee](https://github.com/SubJeeLee) | Port the original Ko `instructions.py`, `instructions_registry.py` and `instructions_util.py`. Preserve source attribution and license headers, and adapt import paths to the package structure. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| Week 4 | [Hyeongjun Kim](https://github.com/kiimyjun) | Implement `Doc` conversion, dataset and zero-shot settings, and the four evaluation metrics in `main.py`; register `ifeval_ko` in `TASKS_TABLE`. Run `lighteval tasks inspect` without a model and compare the output with the original prompts. Attach the output and comparison results to the code PR. |  |
+| Week 4 | Entire team | Integrate each member's implementation under `src/lighteval/tasks/tasks/ifeval_ko/` in the team fork `Hugging-Face-KREW/lighteval`, and open a code PR targeting `team-c/ifeval-ko`. | [Team branch in the fork](https://github.com/Hugging-Face-KREW/lighteval/tree/team-c/ifeval-ko) |
+| Week 5 | [Hyeongjun Kim](https://github.com/kiimyjun) | Record the revision and generation settings of the comparison model selected during the session. Generate and save model responses for the 23 prompts. After integration validation passes, run all 342 prompts in the full split with the same settings. | [Design section 6](#validation-plan) |
+| Week 5 | [Yejun Song](https://github.com/joony0905) | Pass the same saved responses to the original Ko evaluator and the new task. Compare strict/loose judgments for each instruction and prompt, and all four aggregate metrics. Record comparison results separately for the 23 prompts and the full 342-prompt split. For any mismatches, document a reproducible example and its cause. | — |
+| Week 5 | [Junseop Lee](https://github.com/SubJeeLee) | Summarize the implementation scope, original code provenance and validation results in the PR description. Submit the code to `huggingface/lighteval` after team review and link the relevant issue. | [Upstream issue #1463](https://github.com/huggingface/lighteval/issues/1463) |

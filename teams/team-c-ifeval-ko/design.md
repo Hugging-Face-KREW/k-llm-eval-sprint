@@ -510,39 +510,24 @@ Ko 수정 클래스 표시는 [기존에 열거된 수정 클래스와 등록 �
 
 선정한 23문항·40개 지시의 입력 범위 집계는 6.5절의 스크립트로 실행하여 첨부하였다. 원본 평가기로 수행한 156건의 실험과 보조 입력 18건의 결과는 6.2.1~6.2.4절에 정리했다. 모델 통합 실행과 새 task 동등성 결과는 아니다.
 
-## 7. 작업 나누기: 담당과 날짜
+## 7. 작업 분담과 일정
 
-### 7.1. 배정·일정의 상태
+개인별 자세한 기여 기록은 `main` 브랜치의 [people](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/tree/main/people)에서 확인할 수 있다.
 
-아래는 2026년 11월 1일을 설계 확정일 D0로 가정한 **제안 일정**이다. 기존 기한을 이미 지켰거나 팀원이 이 배정을 수락했다는 뜻이 아니다. 구조·구현 담당·환경이 늦게 확정되면 의존 작업을 순연한다.
-
-기존 PR 기록에서 `joony0905`는 분석·설계·검증 자료 연결, `SubJeeLee`는 issue draft 작성·검토 흐름에 등장한다. `kiimyjun`에게는 모델·환경·표본 확정 후 통합 실행을 요청한 댓글이 있다. 구현 담당의 이름과 확정 기한은 확인되지 않아 미정으로 둔다. 아래 GitHub 식별자는 업무 제안의 근거이며 실제 Notion 담당자 할당이나 알림을 만들지 않는다.
-
-| 작업 | 담당·협업 제안 | 목표 날짜 KST | 산출물·완료 조건 |
+| 주차 | 담당 | 작업 내용 | 관련 기록 |
 | --- | --- | --- | --- |
-| 설계 기준·A/B 결정·지원 범위 확정 | `joony0905` 정리, 팀 리뷰·메인테이너 의견 확인 |  | 선택 구조, 파일 목록, API·검증 범위 기록 |
-| Ko checker·registry·utility 이식 | 구현 담당 A — 미정 |  | 원본 출처·헤더 유지, 필수 source hash·import 확인 |
-| scorer·task·metric 연결 | 구현 담당 B — 미정; A와 계약 조율 |  | A: 전용 scorer / B: 공통 core·policy, Registry 발견·Doc·네 지표 연결 |
-| 21종 fixture 보강·86건 회귀 | 검증 담당 — 미정; `joony0905`의 근거 검토 협업 제안 |  | 8종 누락·5종 부수 조건 보강, 반복 ID·NFC·schedule·집계 검증 |
-| B 선택 시 영어/French 회귀 | 구현 담당 B·검증 담당 — 미정 |  | 기존 판정·export·교차 언어 상태 격리 불변 |
-| 모델·환경·N문항 확정과 통합 평가 | `kiimyjun` — 기존 요청 기준의 제안, 확정 필요 |  | revision·dtype·backend·template·실제 생성 설정·응답·재채점 결과 |
-| 전체 split 생성·동일응답 재채점 | `kiimyjun`·검증 담당 협업 제안 |  | 342개 key·481개 조건 정상 처리, 네 지표·불일치 목록 |
-| analysis·design·issue draft 동기화 | `joony0905` 분석·설계, `SubJeeLee` issue draft 흐름 기준의 제안 |  | 같은 구조·범위·실행 상태·증빙 링크로 정리 |
-| 상호 리뷰와 제출 준비 | 팀 공동; 리뷰 담당 확정 필요 |  | 합격 기준, 미완료 항목, source·라이선스·재현 자료 검토 |
-
-B안의 영어/French 리팩터링 범위가 늘거나 모델 실행 자원이 부족하면 실제 측정 후 일정을 다시 산정한다. 구조 미확정 상태에서 구현 완료일이나 전체 모델 평가 완료를 확약하지 않는다.
-
-### 7.2. 선행 의존성과 결정 목록
-
-- 구조 A/B 확정 → scorer·policy 계약 확정 → 등록 task·고정 응답 회귀 → N문항 통합 → 전체 split 평가.
-- fixture 보강과 모델 환경 준비는 구조 확정 후 독립적으로 진행할 수 있다.
-- B안은 기존 영어 결과 고정 → 동작을 유지한 공통화 → 영어/French 회귀 통과 → Ko 연결 순서로 검토한다.
-
-| 결정할 항목 | 현재 상태 | 결정 기준 |
-| --- | --- | --- |
-| 최종 구조 | A 기본 권고·B 대안, 팀/메인테이너 합의 전 | 최소 변경과 공통화 비용, 두 schedule·회귀 증거 |
-| 구현·검증 담당 | 미정 | 팀의 실제 참여·시간 확인 |
-| 모델·revision·backend·dtype | 후보 단계 | 로딩·생성 자원 점검과 재현성 |
-| 최종 N·key 목록 | 23문항·40개 지시 제안안의 coverage 집계 완료, 팀 확정 전 | 21종·25개 입력 경로 포함과 진단 목적 충족. 빠진 항목이 생기면 문항 추가 |
-| Inspect | 초기 범위에서 분리 제안 | 별도 요구와 scorer 계약 |
-| 데이터 오류 수정 | 기본 이식과 분리 | 제작자 제보·명시적 overlay·별도 검증 |
+| 1주차 | 팀 전체 | 각자 첫 PR을 올렸다. 서로 PR 리뷰에 참여하고 팀 PR을 생성했다. | [예준 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/joony0905.md) · [준섭 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/SubJeeLee.md) · [형준 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/kiimyjun.md) |
+| 2주차 | [송예준](https://github.com/joony0905), [이준섭](https://github.com/SubJeeLee), [김형준](https://github.com/kiimyjun) | 예준은 IFEval-Ko 벤치마크 보고서를 작성하고 리뷰를 요청했다. 준섭과 형준은 보고서를 리뷰했다. 리뷰한 내용들을 각자 보완했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| 3주차 | [송예준](https://github.com/joony0905) | 리뷰 피드백을 반영해 벤치마크 보고서를 보완하고 `design.md` 초안을 작성했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| 3주차 | [이준섭](https://github.com/SubJeeLee) | Lighteval에 게시할 업스트림 이슈 초안 `issue-draft.md`를 작성했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| 3주차 | [김형준](https://github.com/kiimyjun) | 비교 모델 후보를 정리하고 우선 실험할 모델을 확정했다. 지시 유형별 검증 문항의 선정 근거를 정리했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| 4주차 | [송예준](https://github.com/joony0905) | 원본 영어·Ko 채점기의 판정 차이를 정리하고, 고정 응답 회귀 케이스를 86건에서 156건으로 확장했다. 영문 문서를 추가했다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| 4주차 | [이준섭](https://github.com/SubJeeLee) | Ko 전용 패키지 구조를 제안하고 Inspect 지원 범위에 대한 의견을 구하는 업스트림 이슈를 게시했다. | [업스트림 이슈 #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| 4주차 | [김형준](https://github.com/kiimyjun) | `analysis.md`와 `design.md`의 통합 검증 표본을 23문항·40개 지시로 맞췄다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| 4주차 | [송예준](https://github.com/joony0905) | `scoring.py`에 NFC 정규화와 strict·loose 채점 로직을 구현한다. 고정 응답 **156건**의 지시별·문항별 판정이 원본 Ko와 100% 일치하는지 검증한다. 팀 포크 `Hugging-Face-KREW/lighteval`에 `team-c/ifeval-ko`를 대상으로 PR을 연다.| [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| 4주차 | [이준섭](https://github.com/SubJeeLee) | 원본 Ko의 `instructions.py`, `instructions_registry.py`, `instructions_util.py`를 이식한다. 원본 출처와 라이선스 헤더를 보존하고 패키지 구조에 맞게 import 경로를 조정한다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
+| 4주차 | [김형준](https://github.com/kiimyjun) | `main.py`에 `Doc` 변환, 데이터셋과 0-shot 설정, 네 평가 지표 연결을 구현하고 `TASKS_TABLE`에 `ifeval_ko`를 등록한다. 모델 없이 `lighteval tasks inspect`를 실행해 원본 프롬프트와 대조하고, 출력과 대조 결과를 코드 PR에 첨부한다. |  |
+| 4주차 | 팀 전체 | 팀 포크 `Hugging-Face-KREW/lighteval`의 `src/lighteval/tasks/tasks/ifeval_ko/`에 각자 구현한 코드를 통합하고, `team-c/ifeval-ko`를 대상으로 코드 PR을 올린다. | [포크 팀 브랜치](https://github.com/Hugging-Face-KREW/lighteval/tree/team-c/ifeval-ko) |
+| 5주차 | [김형준](https://github.com/kiimyjun) | 세션에서 고른 비교 모델의 revision과 생성 설정을 기록한다. 23문항의 모델 응답을 생성·저장하고, 통합 검증을 통과하면 같은 설정으로 전체 split 342문항을 실행한다. | [설계 문서 6절](#validation-plan) |
+| 5주차 | [송예준](https://github.com/joony0905) | 저장한 동일 응답을 원본 Ko와 새 태스크에 넣어 지시별·문항별 strict·loose 판정과 네 집계 지표를 대조한다. 23문항과 전체 342문항의 비교 결과를 구분해 기록하고, 불일치가 있으면 재현 사례와 원인을 정리한다. | — |
+| 5주차 | [이준섭](https://github.com/SubJeeLee) | 구현 범위, 원본 코드 출처, 검증 결과를 PR 본문에 정리한다. 팀 검토를 마친 코드를 `huggingface/lighteval`에 제출하고 관련 이슈를 연결한다. | [업스트림 이슈 #1463](https://github.com/huggingface/lighteval/issues/1463) |
