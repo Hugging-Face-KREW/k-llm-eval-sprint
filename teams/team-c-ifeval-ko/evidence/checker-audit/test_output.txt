@@ -1,0 +1,30 @@
+test_all_english_support_results_cannot_be_replaced_by_exceptions (__main__.AuditTests.test_all_english_support_results_cannot_be_replaced_by_exceptions) ... ok
+test_checker_objects_cannot_be_shared_between_phases (__main__.AuditTests.test_checker_objects_cannot_be_shared_between_phases) ... ok
+test_duplicate_case_id_is_rejected (__main__.AuditTests.test_duplicate_case_id_is_rejected) ... ok
+test_exception_cannot_be_counted_as_a_normal_false_or_true (__main__.AuditTests.test_exception_cannot_be_counted_as_a_normal_false_or_true) ... ok
+test_falsey_kwargs_reach_original_random_fallback (__main__.AuditTests.test_falsey_kwargs_reach_original_random_fallback) ... ok
+test_index_cannot_select_another_id_or_python_bool (__main__.AuditTests.test_index_cannot_select_another_id_or_python_bool) ... ok
+test_ko_schedule_cannot_be_interleaved (__main__.AuditTests.test_ko_schedule_cannot_be_interleaved) ... ok
+test_loose_cannot_require_one_joint_success_candidate (__main__.AuditTests.test_loose_cannot_require_one_joint_success_candidate) ... ok
+test_loose_empty_candidates_and_duplicates_cannot_be_dropped (__main__.AuditTests.test_loose_empty_candidates_and_duplicates_cannot_be_dropped) ... ok
+test_new_case_cannot_inflate_retained_reproduction_count (__main__.AuditTests.test_new_case_cannot_inflate_retained_reproduction_count) ... ok
+test_predeclared_oracle_is_not_replaced_by_observation (__main__.AuditTests.test_predeclared_oracle_is_not_replaced_by_observation) ... ok
+test_repeated_id_requires_index (__main__.AuditTests.test_repeated_id_requires_index) ... ok
+test_retained_reproduction_is_embedded_and_must_match (__main__.AuditTests.test_retained_reproduction_is_embedded_and_must_match) ... ok
+test_same_key_variants_have_distinct_cache_keys (__main__.AuditTests.test_same_key_variants_have_distinct_cache_keys) ... ok
+test_second_repeated_id_cannot_be_collapsed_to_first (__main__.AuditTests.test_second_repeated_id_cannot_be_collapsed_to_first) ... ok
+test_source_edit_is_rejected_even_with_new_hash (__main__.AuditTests.test_source_edit_is_rejected_even_with_new_hash) ... ok
+test_stale_response_hash_is_rejected (__main__.AuditTests.test_stale_response_hash_is_rejected) ... ok
+test_support_boolean_corruption_cannot_hide_in_a_consistent_trace (__main__.AuditTests.test_support_boolean_corruption_cannot_hide_in_a_consistent_trace) ... ok
+test_support_expected_exception_cannot_be_normal_or_another_type (__main__.AuditTests.test_support_expected_exception_cannot_be_normal_or_another_type) ... ok
+test_support_expected_flags_and_prompt_must_be_booleans (__main__.AuditTests.test_support_expected_flags_and_prompt_must_be_booleans) ... ok
+test_support_missing_or_reordered_english_results_are_rejected (__main__.AuditTests.test_support_missing_or_reordered_english_results_are_rejected) ... ok
+test_support_normal_return_cannot_become_exception (__main__.AuditTests.test_support_normal_return_cannot_become_exception) ... ok
+test_support_requires_independent_oracles_for_both_references (__main__.AuditTests.test_support_requires_independent_oracles_for_both_references) ... ok
+test_trace_keeps_call_input_before_checker_lowercases_it (__main__.AuditTests.test_trace_keeps_call_input_before_checker_lowercases_it) ... ok
+test_uneven_instruction_aggregation (__main__.AuditTests.test_uneven_instruction_aggregation) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.162s
+
+OK

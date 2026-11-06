@@ -1,5 +1,7 @@
 # C팀: IFEval-Ko
 
+**한국어** | [English](README.en.md)
+
 - 팀 이름: 딸기라떼
 - 데이터셋: [allganize/IFEval-Ko](https://huggingface.co/datasets/allganize/IFEval-Ko)
 - 참고할 Lighteval 코드: src/lighteval/tasks/tasks/ifeval/
@@ -31,6 +33,9 @@
 
 - [벤치마크 분석 보고서](analysis.md) (2주차)
 - [설계 문서](design.md) (4주차)
+- [분석 보조 자료](evidence/analysis-details.md)
+- [실험 안내](evidence/checker-audit/README.md)와 [156건의 실험 결과](evidence/checker-audit/results.md)
+- [문항 선정 안내](evidence/sample-coverage/README.md)와 [집계표](evidence/sample-coverage/coverage.md)
 
 ## 업스트림 링크
 
