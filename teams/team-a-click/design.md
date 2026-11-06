@@ -5,7 +5,7 @@
 
 > **팀:** A팀 · 베이직파이브  
 > **상태:** 수정 초안 v0.3 — 팀·메인테이너 검토 전  
-> **작성·수정일:** 2026-11-01  
+> **작성·수정일:** 2026-11-06
 > **기준 자료:** CLIcK `analysis.md`(2026-10-19 조사), [「[EVAL] CLIcK: Korean cultural and language understanding」 이슈 본문][click-issue]
 
 **목표:** CLIcK의 11개 분야·1,995문항을 Lighteval에서 **0-shot·단일 한국어 프롬프트·원본 보기 순서·전체 답변 문자열의 로그 확률 비교**로 평가한다. 아래의 정확한 템플릿·추적 방식·담당·날짜는 구현을 위한 **검토 제안**이며, 이슈 승인이나 모델 검증 완료를 뜻하지 않는다. 데이터 통계는 분석 보고서의 결과를 인용한다.
@@ -80,9 +80,9 @@ HF 로딩 후 경로가 사라지는 경우, 원본 5개 필드(`id`, `paragraph
 
 | 원본 필드·설정 | `Doc` 위치 | 변환·검사 규칙 |
 | --- | --- | --- |
-| `paragraph` | `query`의 지문 블록 | `paragraph.strip()`이 비어 있지 않을 때만 원문 전체 포함 |
+| `paragraph` | `query`의 맥락 필드 | 비공백 지문이면 Type 1 지시문과 맥락 필드 사용, 아니면 Type 2 |
 | `question` | `query`의 질문 블록 | 원문·내부 보기·줄바꿈 유지. 빈 질문은 오류 |
-| `choices` | `query`의 선택지 블록 | 원본 순서로 `A. 내용` … `D. 내용` 또는 `E. 내용` 표시 |
+| `choices` | `query`의 선택지 블록 | 원본 순서로 `A: 내용` … `D: 내용` 또는 `E: 내용` 표시; 쉼표와 공백으로 연결 |
 | `choices` | `choices` | `" A. 내용"`처럼 **앞 공백 1개 + 알파벳 + `. ` + 원문**을 후보로 사용 |
 | `answer` | `gold_index` | `choices.index(answer)`의 0-based 위치. 정확히 일치하는 보기가 하나여야 함 |
 | `id` | `specific["original_id"]` | 추적용. 모델 입력이나 유일 키로 사용하지 않음 |
@@ -94,127 +94,61 @@ HF 로딩 후 경로가 사라지는 경우, 원본 5개 필드(`id`, `paragraph
 
 ### 3.2 프롬프트 형식
 
-프롬프트 버전은 `click_ko_single_v1`으로 기록한다. 아래 **블록 이름·배치·공백은 팀 설계안**이지, 공개되지 않은 논문 실행 코드를 복원한 결과가 아니다.
+2026-11-06부터 프롬프트 버전은 `click_paper_example_v2`다. 논문 §4의
+Type 1(지문 있음)·Type 2(지문 없음) 예시를 기준으로 지시문과 표시 형식을 맞췄다.
+기존 `click_ko_single_v1`의 대괄호 블록 형식은 사용하지 않는다.
+
+| 조건 | 지시문 시작 | 맥락 필드 |
+| --- | --- | --- |
+| 지문이 비공백 문자열 | `주어진 맥락을 천천히 읽고, 질문에 대한 적절한 정답을` | 포함 |
+| 지문이 없거나 공백뿐 | `주어진 질문을 천천히 읽고, 적절한 정답을` | 생략 |
+
+지시문의 보기 알파벳 목록은 실제 보기 수에 맞춰 A–D 또는 A–E로 만든다.
+필드 이름은 논문에 인쇄된 한영 병기를 사용하며, 지시문 뒤의 괄호 속 영어 번역 문장은
+추가하지 않는다. 이는 인쇄 예시를 구현하는 명시적 규칙이며 저자의 실행 코드에서
+영어 병기가 실제 입력됐는지 확인한 결과라는 뜻은 아니다.
 
 ```text
-주어진 질문을 천천히 읽고, 적절한 정답을 {labels} 중에 골라 알파벳 하나로 답하시오.
-
-[지문]
-{paragraph}
-
-[질문]
-{question}
-
-[선택지]
-{labeled_options}
-
-정답:
+{지문 유무에 맞는 한국어 지시문}
+맥락 (Context): {paragraph}
+질문 (Question): {question}
+보기 (Options):
+A: {A}, B: {B}, C: {C}, D: {D}
+정답 (Answer):
 ```
 
-`labels`는 `A, B, C, D` 또는 `A, B, C, D, E`다. 지문이 없으면 지문 블록 전체를 생략한다. 블록 사이는 줄바꿈 2개이며, 실제 `query`는 마지막 콜론으로 끝난다. 후보는 ASCII 공백 1개로 시작하므로 연결하면 `정답: E. 서울`이 된다. 원본 필드 내부의 공백·줄바꿈은 유지한다.
+지문이 없으면 맥락 줄을 통째로 생략한다. 5지선다는 같은 보기 줄에 E를 추가한다.
+각 필드는 개행 1개로 연결하고, 원본 필드 내부의 공백·Unicode·줄바꿈은 유지한다.
+query는 마지막 콜론으로 끝나며 끝에 개행을 추가하지 않는다.
+논문 지면만으로 저자 실행 코드의 개행 바이트까지 확인할 수 없으므로,
+이 직렬화 규칙을 테스트 스냅샷으로 고정한다.
 
-기본 검증은 채팅 템플릿과 별도 system prompt를 끈다. BOS 처리와 토큰화 경계를 양쪽 도구에서 맞추고, 후보 뒤 EOS를 채점에 추가하지 않는다. 문자열을 따로 토큰화한 결과를 단순 연결해도 같을 것이라 가정하지 말고, **실제 유효 토큰·후보 시작 위치·채점 마스크**를 확인한다.
+**표시 보기와 채점 후보는 별도 계약이다.** 표시에는 콜론을 사용하지만,
+채점 후보는 기존 저자 답변에 근거한 ` A. 내용` 형식을 유지한다.
+후보를 연결하면 `정답 (Answer): E. 서울`처럼 된다. 이번 변경에서 채점 후보나
+정답 인덱스, 원본 행 해시 계산은 바꾸지 않았다.
 
-### 3.3 5지선다 예시와 기대 결과
+기본 검증은 채팅 템플릿과 별도 system prompt를 끈다. BOS 처리와 토큰화 경계를
+양쪽 도구에서 맞추고 후보 뒤 EOS를 채점에 추가하지 않는다. 실제 유효 토큰,
+후보 시작 위치와 채점 마스크의 모델 검증은 별도 단계다.
 
-다음은 원본 데이터가 아닌 합성 테스트 문항이다. 입력의 `choices`는 `["부산", "대구", "인천", "대전", "서울"]`, `answer`는 `"서울"`, `paragraph`는 빈 문자열이다.
+### 3.3 스냅샷과 기대 결과
 
-```text
-주어진 질문을 천천히 읽고, 적절한 정답을 A, B, C, D, E 중에 골라 알파벳 하나로 답하시오.
+Lighteval의 `tests/unit/tasks/test_click.py`에 수동 기대 문자열을 둔다.
+4지선다·지문 없음, 5지선다·지문 있음, Unicode·공백·내부 줄바꿈 보존을
+전체 문자열로 검사한다. 추가로 4/5지선다 × 지문 유/무 4조합에서 지시문 선택과
+맥락 필드·E 보기 포함 여부를 검사한다.
 
-[질문]
-대한민국의 수도는 어디인가?
-
-[선택지]
-A. 부산
-B. 대구
-C. 인천
-D. 대전
-E. 서울
-
-정답:
-```
-
-기대 `Doc.choices`는 `[" A. 부산", " B. 대구", " C. 인천", " D. 대전", " E. 서울"]`, 기대 `gold_index`는 **4**다. 입력에 E를 표시하는 것과 E 후보를 점수화하는 것을 모두 검사한다.
+합성 보기 `["부산", "대구", "인천", "대전", "서울"]`에 정답이 `"서울"`이면
+`Doc.choices`는 `[" A. 부산", " B. 대구", " C. 인천", " D. 대전", " E. 서울"]`,
+`gold_index`는 4다. query의 보기는 콜론·쉼표 형식으로 표시한다.
 
 ### 3.4 변환 함수 설계
 
-다음 순수 함수와 얇은 `Doc` 어댑터로 분리한다. 순수 함수 테스트와 Lighteval 통합 실행은 별개다. 메타데이터는 입력에 붙이지 않는다.
-
-<details>
-<summary>입력 검사와 변환 함수 예시</summary>
-
-```python
-from collections.abc import Mapping
-
-
-def build_click_payload(row: Mapping[str, object]) -> dict[str, object]:
-    """click_ko_single_v1 문자열 계약. Lighteval 실행 코드 전체는 아니다."""
-    fields: dict[str, str] = {}
-    for key in ("id", "paragraph", "question", "answer"):
-        value = row.get(key)
-        if not isinstance(value, str):
-            raise ValueError(f"{key} must be a string")
-        fields[key] = value
-
-    options = row.get("choices")
-    if not isinstance(options, list) or len(options) not in (4, 5):
-        raise ValueError("choices must contain four or five options")
-    if any(not isinstance(option, str) or not option.strip() for option in options):
-        raise ValueError("each option must be a nonempty string")
-    if not fields["question"].strip():
-        raise ValueError("question must be nonempty")
-    if options.count(fields["answer"]) != 1:
-        raise ValueError("answer must match exactly one option")
-
-    labels = "ABCDE"[:len(options)]
-    instruction = (
-        "주어진 질문을 천천히 읽고, 적절한 정답을 "
-        + ", ".join(labels)
-        + " 중에 골라 알파벳 하나로 답하시오."
-    )
-    blocks = [instruction]
-    if fields["paragraph"].strip():
-        blocks.append("[지문]\n" + fields["paragraph"])
-    blocks.append("[질문]\n" + fields["question"])
-    labeled_options = [
-        f"{label}. {option}" for label, option in zip(labels, options)
-    ]
-    blocks.append("[선택지]\n" + "\n".join(labeled_options))
-    blocks.append("정답:")
-
-    return {
-        "query": "\n\n".join(blocks),
-        "choices": [" " + option for option in labeled_options],
-        "gold_index": options.index(fields["answer"]),
-    }
-```
-
-```python
-import hashlib
-import json
-
-from lighteval.tasks.requests import Doc
-
-
-def click_prompt(line: dict, task_name: str) -> Doc:
-    payload = build_click_payload(line)
-    raw = {key: line[key] for key in
-           ("id", "paragraph", "question", "choices", "answer")}
-    encoded = json.dumps(
-        raw, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")
-    return Doc(
-        task_name=task_name,
-        specific={
-            "original_id": line["id"],
-            "raw_row_sha256": hashlib.sha256(encoded).hexdigest(),
-        },
-        **payload,
-    )
-```
-
-</details>
+입력 검사·문자열 구성을 담당하는 순수 함수 `build_click_payload`와
+`Doc` 생성만 담당하는 `click_prompt`를 분리한다. 구현과 문서 예시가 따로 변하지 않도록
+[실제 코드](https://github.com/Hugging-Face-KREW/lighteval/blob/be429ad021b199f5f0fe167e961a05180397d6af/src/lighteval/tasks/tasks/click.py)를 기준으로 한다.
+`Doc.specific`에는 원본 ID와 5개 원본 필드의 SHA-256만 저장하고 모델 입력에 넣지 않는다.
 
 ## 4. 채점: 지표, 생성 길이, stop sequence, 정답 추출
 
@@ -257,13 +191,13 @@ correct = 1 if predicted_index == gold_index else 0
 
 | 항목 | 논문·저자 자료에서 분석한 내용 | 이번 구현과 이유 |
 | --- | --- | --- |
-| 지시문 표현 | 3가지 표현 사용. 정확한 전체 원문은 분석에서 확인하지 못함 | 1개를 명시적으로 고정. 임의의 세 표현을 만들어 공식 재현이라 부르지 않음 |
+| 지시문 표현 | 3가지 표현 사용. 정확한 전체 원문은 분석에서 확인하지 못함 | 논문에 제시된 Type 1/2 예시를 지문 유무에 따라 사용. 세 가지 지시문 표현의 평균 평가는 별도 범위 |
 | 보기 순서 | 보기를 순환 배치하며 평가 | 원본 순서 고정. 첫 기여 범위를 제한하며 위치 민감도 평가까지 수행했다고 주장하지 않음 |
 | 문항당 평가 | 4지선다 12회, 5지선다 15회 | 조건 1개로 정오 1개 산출. 실제 후보 채점 연산은 보기 수만큼 필요 |
 | Few-shot | 실제 실험 전체의 shot 수를 명확히 확인하지 못함 | 명시적 0-shot. 별도 예시 선정·중복 관리 없이 재현 가능한 조건부터 구현 |
 | 공개 모델 채점 후보 | 저자 설명은 `알파벳. 보기 내용` 전체 | 이 후보 유형을 따름. 프롬프트의 ‘알파벳 하나’ 지시와 채점 후보를 구분 |
 | 길이 정규화 | 적용 여부를 확인하지 못함 | 미사용은 **팀 선택**. 긴 후보에 불리한 효과가 생길 수 있으며 정확도 개선을 보장하지 않음 |
-| 입력 세부 형식 | 정확한 공백·경계·채팅 템플릿 등 미확인 사항 존재 | §3의 별도 템플릿을 버전 관리. 원문 전체 조건을 복제했다고 주장하지 않음 |
+| 입력 세부 형식 | 정확한 공백·경계·채팅 템플릿 등 미확인 사항 존재 | 논문 인쇄 예시에 맞춘 §3 템플릿 사용. 실행 코드의 개행·영어 병기 여부까지 확인한 것은 아님 |
 | API 모델 평가 | 생성 답변에서 정답을 판정하는 별도 절차 | 첫 버전에서 제외. 생성 전용 API 지원을 약속하지 않음 |
 
 근거: 팀 `analysis.md` §5, [논문][paper], 보고서가 인용한 [저자 채점 방식 답변][author-scoring]. **이번 결과는 논문 Table 5의 완전 재현 결과가 아니라, 명시된 단일 조건의 CLIcK 평가 결과다.**

@@ -1,15 +1,15 @@
 # CLIcK 데이터와 프롬프트 구현 보고서
 
-2026-11-05 · @GeonRyoung · `docs/week5-basicfive`
+2026-11-06 · @GeonRyoung · `docs/week5-basicfive`
 
 [4주차 설계](design.md) §7의 담당 작업 두 개를 구현하고 검증했습니다.
 
 | 담당 작업 | 완료한 내용 | 검증 |
 | --- | --- | --- |
 | 분야별 파일 목록·데이터 검사·추적 연결 | 11개 분야의 원본 26파일 고정, 파일 해시·1,995행 추적 목록, HF 로더와 Lighteval 저장 로그 연결 | D01–D03 통과, 추적 실패 테스트 20개 통과 |
-| Prompt function·입력 단위 테스트 | `build_click_payload`, `click_prompt`, 4·5지선다 전체 후보, 원문 보존과 입력 오류 처리 | U01–U07에 해당하는 테스트 66개 통과 |
+| Prompt function·입력 단위 테스트 | `build_click_payload`, `click_prompt`, 4·5지선다 전체 후보, 원문 보존과 입력 오류 처리 | U01–U07에 해당하는 테스트 70개 통과 |
 
-구현은 Lighteval 로컬 커밋 `cfbc8167c87009bbe60c897d032a8a568881787f`에,
+구현은 Lighteval 커밋 `be429ad021b199f5f0fe167e961a05180397d6af`에,
 실행 방법·검증 범위·주의할 버전 차이는 [검증 README](validation/click/README.md)에 있습니다.
 [원본 목록](validation/click/manifest.json)과 [실제 검사 결과](validation/click/results.json)에는
 원문 대신 경로·ID·해시·통계만 저장했습니다.
@@ -24,4 +24,9 @@ Doc의 추적 해시가 실제 Parquet 저장·재읽기 후에도 유지되는 
 
 AI 도구로 구현·테스트·문서 초안을 작성했습니다. 팀 제출 전 담당자의 코드 이해와 교차 검토가 필요합니다.
 
-사용자 요청에 따라 로컬 커밋까지만 진행했으며 push와 PR은 수행하지 않았습니다.
+
+
+2026-11-06 프롬프트 수정: 논문 §4의 지문 유무별 지시문과 인쇄 예시의 필드·보기 표시를
+적용했습니다. 스냅샷과 지문 유무 × 보기 수 검사를 갱신했습니다.
+프롬프트 버전은 `click_paper_example_v2`이며, 기존 v1 결과와 구분합니다.
+채점 후보는 유지했고 모델 정확도 변화는 아직 측정하지 않았습니다.
