@@ -12,3 +12,4 @@
 | 주차 | 한 일 | 링크 |
 |---|---|---|
 | 1 | 첫 PR | |
+| 5 | CLIcK 분야별 파일 목록·D01–D03 추적 검사, prompt function·U01–U07 구현 및 테스트 | [구현 기록](../teams/team-a-click/implementation-report.md) |
