@@ -1,40 +1,37 @@
-[Team documents](README.en.md)
+We would like to contribute IFEval-Ko to Lighteval, starting with a separate `ifeval_ko` package and scorer. We plan to implement it in our team fork and adapt to your feedback.
 
 ## Evaluation short description
 
-- **Why is this evaluation interesting?**
-  We would like to contribute IFEval-Ko, Allganize's Korean adaptation of IFEval, to evaluate compliance with verifiable instructions in Korean prompts. The goal is compatibility with Allganize's existing evaluator, rather than new scoring rules or a general measure of Korean response quality.
-- **How used is it in the community?**
-  Allganize publishes the [dataset and model-result chart](https://huggingface.co/datasets/allganize/IFEval-Ko) and an [lm-evaluation-harness task with usage instructions](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/README_Ko.md). Broader adoption is not quantified here.
+- **Why is this evaluation interesting?** IFEval-Ko is Allganize's Korean adaptation of IFEval. It evaluates verifiable instruction following, including keyword counts, length limits, and response formatting in Korean.
+- **How used is it in the community?** Allganize publishes model results and an [lm-evaluation-harness task](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/README_Ko.md). We have not quantified broader adoption.
 
 ## Evaluation metadata
 
-- Paper url: [IFEval, Zhou et al. (2023)](https://arxiv.org/abs/2311.07911). IFEval-Ko is the Korean adaptation, not a separate paper.
-- Github url: [original IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval). The **Ko reference code** is hosted on [Hugging Face](https://huggingface.co/datasets/allganize/IFEval-Ko/tree/54199e3801116897697babf341865741dcd06fc8/ifeval_ko).
-- Dataset url: [allganize/IFEval-Ko](https://huggingface.co/datasets/allganize/IFEval-Ko), `default` / `train`, 342 prompts at revision `54199e3801116897697babf341865741dcd06fc8`; Apache-2.0 as declared in the card; no access gate at review time.
+- Paper url: [Original IFEval paper](https://arxiv.org/abs/2311.07911); IFEval-Ko is its Korean adaptation.
+- Github url: [Original IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval). The [Ko reference code](https://huggingface.co/datasets/allganize/IFEval-Ko/tree/54199e3801116897697babf341865741dcd06fc8/ifeval_ko) is hosted on Hugging Face.
+- Dataset url: [allganize/IFEval-Ko](https://huggingface.co/datasets/allganize/IFEval-Ko), `default` / `train`; 342 prompts, 481 instruction occurrences, 21 instruction types at the pinned Ko revision above. The card declares Apache-2.0.
 
-## Why the existing IFEval metric needs adaptation
+## Proposed approach
 
-The existing [French task](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/multilingual/tasks/french.py#L28-L40) imports the English `ifeval_metrics`. Changing only the dataset would not preserve the Ko reference: its [utility](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions_util.py) counts whitespace-delimited words, unlike the English regex tokenizer. For example, `사과,배,포도` counts as one word in Ko and three in the existing English implementation. Ko also changes sentence splitting, fixed response phrases, and NFC handling.
+We recommend a separate Ko scorer for the first PR. Ko has different word/sentence utilities, fixed phrases, and NFC handling. It also runs all strict checks before loose checks, creating fresh checker instances for each phase. Keeping this flow close to the reference makes parity checks easier and limits changes to the existing English metric and tasks that reuse it.
 
-We recommend a separate `ifeval_ko` package and scorer for the initial port (option A). This keeps Ko utilities, fixed phrases and normalization close to the reference. It also preserves the order of running all strict checks before all loose checks, with fresh checker instances in each phase. The approach limits changes to the existing English and French paths while establishing Ko parity. Option B can also work if it preserves the same policies and checker lifecycle. See the [experiment results](evidence/checker-audit/results.en.md) and [pinned sources](evidence/checker-audit/provenance.json).
+This duplicates some scoring logic; we would revisit shared helpers after establishing parity. [Design and supporting analysis](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/da7053db1d4858239856695a2cfed702173234b6/teams/team-c-ifeval-ko/design.en.md).
 
-## Proposed implementation and validation
+We would preserve the [Ko protocol](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/ifeval_ko.yaml): zero-shot, no sampling, up to 1,280 new tokens, declared stop strings, and all four prompt-/instruction-level strict/loose accuracy metrics.
 
-- Proposed task: `ifeval_ko`, with layout subject to feedback. Follow the [Ko task protocol](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/ifeval_ko.yaml): generative, 0-shot, no sampling, maximum 1,280 new tokens, and the declared stop strings. Record model-specific chat-template/EOS behavior.
-- Proposed first target: native metric/Pipeline with `prompt_level_strict_acc`, `inst_level_strict_acc`, `prompt_level_loose_acc`, and `inst_level_loose_acc`. Inspect support is outside the initial proposal; its existing scorer returns only the two prompt-level values.
-- Evaluate **identical inputs and stored responses** with the Ko reference and the registered Lighteval task. Require identical instruction-level and prompt-level judgments, matching aggregate numerators and denominators, and an absolute error of at most `1e-12` for all four metrics. Run regression checks for existing tasks if shared code changes.
-- Experimental evidence: a [156-case experiment](evidence/checker-audit/results.en.md), with 18 auxiliary inputs for compatibility and error handling. Both original evaluators receive identical Ko inputs, and the raw results include input reproduction checks. Each of the 21 instruction IDs and 25 input partitions used by the dataset has dedicated pass and fail cases. For the primary targets, `(English, Ko)=(T,F)` occurs in 13 strict cases and 8 loose cases; `(F,T)` occurs in 22 strict cases and 21 loose cases. Parity testing for the new Lighteval-Ko task remains pending.
-- Next: compare the new task with the stored Ko expectations, check affected English/French paths for regressions, then run model integration on the proposed 23 prompts (40 instruction occurrences, 21 IDs and 25 input partitions), followed by the full split. `Qwen/Qwen2.5-1.5B-Instruct` and the sample await team approval; backend, dtype, and model/tokenizer revisions remain to be fixed. New-task parity and model integration remain pending. See the [design proposal](design.en.md).
+Known prompt/checker mismatches, such as `3345` requesting “강도” while checking `robber`, would remain unchanged for reference compatibility and be reported separately to the dataset authors.
 
-## Published results and known limitations
+## Validation and current status
 
-Allganize's [published Korean results](https://huggingface.co/datasets/allganize/IFEval-Ko/blob/54199e3801116897697babf341865741dcd06fc8/benchmark-score-dot-plot.png) are labeled Strict Accuracy. We have not established the prompt-/instruction-level mapping or complete execution settings, so we do not present them as a four-metric reproduction target. Our primary acceptance criterion is agreement on the same responses, not matching historical English GPT-4 scores.
+Compare identical stored responses through the Ko reference and the registered task, requiring matching individual judgments, aggregate numerators/denominators, and an absolute error of at most `1e-12` for all four metrics. Check affected existing tasks for regressions.
 
-We will preserve original prompts and scoring parameters. [Known Issues](analysis.en.md#82-known-issues-confirmed-with-the-actual-evaluators) include `3345` (`강도` / `robber`), `1203` (`평화` / `peace`), `2142` (`포식자` / `predatory`), fixed-choice wording in `227`, and 14 inclusive/exclusive length-limit wording mismatches. Corrections will be proposed separately to the dataset authors, not silently applied in this integration. These observations do not quantify changes in model scores.
+Our expanded [156 diagnostic cases](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/da7053db1d4858239856695a2cfed702173234b6/teams/team-c-ifeval-ko/evidence/checker-audit/results.en.md), plus 18 auxiliary inputs for compatibility and error handling, compare the original English and Ko evaluators on identical Ko inputs. The cases provide dedicated pass and fail examples for all 21 observed instruction types and 25 input partitions. These results support the need for Ko-specific behavior; they do not establish parity of the registered Lighteval task. [Pinned sources and execution details](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/da7053db1d4858239856695a2cfed702173234b6/teams/team-c-ifeval-ko/evidence/checker-audit/README.en.md).
 
-The 2026-10-30 (KST) issue/PR searches are historical background. The proposal now exists as [huggingface/lighteval#1463](https://github.com/huggingface/lighteval/issues/1463); the [experiment results](evidence/checker-audit/results.en.md) provide the supporting evidence. Issue attachment drafts and remote publication are outside this documentation update.
+We propose [23 prompts with 40 instruction occurrences](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/da7053db1d4858239856695a2cfed702173234b6/teams/team-c-ifeval-ko/evidence/sample-coverage/README.en.md) for model integration, covering all 21 observed instruction types. This is separate from the diagnostic experiment above. Model integration and full-split evaluation remain pending.
 
-## Question for maintainers
+Implementation is in progress in our [team-fork PR](https://github.com/Hugging-Face-KREW/lighteval/pull/2). We will validate fixed-response parity through the registered task, followed by model integration and full-split evaluation. Our initial proposal targets native Pipeline support; Inspect support would be a follow-up, subject to your feedback.
 
-Would a separate `ifeval_ko` package and scorer, **option A**, fit the project for the initial contribution? We recommend it to establish reference parity while limiting changes to existing paths. We are also open to **option B**: a shared metric with explicit policies for registry selection, normalization, execution order and checker construction.
+## Questions for maintainers
+
+1. Does this separate-package approach fit the project? Any requirements for the initial PR?
+2. Would native Pipeline/metric support be sufficient for the initial PR, with Inspect support as a follow-up?
