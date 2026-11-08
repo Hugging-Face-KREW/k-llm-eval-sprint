@@ -2,9 +2,13 @@
 
 > 팀: STP즈(D팀) · 분석 보고서: `teams/team-d-kormedmcqa/analysis.md`
 >
-> 기준 버전: 데이터셋 revision `79efd6f`, lm-evaluation-harness `97a5e2c`(task version 3.0), lighteval `c2af9e5f`(팀 포크 `Hugging-Face-KREW/lighteval`), 논문 arXiv 2403.01469v3
+> 기준 버전: 데이터셋 revision `79efd6f91edfc8036330d7a4daa88b9f2deb9a82`, lm-evaluation-harness `97a5e2c`(task version 3.0), lighteval `c2af9e5f`(팀 포크 `Hugging-Face-KREW/lighteval`), 논문 arXiv 2403.01469v3
+>
+> 구현: 포크 `kangmin/kormedmcqa-task` 브랜치 `88089039`(`src/lighteval/tasks/tasks/kormedmcqa.py`, `tests/unit/tasks/test_kormedmcqa.py`). `team-d/kormedmcqa`로 PR 예정.
 >
 > 코드 맨 위 주석과 `파일 :행` 표기는 위 커밋 기준의 소스 위치다.
+>
+> **11/8 갱신**: 4주차 세션(11/1)에서 정한 것과 11/7 구현 결과를 반영했다. 전체 점수(5-1 ②, 5-3), `choices`와 metric 이름(3장, 5-2), 단위 테스트(6-1), 작업 나누기(7장)가 바뀌었다.
 
 ## 1. 태스크 이름, 파일 위치
 
@@ -35,7 +39,11 @@ ARABIC_MMLU_TASKS = [
 
 - `tasks/tasks/`는 항상 로드된다. `multilingual/tasks/`는 `load_multilingual=True`일 때만 로드된다(`registry.py` 기본값 `False`).
 - 한편 기존 한국어 관련 태스크(`global_mmlu`, `paws_x` 등)는 `multilingual/tasks/`에 있어서, 메인테이너가 그쪽을 원할 수도 있다.
-- 파일 하나로 끝나는 구조라, `multilingual/tasks/`를 원하면 파일만 옮기면 되고 코드는 바뀌지 않는다. 이슈에 이렇게 적고 메인테이너에게 묻는다.
+- 파일 하나로 끝나는 구조라, `multilingual/tasks/`를 원하면 파일만 옮기면 되고 코드는 바뀌지 않는다. 메인테이너가 다른 위치를 원하면 PR 리뷰에서 옮긴다.
+
+### 1-3. 범위
+
+KorMedMCQA 하나만 구현한다. 팀 배정 목록의 Ko-MuSR은 선택 항목이라 이번 스프린트 범위에서 뺐다.
 
 ## 2. 데이터 범위
 
@@ -67,7 +75,7 @@ shot 수는 실행할 때 `--num_fewshot 5`로 지정한다(`_cli/run.py` :123).
 | --- | --- | --- | --- | --- |
 | `hf_repo` | `sean0042/KorMedMCQA` | `dataset_path` | (필수 필드) | `lighteval_task.py` :115 |
 | `hf_subset` | 직종 4개 중 하나 | `dataset_name` | (필수 필드) | `lighteval_task.py` :116 |
-| `hf_revision` | `79efd6f` | (원본은 고정하지 않음) | `None`(최신) | `lighteval_task.py` :128 |
+| `hf_revision` | `79efd6f91edfc8036330d7a4daa88b9f2deb9a82` (전체 40자) | (원본은 고정하지 않음) | `None`(최신) | `lighteval_task.py` :128 |
 | `evaluation_splits` | `["test"]` | `test_split` | `["validation"]` | `lighteval_task.py` :133 |
 | `few_shots_split` | `"fewshot"` | `fewshot_split` | `None` | `lighteval_task.py` :134 |
 | `few_shots_select` | `"sequential"` | `sampler: first_n` | `None` → `balanced` | `prompt_manager.py` :203-205 |
@@ -134,18 +142,20 @@ E. {E}
 | `A`~`E` | `query`의 `A. ...` ~ `E. ...` 줄 | 줄바꿈으로 이어 붙임 |
 | (고정 문구) | `query` 마지막 줄 | `정답：` (**전각 콜론 `：`**, 일반 `:` 금지) |
 | `answer` (1~5) | `gold_index` | **`answer - 1`** (Lighteval은 0부터. 빼먹어도 에러가 없고 점수만 20% 근처로 떨어짐) |
-| (A~E 글자) | `choices` | `[" A", " B", " C", " D", " E"]`. 앞 공백은 프롬프트와 채점에 영향 없음 (3-1 ①) |
+| (A~E 글자) | `choices` | `["A", "B", "C", "D", "E"]`(앞 공백 없음). 공백을 넣어도 프롬프트와 채점에 영향이 없지만(3-1 ①) 굳이 넣을 이유가 없어 뺐다 |
 | `cot`, `subject`, `year`, `period`, `q_number` | 사용 안 함 |  |
 
 ```py
+# kormedmcqa.py (구현)
+LETTERS = ["A", "B", "C", "D", "E"]
+
+
 def kormedmcqa_prompt(line, task_name: str = None):
-    query = f"{line['question'].strip()}\n"
-    query += "".join(f"{l}. {line[l]}\n" for l in ["A", "B", "C", "D", "E"])
-    query += "정답："
+    query = f"{line['question'].strip()}\n" + "".join(f"{letter}. {line[letter]}\n" for letter in LETTERS) + "정답："
     return Doc(
         task_name=task_name,
         query=query,
-        choices=[" A", " B", " C", " D", " E"],
+        choices=list(LETTERS),
         gold_index=line["answer"] - 1,
     )
 ```
@@ -220,7 +230,7 @@ KorMedMCQA는 모델이 답변을 생성한 후, 정규식을 사용해 정답 �
 
 데이터셋의 실제 정답 1~5를 3장의 `gold_index`로 바꿔 A~E 글자로 모델의 예측 정답과 비교한다.
 
-- **평가 지표:** Lighteval의 `ExactMatches` 사용
+- **평가 지표:** Lighteval의 `ExactMatches` 사용. 결과표 이름은 `em`(내장 `Metrics.exact_match`와 같은 이름)
 - **예측값 정규화:** `normalize_pred`에 `extract_choice` 연결
 - **실제 정답:** `Doc`의 `gold_index`를 활용하여 A~E 형식으로 관리
 - **채점 기준:** 정답 일치 시 1점, 불일치 및 추출 실패 시 0점
@@ -229,20 +239,22 @@ KorMedMCQA는 모델이 답변을 생성한 후, 정규식을 사용해 정답 �
 
 ### 4-4. 점수 집계
 
-Doctor, Nurse, Pharm, Dentist 네 가지 하위 데이터셋의 정확도를 각각 산출한다. 전체 점수 및 가중 평균은 5장에서 다룬다.
+Doctor, Nurse, Pharm, Dentist 네 가지 하위 데이터셋의 정확도를 각각 산출한다. 전체 점수는 lighteval 기본 `kormedmcqa:_average`(단순 평균)를 쓰고, 가중 평균은 따로 계산해 PR 본문에 적는다(5-3).
 
 Accuracy = {(정답 문항 수)/(전체 평가 문항 수) }\*100(%)
 
 ## 5. 원본과 다른 점, 그 이유
 
-> 목표는 같은 입력에 harness와 같은 점수를 내는 것이다. Qwen2.5-1.5B-Instruct, doctor 435문항, 5-shot에서 실험용 커스텀 태스크는 harness와 문항별 출력과 채점이 doctor 태스크에 한해선, 모두 일치했다(정확도 둘 다 0.3310, 시간 : cpu 25-30분). 나머지 범위는 8장에 적었다.
+> 목표는 같은 입력에 harness와 같은 점수를 내는 것이다. Qwen2.5-1.5B-Instruct, doctor 435문항, 5-shot에서 실험용 커스텀 태스크는 harness와 문항별 출력과 채점이 doctor 태스크에 한해선, 모두 일치했다(정확도 둘 다 0.3310, 시간 : cpu 25-30분).
+>
+> 11/7에는 포크에 구현한 `kormedmcqa:doctor|5`로 같은 조건을 다시 돌렸다. 정확도 0.3310(144/435)이고, 프롬프트 토큰, 생성 텍스트, 문항별 점수가 435문항 모두 harness와 같았다. 나머지 범위는 8장에 적었다.
 
 ### 5-1. 요약
 
 | # | 항목 | 원본(harness) | Lighteval | 대응 | 이유 |
 | --- | --- | --- | --- | --- | --- |
 | ① | 정답 추출 | `ExtractChoiceFilter` + `take_first` 필터 | 필터 단계가 없다. 기본 `exact_match`는 출력 전체를 비교 | `ExactMatches`의 `normalize_pred`에 원본 `extract_choice`를 넣는다 | 원본과 같은 채점을 하려고 |
-| ② | 전체 점수 | 문항 수 **가중 평균**(`weight_by_size: true`) | `kormedmcqa:_average`는 **단순 평균** | 일단 직종별 점수로 비교. 방법은 **미정**(5-3) | GPT-4o 기준 가중 85.61, 단순 85.53 |
+| ② | 전체 점수 | 문항 수 **가중 평균**(`weight_by_size: true`) | `kormedmcqa:_average`는 **단순 평균** | **단순 평균을 그대로 쓴다.** 가중 평균은 직종별 점수와 문항 수로 따로 계산해 PR 본문에 적는다(5-3) | lighteval 공통 관례를 바꾸지 않는다. 이슈 #1481에 이렇게 제안했다. GPT-4o 기준 가중 85.61, 단순 85.53 |
 | ③ | 직종 묶기 | group yaml | 이름의 `:` 앞부분이 같으면 superset으로 묶인다 | `kormedmcqa:<직종>` 4개를 만든다 | `kormedmcqa\|5`로 네 직종을 함께 실행할 수 있다 |
 | ④ | few-shot 선택 | `sampler: first_n` | 기본 `balanced` | `few_shots_select="sequential"` | 기본값이면 예시 순서가 바뀌어 프롬프트가 달라진다 |
 | ⑤ | few-shot 개수 | CLI `--num_fewshot 5` | 실행 문자열 `kormedmcqa:doctor\|5` | 실행할 때 `\|5`를 반드시 쓴다 | `\|` 없이 쓰면 0-shot으로 덮어쓴다 |
@@ -270,9 +282,9 @@ filter_list:
 lighteval에는 필터 단계가 없어서 메트릭 쪽에서 추출한다. `CHOICE_PATTERNS`와 `extract_choice`는 그대로 옮기고 호출 위치만 바뀐다.
 
 ```py
-# 설계안 (의사코드)
+# kormedmcqa.py (구현)
 kormedmcqa_metric = SampleLevelMetric(
-    metric_name="exact_match",
+    metric_name="em",
     sample_level_fn=ExactMatches(strip_strings=True, normalize_pred=extract_choice),
     category=SamplingMethod.GENERATIVE,
     corpus_level_fn=np.mean,
@@ -282,8 +294,11 @@ kormedmcqa_metric = SampleLevelMetric(
 
 - `extract_choice`가 `.upper()`로 A~E 한 글자만 돌려주므로 harness의 대소문자, 구두점, 공백 무시 옵션은 필요 없다.
 - 추출에 실패하면 빈 문자열이 되어 오답이다. harness와 같다.
+- metric 이름은 `em`이다. 같은 `ExactMatches`를 쓰는 내장 `Metrics.exact_match`가 `em`이고, 정규화 함수를 붙인 다른 내장 metric(`rouge_t5` 등)도 이름을 바꾸지 않는다. 추출 규칙은 docstring과 PR 본문에 적는다.
 
-### 5-3. 전체 점수: 가중 평균 (미정)
+### 5-3. 전체 점수: 단순 평균 유지, 가중 평균은 사후 계산 (결정)
+
+**결정(4주차 세션)**: 태스크 코드는 lighteval 기본 `kormedmcqa:_average`(단순 평균)를 그대로 쓴다. harness와 비교할 가중 평균은 아래 후보 1로 계산해 PR 본문의 결과표에 함께 적는다. 이슈 #1481에도 이렇게 제안했다.
 
 harness는 문항 수로 가중한다.
 
@@ -314,7 +329,7 @@ if len(list_of_subtasks) > 1:
 
 | 후보 | 방법 | 5-shot에서 harness와 같은 계산인가 | 비고 |
 | --- | --- | --- | --- |
-| 1 | 사후 계산. 직종별 점수와 문항 수로 직접 가중한다 | **같다** | 태스크 코드에 손대지 않는다. docstring이나 문서로 계산법을 안내한다 |
+| 1 (**채택**) | 사후 계산. 직종별 점수와 문항 수로 직접 가중한다 | **같다** | 태스크 코드에 손대지 않는다. PR 본문에 결과를 적는다 |
 | 2 | 통합 태스크. 네 직종을 이어 붙인 태스크를 추가한다 | **다르다** | 0-shot에서만 같다. `download_dataset_worker`를 가로채야 한다 |
 | 3 | lighteval 집계 코드에 가중 평균을 넣는다 | 구현에 따라 다르다 | `_average` 관례를 바꾸는 일이라 메인테이너에게 물어야 한다 |
 
@@ -430,6 +445,17 @@ rnd.shuffle(eval_docs)
 
 ### 6-1. 단위 테스트
 
+**구현(11/7)**: `tests/unit/tasks/test_kormedmcqa.py`에 33개를 만들었고 모두 통과한다(`test_registry.py` 포함 41개). 데이터셋이 CC BY-NC라 원문 대신 가짜 행을 쓴다.
+
+| 대상 | 확인하는 것 |
+| --- | --- |
+| 프롬프트 | 전체 문자열 스냅샷, 전각 콜론, `answer` 1~5 → gold A~E |
+| `extract_choice` | 정규식 4개 각각, 같은 정규식의 마지막 매치, 앞 정규식 우선, 전각 콜론(`정답：C`)이 패턴 1에 안 걸리는 것, 일부러 남긴 허점 |
+| metric | `ModelResponse`를 넣어 추출 → 채점 경로 |
+| 설정 | 태스크 4개, 직종별 config 값이 harness 설정과 같은지 |
+
+아래는 처음 세운 계획이다.
+
 `extract_choice`:
 
 ```py
@@ -491,13 +517,18 @@ NVIDIA GPU로 테스트하지 못하면 그 사실을 PR 검증 범위에 적는
 
 ## 7. 작업 나누기
 
-| 작업 | 내용 | 산출물 | 담당 | 기한 |
-| --- | --- | --- | --- | --- |
-| 데이터 스플릿, few-shot | 태스크 정의 4개의 데이터 설정(`hf_subset`, `hf_revision`, `evaluation_splits`, `few_shots_split`, `few_shots_select`) | `kormedmcqa.py`의 `make_task` | 정민채 | 11/7 |
-| 프롬프트 | 프롬프트 함수와 단위 테스트, nurse, pharm, dentist 프롬프트 글자 대조 | `kormedmcqa_prompt`, 대조 스크립트 | 김대성 | 11/7 |
-| 채점 | `extract_choice`, 메트릭, 생성 설정, 단위 테스트 | `extract_choice`, `SampleLevelMetric`, `test_kormedmcqa.py` | 나하윤 | 11/7 |
-| 전체 실행, 대조 | nurse, pharm, dentist를 포함한 전체 3,009문항 harness 대조, 정규식 영향 집계 | `scripts/`, `results/` | 김강민 | 11/7 |
-| PR, 이슈 | 이슈 질문 정리, PR 작성 | PR, 이슈 | 김강민 | 11/7 |
+4주차 세션에서 일정을 둘로 나눴다. 11/8까지 태스크 코드와 doctor 재현, 11/15까지 전체 대조와 업스트림 PR이다.
+
+| 작업 | 내용 | 산출물 | 담당 | 기한 | 상태 |
+| --- | --- | --- | --- | --- | --- |
+| 데이터 스플릿, few-shot | 태스크 정의 4개의 데이터 설정(`hf_subset`, `hf_revision`, `evaluation_splits`, `few_shots_split`, `few_shots_select`) | `kormedmcqa.py`의 `TASKS_TABLE`(직종 목록 컴프리헨션) | 정민채 | 11/8 | 완료 |
+| 프롬프트 | 프롬프트 함수와 단위 테스트 | `kormedmcqa_prompt` | 김강민 | 11/8 | 완료 |
+| 채점 | `extract_choice`, 메트릭, 생성 설정, 단위 테스트 | `extract_choice`, `SampleLevelMetric`, `test_kormedmcqa.py` | 나하윤, 김강민 | 11/8 | 완료 |
+| doctor 재현 | `kormedmcqa:doctor\|5` 전체 실행, harness와 문항별 대조 | 0.3310 재현 | 김강민 | 11/8 | 완료 |
+| 포크 PR | `team-d/kormedmcqa` 대상 PR, `tasks inspect` 출력 첨부 | 포크 PR | 김강민 | 11/8 | 진행 중 |
+| 프롬프트 글자 대조 | nurse, pharm, dentist 프롬프트를 harness와 글자 단위 대조 | 대조 스크립트 | 김대성 | 11/15 | |
+| 전체 실행, 대조 | nurse, pharm, dentist를 포함한 전체 3,009문항 harness 대조, 정규식 영향 집계, 가중 평균 계산 | 결과표 | 김강민 | 11/15 | |
+| 업스트림 PR | `huggingface/lighteval` PR(`Closes #1481`) | PR | 김강민 | 11/15 | |
 
 ## 8. 아직 확인하지 않은 것
 
