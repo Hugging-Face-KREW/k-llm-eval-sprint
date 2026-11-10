@@ -1,0 +1,182 @@
+{
+  "checked_at_utc": "2026-11-10T05:03:27.184819+00:00",
+  "dataset": "EunsuKim/CLIcK",
+  "dataset_revision": "d61627859645b5e6edc03fd9f835735d8226fa4e",
+  "prompt_version": "click_harness_layout_v3",
+  "lighteval_base": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+  "lighteval_head": "efb7e657802dd0d760473ffa9307063928ce4b41",
+  "click_module_sha256": "e88a2fedd02217ccbb6f43afd79333554d2a5b750e42f7e9017bd684a6481f3f",
+  "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
+  "python": "3.14.4",
+  "packages": {
+    "datasets": "5.1.0",
+    "huggingface-hub": "1.33.0",
+    "pyarrow": "26.0.0",
+    "torch": "2.14.1",
+    "pytest": "9.1.1"
+  },
+  "loader": "HF-repo-default-config-pinned-revision",
+  "D01": "PASS",
+  "D02": "PASS",
+  "D03": "PASS",
+  "totals": {
+    "files": 26,
+    "rows": 1995,
+    "four_options": 1739,
+    "five_options": 256,
+    "paragraphs": 353,
+    "gold_e": 49,
+    "unique_ids": 1987
+  },
+  "categories": {
+    "society": {
+      "rows": 309,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "tradition": {
+      "rows": 222,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "history": {
+      "rows": 280,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "law": {
+      "rows": 219,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "politics": {
+      "rows": 84,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "economy": {
+      "rows": 59,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "geography": {
+      "rows": 131,
+      "five_options": 30,
+      "paragraphs": 0
+    },
+    "popular": {
+      "rows": 41,
+      "five_options": 0,
+      "paragraphs": 0
+    },
+    "textual": {
+      "rows": 285,
+      "five_options": 68,
+      "paragraphs": 238
+    },
+    "functional": {
+      "rows": 133,
+      "five_options": 112,
+      "paragraphs": 106
+    },
+    "grammar": {
+      "rows": 232,
+      "five_options": 46,
+      "paragraphs": 9
+    }
+  },
+  "loader_to_saved_log": {
+    "society": {
+      "loaded": 309,
+      "linked": 309,
+      "source_order_preserved": true,
+      "saved_log_linked": 309
+    },
+    "tradition": {
+      "loaded": 222,
+      "linked": 222,
+      "source_order_preserved": true,
+      "saved_log_linked": 222
+    },
+    "history": {
+      "loaded": 280,
+      "linked": 280,
+      "source_order_preserved": true,
+      "saved_log_linked": 280
+    },
+    "law": {
+      "loaded": 219,
+      "linked": 219,
+      "source_order_preserved": true,
+      "saved_log_linked": 219
+    },
+    "politics": {
+      "loaded": 84,
+      "linked": 84,
+      "source_order_preserved": true,
+      "saved_log_linked": 84
+    },
+    "economy": {
+      "loaded": 59,
+      "linked": 59,
+      "source_order_preserved": true,
+      "saved_log_linked": 59
+    },
+    "geography": {
+      "loaded": 131,
+      "linked": 131,
+      "source_order_preserved": true,
+      "saved_log_linked": 131
+    },
+    "popular": {
+      "loaded": 41,
+      "linked": 41,
+      "source_order_preserved": true,
+      "saved_log_linked": 41
+    },
+    "textual": {
+      "loaded": 285,
+      "linked": 285,
+      "source_order_preserved": true,
+      "saved_log_linked": 285
+    },
+    "functional": {
+      "loaded": 133,
+      "linked": 133,
+      "source_order_preserved": true,
+      "saved_log_linked": 133
+    },
+    "grammar": {
+      "loaded": 232,
+      "linked": 232,
+      "source_order_preserved": true,
+      "saved_log_linked": 232
+    }
+  },
+  "trace_modes": {
+    "society": "category+raw-row-sha256",
+    "tradition": "category+raw-row-sha256",
+    "history": "category+raw-row-sha256",
+    "law": "category+raw-row-sha256",
+    "politics": "category+raw-row-sha256",
+    "economy": "category+raw-row-sha256",
+    "geography": "category+raw-row-sha256",
+    "popular": "category+raw-row-sha256",
+    "textual": "category+raw-row-sha256",
+    "functional": "category+raw-row-sha256",
+    "grammar": "category+raw-row-sha256"
+  },
+  "functional_csat_row_82": {
+    "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#82",
+    "category": "functional",
+    "path": "Dataset/Language/Functional/Functional_CSAT.json",
+    "row_number": 82,
+    "original_id": "CSAT_korean_13_11",
+    "raw_row_sha256": "e40cf5b2d4fb18b8f91fa759bbd8a99ab686060c8e655a517c55db1532bae3c9"
+  },
+  "duplicate_id_groups": 8,
+  "ambiguous_category_hash_groups": 0,
+  "model_evaluation": "NOT_RUN",
+  "full_pipeline_registry_integration": "NOT_RUN",
+  "log_check": "Real DetailsLogger and EvaluationTracker.save_details; empty ModelResponse; no accuracy measured"
+}
