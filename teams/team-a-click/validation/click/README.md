@@ -6,22 +6,22 @@ U01–U07, D01–D03을 대상으로 합니다.
 
 ## 코드와 검증 자료
 
-실제 태스크 코드는 Lighteval 커밋 `be429ad021b199f5f0fe167e961a05180397d6af`에 있습니다.
+실제 태스크 코드는 Lighteval 커밋 `efb7e657802dd0d760473ffa9307063928ce4b41`에 있습니다.
 문서와 코드 모두 `docs/week5-basicfive` 브랜치를 사용합니다.
 
 | 산출물 | 위치와 역할 |
 | --- | --- |
 | 분야별 파일 목록·프롬프트 | Lighteval `src/lighteval/tasks/tasks/click.py`의 `CATEGORY_FILES`, `build_click_payload`, `click_prompt` |
-| 입력 단위 테스트 | Lighteval `tests/unit/tasks/test_click.py`, 합성 문항 70개 테스트 케이스 |
+| 입력 단위 테스트 | Lighteval `tests/unit/tasks/test_click.py`, 합성 문항 입력 테스트 70개(파일 전체 76개) |
 | 원본 파일·행 목록 | [manifest.json](manifest.json): 파일 SHA-256·행 수, 각 행의 경로·0-based 번호·ID·내용 해시 |
 | 추적 연결 | [provenance.py](provenance.py): 원본과 Doc/저장 로그의 일대일 연결 및 출현 횟수 검사 |
 | 추적 오류 단위 테스트 | [test_provenance.py](test_provenance.py): 합성 데이터 20개 테스트 케이스 |
 | 실제 데이터 검사 명령 | [validate.py](validate.py): 고정 원본·HF 로더·Lighteval 저장 로그 검사 |
 | 실행 결과 | [results.json](results.json): 실제 버전·코드 해시·분야별 검사 결과, 원문 미포함 |
 
-기준 Lighteval SHA는 팀 포크의 `team-a/kmmlu`에 있던
-`c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14`입니다. 이번 구현의 실행 기준이며 팀 공동 승인이나
-업스트림 제출 기준 확정을 뜻하지 않습니다. 이전 설계의 분석 당시 SHA와 구분합니다.
+팀 포크 베이스는 `team-a/kmmlu`에 있던 `c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14`이며,
+팀 공동 승인이나 업스트림 제출 기준 확정을 뜻하지 않습니다. 이전 설계의 분석 당시 SHA와 구분합니다.
+현재 `results.json`은 v3 구현 커밋 `efb7e65`에서 실행한 결과이고, 이전 v2 구현은 `be429ad`입니다.
 데이터는 `EunsuKim/CLIcK`의 `d61627859645b5e6edc03fd9f835735d8226fa4e`로 고정했습니다.
 
 ## 검사 결과
@@ -45,11 +45,12 @@ D03은 실제 `EvaluationTracker.save_details`를 사용합니다. 모델을 호
 
 ## 입력과 추적 계약
 
-프롬프트 버전은 `click_paper_example_v2`입니다. 논문 §4의 Type 1/2에 따라
-지문 유무별 지시문을 선택하고, 인쇄된 한영 필드 이름과 콜론·쉼표로 보기를 표시합니다.
-지시문의 영어 번역 문장은 추가하지 않으며 필드 사이는 개행 1개로 고정합니다.
+프롬프트 버전은 `click_harness_layout_v3`입니다. 지문 유무별 지시문을 선택하고,
+lm-evaluation-harness와 같이 지시문 뒤에 빈 줄을 두고 `맥락:`·`질문:`·`보기:`·`정답:`
+한국어 필드 이름과 콜론·쉼표로 보기를 표시합니다. 하네스와 달리 모든 보기 라벨 뒤에 공백을 두고,
+5지선다는 지시문과 보기에 E까지 표시합니다.
 원본 공백·Unicode·줄바꿈과 보기 순서는 보존합니다. 세부 규칙은 [설계 §3](../../design.md)에 있습니다.
-query는 `정답 (Answer):`으로 끝나며, 채점 후보는 기존 ` A. 원문` 형식을 유지합니다.
+query는 `정답:`으로 끝나며, 채점 후보는 기존 ` A. 원문` 형식을 유지합니다.
 이번 변경은 단일 예시 형식에 맞춘 것으로, 지시문 3종·보기 순환 평가와 실제 모델의
 변경 전후 정확도 비교는 포함하지 않습니다.
 
@@ -115,9 +116,11 @@ Lighteval 변경 파일의 pre-commit 검사는 모두 통과했습니다. 저�
 마지막 개행 검사에서 변경이 발생했습니다. 해당 변경은 복원해 이번 커밋에서 제외했습니다.
 검증 Python 코드의 Ruff 검사·포맷 검사도 통과했습니다.
 
-태스크 등록 담당자는 `CATEGORY_FILES[category]`, `HF_REPO`, `HF_REVISION`, `click_prompt`를
-11개 설정에 연결하면 됩니다. HF subset은 `default`, `hf_data_files`는
-`{"train": list(CATEGORY_FILES[category])}`, 평가 split은 `train`입니다.
-`must_remove_duplicate_docs=False`와 0-shot을 유지해야 합니다.
-이번 커밋에는 `TASKS_TABLE`·지표·집계가 없어 CLI 태스크 등록은 아직 완료되지 않았습니다.
-U08–U10·I01, 전체 요청 생성 I02, 실제 모델 검산 M01–M04는 다른 담당 작업에 이어집니다.
+태스크 등록은 Lighteval `e2c506f`에서 완료됐습니다. `TASKS_TABLE`에 `click:<category>`
+11개 설정이 있으며, 각 설정은 `CATEGORY_FILES[category]`, `HF_REPO`, `HF_REVISION`,
+`click_prompt`를 사용합니다. HF subset은 `default`, `hf_data_files`는
+`{"train": list(CATEGORY_FILES[category])}`, 평가 split은 `train`, 지표는
+`Metrics.loglikelihood_acc`(길이 정규화 없음)이고 `must_remove_duplicate_docs=False`와 0-shot입니다.
+지표·집계·등록 테스트 6개는 `7bb0dcd`에서 추가돼 `test_click.py`는 입력 테스트 70개를 포함해
+모두 76개입니다(`efb7e65` 기준 76개 통과).
+전체 요청 생성 I02와 실제 모델 검산 M01–M04는 아직 수행하지 않았습니다.

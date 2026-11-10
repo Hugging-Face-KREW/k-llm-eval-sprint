@@ -1,11 +1,11 @@
 {
-  "checked_at_utc": "2026-11-06T11:17:16.659929+00:00",
+  "checked_at_utc": "2026-11-10T05:03:27.184819+00:00",
   "dataset": "EunsuKim/CLIcK",
   "dataset_revision": "d61627859645b5e6edc03fd9f835735d8226fa4e",
-  "prompt_version": "click_paper_example_v2",
+  "prompt_version": "click_harness_layout_v3",
   "lighteval_base": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
-  "lighteval_head": "be429ad021b199f5f0fe167e961a05180397d6af",
-  "click_module_sha256": "08cb9284eb5ea2efbff19d3bd990ace9fdc64160ea6c8ddd58b31ce83966d51d",
+  "lighteval_head": "efb7e657802dd0d760473ffa9307063928ce4b41",
+  "click_module_sha256": "e88a2fedd02217ccbb6f43afd79333554d2a5b750e42f7e9017bd684a6481f3f",
   "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
   "python": "3.14.4",
   "packages": {

@@ -5,7 +5,7 @@
 
 > **팀:** A팀 · 베이직파이브  
 > **상태:** 수정 초안 v0.3 — 팀·메인테이너 검토 전  
-> **작성·수정일:** 2026-11-06
+> **작성·수정일:** 2026-11-10
 > **기준 자료:** CLIcK `analysis.md`(2026-10-19 조사), [「[EVAL] CLIcK: Korean cultural and language understanding」 이슈 본문][click-issue]
 
 **목표:** CLIcK의 11개 분야·1,995문항을 Lighteval에서 **0-shot·단일 한국어 프롬프트·원본 보기 순서·전체 답변 문자열의 로그 확률 비교**로 평가한다. 아래의 정확한 템플릿·추적 방식·담당·날짜는 구현을 위한 **검토 제안**이며, 이슈 승인이나 모델 검증 완료를 뜻하지 않는다. 데이터 통계는 분석 보고서의 결과를 인용한다.
@@ -94,38 +94,50 @@ HF 로딩 후 경로가 사라지는 경우, 원본 5개 필드(`id`, `paragraph
 
 ### 3.2 프롬프트 형식
 
-2026-11-06부터 프롬프트 버전은 `click_paper_example_v2`다. 논문 §4의
-Type 1(지문 있음)·Type 2(지문 없음) 예시를 기준으로 지시문과 표시 형식을 맞췄다.
-기존 `click_ko_single_v1`의 대괄호 블록 형식은 사용하지 않는다.
+2026-11-08부터 프롬프트 버전은 `click_harness_layout_v3`다(Lighteval `efb7e65`).
+비교 대상인 하네스와 같은 입력으로 결과를 대조할 수 있도록, §5.2에서 분석한
+lm-evaluation-harness revision의 `get_context` 레이아웃과 한국어 필드 이름을 따른다.
+이전 `click_paper_example_v2`(논문 §4 인쇄 예시의 한영 병기 필드, 지시문 뒤 개행 1개)와
+`click_ko_single_v1`(대괄호 블록)은 사용하지 않는다.
 
 | 조건 | 지시문 시작 | 맥락 필드 |
 | --- | --- | --- |
 | 지문이 비공백 문자열 | `주어진 맥락을 천천히 읽고, 질문에 대한 적절한 정답을` | 포함 |
 | 지문이 없거나 공백뿐 | `주어진 질문을 천천히 읽고, 적절한 정답을` | 생략 |
 
+지시문 문구는 논문 Type 1(지문 있음)·Type 2(지문 없음) 예시, 하네스와 같다.
 지시문의 보기 알파벳 목록은 실제 보기 수에 맞춰 A–D 또는 A–E로 만든다.
-필드 이름은 논문에 인쇄된 한영 병기를 사용하며, 지시문 뒤의 괄호 속 영어 번역 문장은
-추가하지 않는다. 이는 인쇄 예시를 구현하는 명시적 규칙이며 저자의 실행 코드에서
-영어 병기가 실제 입력됐는지 확인한 결과라는 뜻은 아니다.
 
 ```text
 {지문 유무에 맞는 한국어 지시문}
-맥락 (Context): {paragraph}
-질문 (Question): {question}
-보기 (Options):
+
+맥락: {paragraph}
+질문: {question}
+보기:
 A: {A}, B: {B}, C: {C}, D: {D}
-정답 (Answer):
+정답:
 ```
 
+지시문 뒤에는 빈 줄 하나(`\n\n`)를 두고, 이후 필드는 개행 1개로 연결한다.
 지문이 없으면 맥락 줄을 통째로 생략한다. 5지선다는 같은 보기 줄에 E를 추가한다.
-각 필드는 개행 1개로 연결하고, 원본 필드 내부의 공백·Unicode·줄바꿈은 유지한다.
+원본 필드 내부의 공백·Unicode·줄바꿈은 유지한다.
 query는 마지막 콜론으로 끝나며 끝에 개행을 추가하지 않는다.
-논문 지면만으로 저자 실행 코드의 개행 바이트까지 확인할 수 없으므로,
 이 직렬화 규칙을 테스트 스냅샷으로 고정한다.
+
+**하네스와 의도적으로 다른 점** (전체 비교는 §5.2):
+
+- 하네스 템플릿은 첫 보기만 `A:{A}`로 콜론 뒤 공백이 없다. 이 설계는 논문 예시처럼
+  모든 라벨 뒤에 공백 하나를 둔다(`A: {A}`).
+- 하네스는 5지선다에서도 지시문이 `A, B, C, D 중에`이고 E 보기를 표시하지 않는다.
+  이 설계는 지시문을 A–E로 만들고 E 보기를 표시한다.
+- 공백뿐인 지문은 생략한다. 하네스는 `if ctx:`로 판단해 맥락 줄을 넣는다.
+  고정 revision에는 이런 행이 없다(빈 문자열 1,642행, 내용 있는 지문 353행).
+
+따라서 4지선다 문항의 query는 하네스와 `A:` 뒤 공백 한 칸만 다르다.
 
 **표시 보기와 채점 후보는 별도 계약이다.** 표시에는 콜론을 사용하지만,
 채점 후보는 기존 저자 답변에 근거한 ` A. 내용` 형식을 유지한다.
-후보를 연결하면 `정답 (Answer): E. 서울`처럼 된다. 이번 변경에서 채점 후보나
+후보를 연결하면 `정답: E. 서울`처럼 된다. 이번 변경에서 채점 후보나
 정답 인덱스, 원본 행 해시 계산은 바꾸지 않았다.
 
 기본 검증은 채팅 템플릿과 별도 system prompt를 끈다. BOS 처리와 토큰화 경계를
@@ -147,7 +159,7 @@ Lighteval의 `tests/unit/tasks/test_click.py`에 수동 기대 문자열을 둔�
 
 입력 검사·문자열 구성을 담당하는 순수 함수 `build_click_payload`와
 `Doc` 생성만 담당하는 `click_prompt`를 분리한다. 구현과 문서 예시가 따로 변하지 않도록
-[실제 코드](https://github.com/Hugging-Face-KREW/lighteval/blob/be429ad021b199f5f0fe167e961a05180397d6af/src/lighteval/tasks/tasks/click.py)를 기준으로 한다.
+[실제 코드](https://github.com/Hugging-Face-KREW/lighteval/blob/efb7e657802dd0d760473ffa9307063928ce4b41/src/lighteval/tasks/tasks/click.py)를 기준으로 한다.
 `Doc.specific`에는 원본 ID와 5개 원본 필드의 SHA-256만 저장하고 모델 입력에 넣지 않는다.
 
 ## 4. 채점: 지표, 생성 길이, stop sequence, 정답 추출
@@ -197,7 +209,7 @@ correct = 1 if predicted_index == gold_index else 0
 | Few-shot | 실제 실험 전체의 shot 수를 명확히 확인하지 못함 | 명시적 0-shot. 별도 예시 선정·중복 관리 없이 재현 가능한 조건부터 구현 |
 | 공개 모델 채점 후보 | 저자 설명은 `알파벳. 보기 내용` 전체 | 이 후보 유형을 따름. 프롬프트의 ‘알파벳 하나’ 지시와 채점 후보를 구분 |
 | 길이 정규화 | 적용 여부를 확인하지 못함 | 미사용은 **팀 선택**. 긴 후보에 불리한 효과가 생길 수 있으며 정확도 개선을 보장하지 않음 |
-| 입력 세부 형식 | 정확한 공백·경계·채팅 템플릿 등 미확인 사항 존재 | 논문 인쇄 예시에 맞춘 §3 템플릿 사용. 실행 코드의 개행·영어 병기 여부까지 확인한 것은 아님 |
+| 입력 세부 형식 | 정확한 공백·경계·채팅 템플릿 등 미확인 사항 존재 | 비교를 위해 하네스 레이아웃·한국어 필드 이름을 따른 §3 템플릿 사용. 저자 실행 코드의 형식과 같다는 뜻은 아님 |
 | API 모델 평가 | 생성 답변에서 정답을 판정하는 별도 절차 | 첫 버전에서 제외. 생성 전용 API 지원을 약속하지 않음 |
 
 근거: 팀 `analysis.md` §5, [논문][paper], 보고서가 인용한 [저자 채점 방식 답변][author-scoring]. **이번 결과는 논문 Table 5의 완전 재현 결과가 아니라, 명시된 단일 조건의 CLIcK 평가 결과다.**
@@ -208,10 +220,22 @@ correct = 1 if predicted_index == gold_index else 0
 
 | 항목 | 분석한 하네스 | 비교용 하네스·새 Lighteval 설계 |
 | --- | --- | --- |
-| 5지선다 입력 | A–D만 표시하는 함수 | 모든 4·5개 보기 표시 |
+| 입력 레이아웃 | 지시문 뒤 빈 줄, `맥락:`·`질문:`·`보기:`·`정답:` 필드 | 같음 (`click_harness_layout_v3`) |
+| 보기 라벨 공백 | 첫 보기만 `A:{A}`, 나머지는 `B: {B}` | 모든 라벨 뒤 공백 (`A: {A}`) |
+| 5지선다 입력 | 지시문 A–D, A–D만 표시하는 함수 | 지시문 A–E, 모든 4·5개 보기 표시 |
+| 공백뿐인 지문 | `if ctx:`로 판단해 맥락 줄 포함 | 생략. 고정 revision에 해당 행 0개 |
 | 채점 후보 | 알파벳만 채점 | 알파벳과 보기 내용 전체 채점 |
 | 분야 선택 | ID 필터 사용. Grammar 233 / Functional 132 | 원본 파일 기준. Grammar 232 / Functional 133 |
 | 비교 조건 | 이 설계와 다른 프롬프트·후보 | §3–4의 입력·후보·0-shot·정규화·집계를 동일하게 적용 |
+
+**#4420을 적용하는 경우:** [lm-evaluation-harness #4420][harness-4420](2026-11-10 기준 미병합)은
+5지선다 지시문을 A–E로 바꾸고 보기 E를 표시한다. 적용하면 보기 E 누락은 복구되지만,
+4지선다 입력을 바꾸지 않으려고 `A:{A}`(첫 라벨 뒤 공백 없음)를 유지하고 알파벳만 채점하므로
+**`A:` 뒤 공백과 채점 후보 형식(알파벳만 ↔ ` A. 보기 내용`)은 여전히 다르다.**
+공백뿐인 지문 처리와 ID 기반 분야 선택도 그대로다.
+
+**비교 기준 하네스: 미정.** 실제 비교에 쓸 하네스 기준(분석한 `d6de816` 원본, #4420 적용본,
+팀 보완 패치 중 무엇을 쓸지)은 아직 정하지 않았다. 정해지면 revision·패치 해시를 이 절에 기록한다.
 
 근거: 팀 `analysis.md` §6, [문화 코드][harness-culture]·[언어 코드][harness-language]. 보완한 참고 구현은 패치·commit을 기록하고, 원래 하네스 결과와 별도로 저장한다. 차이를 단순히 ‘버그 수정으로 정답률이 개선됨’이라고 해석하지 않는다.
 
@@ -306,6 +330,7 @@ M01은 두 도구의 채점 함수를 복사해 호출하지 않고, 모델 출�
 [author-scoring]: https://github.com/rladmstn1714/CLIcK/issues/6#issuecomment-2132901818
 [harness-culture]: https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/click/click_cul/utils.py
 [harness-language]: https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/click/click_lang/utils.py
+[harness-4420]: https://github.com/EleutherAI/lm-evaluation-harness/pull/4420
 [le-custom]: https://huggingface.co/docs/lighteval/main/en/adding-a-custom-task
 [le-tasks]: https://huggingface.co/docs/lighteval/main/en/package_reference/tasks
 [le-doc]: https://huggingface.co/docs/lighteval/main/en/package_reference/doc
