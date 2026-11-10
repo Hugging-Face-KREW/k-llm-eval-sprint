@@ -214,7 +214,7 @@ These results support preserving Ko counting functions, fixed phrases, normaliza
 
 Preserve the original Ko data and scoring behavior. Translation corrections and scoring-policy improvements belong in separate Known Issues. Of the seven modified classes listed by the authors, `KeySentenceChecker` is unregistered; English-specific conditions are unused in the Ko data but remain registered. The [class and registry audit](evidence/analysis-details.en.md#ko-classes) provides the detailed counts.
 
-Architectures A/B, Doc conversion, metric/Inspect paths and exception/fallback preservation are specified in the [design document](design.en.md#task-structure). The criterion is agreement with pinned Allganize code on the same stored responses. This does not mean that a new API or Ko task has already been implemented.
+Architectures A/B, Doc conversion, metric/Inspect paths and exception/fallback preservation are specified in the [design document](design.en.md#task-structure). The criterion is agreement with pinned Allganize code on the same stored responses. [Team code PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) subsequently added the option-A implementation and model-free validation, recorded separately in section 9.3.5.
 
 ---
 
@@ -394,7 +394,7 @@ Pass the same pinned prompts and responses to original Ko and new Lighteval-Ko. 
 | Aggregation | Matching numerators/denominators; absolute error ≤`1e-12` for all four metrics |
 | Stability/regression | Pass/fail/boundary inputs covered; no omissions or unhandled exceptions; existing English task judgments preserved |
 
-100% means **agreement between evaluators**, not model accuracy. Even matching exceptions leave successful scoring validation incomplete for those inputs. Actual four-metric parity results have not yet been measured.
+100% means **agreement between evaluators**, not model accuracy. Matching expected exceptions validates auxiliary error contracts; those inputs are excluded from successful normal scoring and metric denominators. Section 9.3.5 records four-metric parity on fixed responses. Metrics on model-generated responses have not yet been measured.
 
 <a id="verification-status"></a>
 
@@ -425,9 +425,9 @@ The directly compared references are the [English evaluator](https://github.com/
 | Verification tools | 25 tests | Detect incorrect indexes, hashes, duplicates, aggregation and missing/tampered reproduction evidence, among other errors |
 | Existing Lighteval English/French regression | Before/after new implementation | **Not run**; reference comparison does not replace it |
 | 23-prompt integration | Registered new task versus original Ko | **Input coverage counted for 23 prompts/40 instructions; model integration not run** |
-| New Lighteval-Ko parity | Individual judgments and four metrics | **Not run or measured** |
+| New Lighteval-Ko parity | Identical fixed responses through original Ko, ported scorer and registered task | **156/156 cases match; zero differences across four aggregate metrics. Also checked 18 auxiliary cases and all 342 Docs. See section 9.3.5** |
 
-[results.json](evidence/checker-audit/results.json) records raw judgments, reproduction evidence, input hashes and aggregates together. Earlier investigations are in the [supplementary analysis](evidence/analysis-details.en.md#language-controls). Current execution status and figures refer to the 156-case experiment. Model generation and new-task parity remain pending.
+[results.json](evidence/checker-audit/results.json) records raw judgments, reproduction evidence, input hashes and aggregates for the original English/Ko comparison. Earlier investigations are in the [supplementary analysis](evidence/analysis-details.en.md#language-controls). These reference-comparison materials are separate from the subsequent new-task validation in section 9.3.5. Model generation remains pending.
 
 #### **9.3.3. Attachment scope and reproduction requirements**
 
@@ -466,7 +466,28 @@ Adding 1954 and 240 to the 23-prompt proposal gives 25 collected prompts/42 inst
 
 Review/reproduction materials: [guide](evidence/checker-audit/README.en.md), [English/Ko comparison](evidence/checker-audit/results.en.md), [inputs/expectations](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [source prompts](evidence/checker-audit/source_rows.en.md). A local ZIP of the experiment materials can be generated with `package_results.py` when needed. Issue drafting and remote publication are outside this change.
 
-**Not run:** parity for the newly registered Lighteval-Ko task; before/after regression, metric-object isolation and optional-dependency loading for existing English/French paths; 23-prompt model integration; full-split model evaluation. Source/frame validation of references does not establish new-task parity.
+The reference experiment above does not execute the newly registered task. Subsequent new-task validation is recorded separately in section 9.3.5. **Not run:** before/after regression, metric-object isolation and optional-dependency loading for existing English/French paths; 23-prompt model integration; full-split model evaluation.
+
+#### **9.3.5. Model-free integration validation of the registered task**
+
+Task implementation `21faccc` in [team code PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) underwent source comparison and scoring integration checks on 2026-11-08. Reproducible validation code was added in `9909ee9` on 2026-11-10. Actual outputs and JSON reports are attached to the [initial validation](https://github.com/Hugging-Face-KREW/lighteval/pull/2#issuecomment-6718587652) and [independent rerun](https://github.com/Hugging-Face-KREW/lighteval/pull/2#issuecomment-6765647327).
+
+| Check | Result |
+| --- | --- |
+| CLI and task configuration | Attached `tasks inspect` output and `tasks dump`; confirmed `train` evaluation, zero-shot and four registered metrics |
+| Full Doc conversion | All 342 prompts/481 instruction occurrences preserve source keys, prompts, ordered/repeated IDs and kwargs |
+| 156 fixed responses | Original Ko, ported scorer and registered task agree on all 247/247 instruction and 156/156 prompt judgments in each mode |
+| 18 auxiliary inputs | Matching 10 normal returns/8 expected exceptions per mode; excluded from main metric denominators |
+| Registered execution path | Registry → Doc → `compute_sample` → corpus aggregation; zero omissions, unexpected scoring errors or judgment mismatches |
+
+| Fixed-response metric | Original Ko = Ported scorer = Registered task | Absolute error |
+| --- | --- | --- |
+| `prompt_level_strict_acc` | 71/156 | 0 |
+| `inst_level_strict_acc` | 133/247 | 0 |
+| `prompt_level_loose_acc` | 79/156 | 0 |
+| `inst_level_loose_acc` | 142/247 | 0 |
+
+See the [code PR README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md) for validation code and reproduction commands. These are compatibility results on fixed responses, not model-performance scores. Model integration on 23 prompts/40 instructions and model evaluation on all 342 prompts/481 instructions remain pending.
 
 ### **9.4. Handoff to implementation and further validation**
 

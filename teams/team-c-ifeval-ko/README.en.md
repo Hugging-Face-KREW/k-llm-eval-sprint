@@ -24,5 +24,10 @@ Add your name as a new row in your first PR.
 
 ## Upstream links
 
-- Proposal issue:
+- Proposal issue: [huggingface/lighteval #1463](https://github.com/huggingface/lighteval/issues/1463)
 - PR:
+
+## Team-fork implementation and validation
+
+- Code PR: [Hugging-Face-KREW/lighteval #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) (`team-c/ifeval-ko-impl` → `team-c/ifeval-ko`)
+- Model-free validation results: [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task)

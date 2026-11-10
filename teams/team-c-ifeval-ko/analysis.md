@@ -216,7 +216,7 @@ Ko의 변경은 [제작자 설명](https://huggingface.co/datasets/allganize/IFE
 
 원본 Ko의 데이터·채점 동작을 보존하고, 번역 오류·채점 정책 개선은 별도 Known Issues로 다룬다. 제작자가 열거한 수정 클래스 7개 중 `KeySentenceChecker`는 registry에 미등록이며, 영어 전용 조건도 데이터에서 미사용일 뿐 registry에는 남아 있다. [클래스별 조사와 등록 현황](evidence/analysis-details.md#ko-classes)에 상세 수치를 정리했다.
 
-구조 A/B, Doc 변환, metric·Inspect 경로, 예외와 fallback 보존 방식은 [설계 문서](design.md#task-structure)로 이관했다. 이식의 판단 기준은 고정 Allganize 코드와 같은 저장 응답의 판정 일치이며, 새 API나 Ko task가 이미 구현됐다는 뜻은 아니다.
+구조 A/B, Doc 변환, metric·Inspect 경로, 예외와 fallback 보존 방식은 [설계 문서](design.md#task-structure)로 이관했다. 이식의 판단 기준은 고정 Allganize 코드와 같은 저장 응답의 판정 일치다. 이후 [팀 코드 PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2)에 A안의 구현과 모델 없는 검증이 추가되었으며, 그 결과는 9.3.5절에 구분해 기록했다.
 
 ---
 
@@ -396,7 +396,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 집계 | 분자·분모 일치, 네 지표 절대 오차 `1e-12` 이하 |
 | 안정성·회귀 | 정상·실패·경계 입력 충족, 누락·미처리 예외 없음, 기존 영어 task 판정 유지 |
 
-100%는 모델 정답률이 아닌 **두 evaluator의 판정 일치율**이다. 같은 예외가 나와도 해당 입력의 채점 검증은 미완료로 기록한다. 네 지표의 실제 비교 점수는 아직 미측정이다.
+100%는 모델 정답률이 아닌 **두 evaluator의 판정 일치율**이다. 예상 예외의 일치는 보조 입력의 오류 계약 검증으로 기록하고 정상 채점 성공이나 지표 분모에는 포함하지 않는다. 고정 응답의 네 지표 비교 결과는 9.3.5절에 있으며, 모델이 생성한 응답의 지표는 아직 미측정이다.
 
 <a id="verification-status"></a>
 
@@ -427,9 +427,9 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 검증 도구 | 검증 테스트 25개 | 잘못된 index·해시·중복·집계와 재현 근거의 누락·변조를 검출하는 검사 등 통과 |
 | 기존 Lighteval 영어/French 회귀 | 새 구현의 변경 전후 비교 | **미수행**. 원본 reference 비교로 대체하지 않음 |
 | 통합 23문항 | 새 등록 task와 원본 Ko | **23문항·40개 instruction 선정안의 입력 범위 집계 완료. 모델 통합 평가 미수행** |
-| 새 Lighteval-Ko 동등성 | 개별 판정·네 지표 비교 | **미수행·미측정** |
+| 새 Lighteval-Ko 동등성 | 원본 Ko·이식 scorer·등록 task에 같은 고정 응답 입력 | **156/156건 일치, 네 지표 집계 차이 0. 보조 18건과 전체 342문항 Doc 변환도 확인. 9.3.5절 참고** |
 
-원시 판정, 재현 근거, 입력 해시와 집계는 [results.json](evidence/checker-audit/results.json)에 함께 기록했다. 이전 조사 내용은 [분석 보조 자료](evidence/analysis-details.md#language-controls)에서 확인할 수 있다. 현재 실행 상태와 수치는 156건의 실험을 기준으로 하며, 모델 생성과 새 task의 동등성 검증은 미수행이다.
+원본 영어·Ko 비교의 원시 판정, 재현 근거, 입력 해시와 집계는 [results.json](evidence/checker-audit/results.json)에 함께 기록했다. 이전 조사 내용은 [분석 보조 자료](evidence/analysis-details.md#language-controls)에서 확인할 수 있다. 이 원본 비교 자료와 이후 새 task 검증 자료(9.3.5절)를 구분하며, 모델 생성은 미수행이다.
 
 #### **9.3.3. 첨부 범위와 재현 조건**
 
@@ -468,7 +468,28 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 재현·검토 자료: [안내](evidence/checker-audit/README.md), [영어·Ko 비교표](evidence/checker-audit/results.md), [입력/사전 기대값](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [원본 문항](evidence/checker-audit/source_rows.md). 필요하면 `package_results.py`로 실험 자료의 로컬 ZIP을 생성할 수 있다. 이슈 초안 작성과 원격 게시는 이번 변경 범위에 포함하지 않는다.
 
-**미수행:** 새 등록 Lighteval-Ko의 동등성, 기존 Lighteval 영어/French 변경 전후 회귀·metric 객체 격리·optional dependency 로딩, 모델 23문항 통합, 전체 split 모델 평가. 원본 reference의 source/frame 검증을 새 task 검증 완료로 해석하지 않는다.
+위 원본 비교 실험에는 새 등록 task의 실행이 포함되지 않는다. 이후 수행한 새 task 검증은 9.3.5절에 별도로 기록한다. **미수행:** 기존 Lighteval 영어/French 변경 전후 회귀·metric 객체 격리·optional dependency 로딩, 모델 23문항 통합, 전체 split 모델 평가.
+
+#### **9.3.5. 등록 태스크의 모델 없는 통합 검증**
+
+[팀 코드 PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2)의 task 구현 `21faccc`에 대해 2026-11-08 원본 대조·채점 연결 검증을 수행했고, 2026-11-10에는 재현 가능한 검증 코드가 `9909ee9`로 추가되었다. [첫 실행 자료](https://github.com/Hugging-Face-KREW/lighteval/pull/2#issuecomment-6718587652)와 [독립 재검증 자료](https://github.com/Hugging-Face-KREW/lighteval/pull/2#issuecomment-6765647327)에 실제 출력과 JSON 결과가 첨부되어 있다.
+
+| 확인 항목 | 결과 |
+| --- | --- |
+| CLI·태스크 설정 | `tasks inspect` 출력과 `tasks dump` 첨부. `train` 평가·0-shot·네 지표 등록 확인 |
+| 전체 Doc 변환 | 342문항·481개 instruction의 원본 key, prompt, instruction 순서·반복, kwargs 보존 |
+| 고정 응답 156건 | 원본 Ko·이식 scorer·등록 task의 판정 일치. strict·loose 각각 지시 247/247개, 문항 156/156개 일치 |
+| 보조 입력 18건 | 각 모드의 정상 반환 10건·예상 예외 8건 일치. 주 지표 분모에서 제외 |
+| 실제 등록 경로 | Registry → Doc → `compute_sample` → corpus 집계로 비교. 누락·예상 밖 채점 오류·판정 불일치 0건 |
+
+| 고정 응답 지표 | 원본 Ko = 이식 scorer = 등록 task | 절대 오차 |
+| --- | --- | --- |
+| `prompt_level_strict_acc` | 71/156 | 0 |
+| `inst_level_strict_acc` | 133/247 | 0 |
+| `prompt_level_loose_acc` | 79/156 | 0 |
+| `inst_level_loose_acc` | 142/247 | 0 |
+
+검증 코드와 재현 명령은 [코드 PR의 README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md)에 있다. 이 수치는 고정 응답에 대한 구현 호환성 결과이며 모델 성능 점수가 아니다. 23문항·40개 instruction 모델 통합과 전체 342문항·481개 instruction 모델 평가는 남아 있다.
 
 ### **9.4. 구현·후속 검증으로의 인계**
 

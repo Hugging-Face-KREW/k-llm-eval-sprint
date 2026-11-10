@@ -24,5 +24,10 @@
 
 ## 업스트림 링크
 
-- 제안 이슈:
+- 제안 이슈: [huggingface/lighteval #1463](https://github.com/huggingface/lighteval/issues/1463)
 - PR:
+
+## 팀 포크 구현·검증
+
+- 코드 PR: [Hugging-Face-KREW/lighteval #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) (`team-c/ifeval-ko-impl` → `team-c/ifeval-ko`)
+- 모델 없는 검증 결과: [분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)

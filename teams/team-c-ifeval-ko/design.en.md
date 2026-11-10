@@ -32,7 +32,7 @@
 
 ### 1.3. Option A: file responsibilities
 
-Paths below are relative to `src/lighteval/tasks/tasks/`. These are proposed files, not an existing implementation.
+Paths below are relative to `src/lighteval/tasks/tasks/`. Option A is implemented in [team code PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2); this does not imply final upstream agreement on the architecture.
 
 | File | Responsibility |
 | --- | --- |
@@ -114,20 +114,22 @@ The pinned-data count confirms that the 23-prompt proposal covers all 21 IDs and
 | `prompt` | `query` | Preserve text; do not apply a chat template in the prompt function |
 | `instruction_id_list` | `specific["instructions_id_list"]` | Document the singular/plural key difference; preserve order and repeats |
 | `kwargs` | `specific["kwargs"]` | One-to-one alignment at each instruction index |
-| `key` | Proposed `specific["ifeval_ko"]["key"]` | Trace source prompt |
-| Original prompt/revision | `specific["ifeval_ko"]` | Reproduction/rescoring metadata |
+| `key` | `specific["ifeval_ko"]["key"]` | Trace source prompt |
+| Original prompt/revision | `query` and task config `hf_revision` | Preserve them at these respective locations and record both in execution artifacts |
 | `choices=[""]` | `choices` | Nominal value for a generative task |
 | `gold_index=0` | `gold_index` | Not an index of an answer phrase |
 | `instruction=""` | `instruction` | Add no extra instruction |
 
-### 3.2. Proposed prompt function
+### 3.2. Implemented prompt function
 
 ```python
 from lighteval.tasks.requests import Doc
+from lighteval.utils.imports import requires
 
 KO_DATA_REVISION = "54199e3801116897697babf341865741dcd06fc8"
 
 
+@requires("langdetect", "immutabledict")
 def ifeval_ko_prompt(line, task_name=""):
     return Doc(
         task_name=task_name,
@@ -140,8 +142,6 @@ def ifeval_ko_prompt(line, task_name=""):
             "kwargs": line["kwargs"],
             "ifeval_ko": {
                 "key": line["key"],
-                "original_prompt": line["prompt"],
-                "dataset_revision": KO_DATA_REVISION,
             },
         },
     )
@@ -317,7 +317,7 @@ For `language:response_language`, preserve the language requested by original `k
 
 Matching an expected exception validates the error contract, not successful scoring. Distinguish internally caught exceptions from propagated errors. Investigate nondeterminism while recording seeds, repeated runs and worker settings. Loose transformations may recover failing responses, so declare strict/loose expectations separately.
 
-Check both checker diagnostics and the actual registered-task path. Follow [analysis section 9.2](analysis.en.md#92-comparison-method-and-acceptance-criteria) for individual judgments, denominators and tolerance. Fixtures and original-reference execution for all 21 types/25 paths are complete in sections 6.2.1–6.2.4. **New-task regression is pending**; section 6.3's sample-coverage counts measure input inclusion only.
+Check both checker diagnostics and the actual registered-task path. Follow [analysis section 9.2](analysis.en.md#92-comparison-method-and-acceptance-criteria) for individual judgments, denominators and tolerance. Fixtures and original-reference execution for all 21 types/25 paths are complete in sections 6.2.1–6.2.4. Subsequent **registered-task validation passed all 156 fixed-response and 18 auxiliary cases**; see [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task). Section 6.3's sample-coverage counts measure input inclusion only.
 
 #### 6.2.1. Stored-response implementation preserving the existing result format
 
@@ -371,9 +371,9 @@ All 25 [verification-tool tests](evidence/checker-audit/test_audit.py) pass. The
 | Provenance, hashes, environment, scope | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
 | Optional local ZIP | Generate `evidence/checker-audit/attachments/ifeval-ko-regression.zip` with `package_results.py`; issue drafts are excluded |
 
-Original English/Ko judgment differences and execution behavior are verified. **New Lighteval-Ko parity, existing English/French regression, optional-dependency loading, 23-prompt model integration and full-split evaluation are pending.** The new task must receive identical inputs/responses and match every instruction/prompt strict/loose Boolean, all four numerators/denominators and metric values within absolute error ≤1e-12. Require zero omissions, unhandled exceptions and unresolved mismatches. The 8 expected Ko exceptions and 2 expected English exceptions are not successful scoring for their respective evaluators.
+The original experiment verifies English/Ko judgment differences and execution behavior. The new task must receive identical inputs/responses and match every instruction/prompt strict/loose Boolean, all four numerators/denominators and metric values within absolute error ≤1e-12. Require zero omissions, unhandled exceptions and unresolved mismatches. The 8 expected Ko exceptions and 2 expected English exceptions are not successful scoring for their respective evaluators. Subsequent registered-task validation met these criteria; see [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task). **Existing English/French regression, optional-dependency loading, 23-prompt model integration and full-split model evaluation remain pending.**
 
-Dependencies are source/input integrity → baseline reproduction → Ko expectation confirmation → identical-response comparison with the new task → English/French, object-isolation and dependency regressions → 23-prompt model integration → all 342 prompts/481 instructions. Work is complete through Ko expectation confirmation. No commits, pushes, issue comments or attachment publication were performed.
+Dependencies are source/input integrity → baseline reproduction → Ko expectation confirmation → identical-response comparison with the new task → English/French, object-isolation and dependency regressions → 23-prompt model integration → all 342 prompts/481 instructions. Work is complete through identical-fixed-response comparison with the new task, with actual outputs and result files attached to team code PR #2.
 
 <a id="selection-rules"></a>
 
@@ -504,13 +504,13 @@ A [156-case experiment](evidence/checker-audit/results.en.md) used stored respon
 | Incidental full-evaluation conditions | JSON, sections, bullets, highlights, title: 5 types | Promoted to explicit targets with indexed isolated/full checks |
 | Absent types | Two responses, placeholders, postscript, fixed choices, language, paragraph count, no-comma, quotation: 8 types | All supplemented with dedicated pass/fail responses |
 
-Both references ran through full-package imports to verify reproduction and identical-Ko-input judgments. Raw results and the comparison table retain this evidence. New-task parity and model generation remain pending. The 156 regression cases and 23 model-integration prompts are different units.
+Both references ran through full-package imports to verify reproduction and identical-Ko-input judgments. Raw results and the comparison table retain this evidence. This reference experiment does not execute the new task or generate model responses. Subsequent new-task validation is recorded separately in analysis section 9.3.5. The 156 regression cases and 23 model-integration prompts are different units.
 
 ### 6.6. Analysis-report updates and current status
 
 Record integration execution settings, selected keys, results and artifacts in the analysis report. Include instruction-type mapping and input-condition coverage as selection evidence.
 
-The script in section 6.5 has counted and attached coverage for 23 prompts/40 instructions. Sections 6.2.1–6.2.4 record the 156-case reference experiment and 18 auxiliary inputs. These are not model-integration or new-task parity results.
+The script in section 6.5 has counted and attached coverage for 23 prompts/40 instructions. Sections 6.2.1–6.2.4 record the 156-case reference experiment and 18 auxiliary inputs. Subsequent model-free new-task validation is documented in [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task), with code revisions, execution evidence, individual judgments and four metrics. Model integration remains pending.
 
 ## 7. Work allocation and schedule
 

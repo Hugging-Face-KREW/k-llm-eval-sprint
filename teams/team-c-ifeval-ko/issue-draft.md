@@ -29,7 +29,7 @@ Our expanded [156 diagnostic cases](https://github.com/Hugging-Face-KREW/k-llm-e
 
 We propose [23 prompts with 40 instruction occurrences](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/da7053db1d4858239856695a2cfed702173234b6/teams/team-c-ifeval-ko/evidence/sample-coverage/README.en.md) for model integration, covering all 21 observed instruction types. This is separate from the diagnostic experiment above. Model integration and full-split evaluation remain pending.
 
-Implementation is in progress in our [team-fork PR](https://github.com/Hugging-Face-KREW/lighteval/pull/2). We will validate fixed-response parity through the registered task, followed by model integration and full-split evaluation. Our initial proposal targets native Pipeline support; Inspect support would be a follow-up, subject to your feedback.
+The implementation and model-free validation are available in our [team-fork PR](https://github.com/Hugging-Face-KREW/lighteval/pull/2). The [registered-task validation](https://github.com/Hugging-Face-KREW/lighteval/pull/2#issuecomment-6765647327) matched all 156 fixed-response cases and 18 auxiliary return/exception contracts against the original Ko evaluator, with zero differences across all four aggregate metrics. Doc conversion also preserved all 342 prompts and 481 instruction occurrences. These are fixed-response compatibility checks; model integration and full-split model evaluation remain pending. Our initial proposal targets native Pipeline support; Inspect scorer/backend support would be a follow-up, subject to your feedback. This is separate from the completed `lighteval tasks inspect` CLI check.
 
 ## Questions for maintainers
 

@@ -32,7 +32,7 @@
 
 ### 1.3. A안: 파일별 책임
 
-다음 경로의 기준 디렉터리는 `src/lighteval/tasks/tasks/`다. 신규 제안 파일이며 현재 구현이 존재한다는 뜻이 아니다.
+다음 경로의 기준 디렉터리는 `src/lighteval/tasks/tasks/`다. [팀 코드 PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2)에 A안으로 구현되어 있으며, 업스트림 구조에 대한 최종 합의와는 구분한다.
 
 | 파일 | 책임 |
 | --- | --- |
@@ -114,19 +114,22 @@ registry 교체만으로는 충분하지 않다. Ko의 응답 정규화·고정 
 | `prompt` | `query` | 원문을 유지하고 chat template를 prompt 함수에서 붙이지 않음 |
 | `instruction_id_list` | `specific["instructions_id_list"]` | 데이터 키와 Doc 키의 단수/복수 차이를 명시하고 순서·반복 보존 |
 | `kwargs` | `specific["kwargs"]` | 같은 index의 instruction과 일대일 대응 |
-| `key` | `specific["ifeval_ko"]["key"]` 제안 | 원본 문항 추적용 |
-| 원본 prompt·revision | `specific["ifeval_ko"]` | 재현·재채점 메타데이터 |
+| `key` | `specific["ifeval_ko"]["key"]` | 원본 문항 추적용 |
+| 원본 prompt·revision | `query`·task config의 `hf_revision` | 원문과 데이터 revision은 각각 이 위치에 보존하며 실행 자료에 함께 기록 |
 | `choices=[""]` | `choices` | 생성형 task의 형식상 값 |
 | `gold_index=0` | `gold_index` | 정답 문구의 index를 의미하지 않음 |
 | `instruction=""` | `instruction` | 별도 지시문을 추가하지 않음 |
 
-### 3.2. prompt 함수 제안
+### 3.2. 구현된 prompt 함수
 
 ```python
 from lighteval.tasks.requests import Doc
+from lighteval.utils.imports import requires
 
 KO_DATA_REVISION = "54199e3801116897697babf341865741dcd06fc8"
 
+
+@requires("langdetect", "immutabledict")
 def ifeval_ko_prompt(line, task_name=""):
     return Doc(
         task_name=task_name,
@@ -139,8 +142,6 @@ def ifeval_ko_prompt(line, task_name=""):
             "kwargs": line["kwargs"],
             "ifeval_ko": {
                 "key": line["key"],
-                "original_prompt": line["prompt"],
-                "dataset_revision": KO_DATA_REVISION,
             },
         },
     )
@@ -316,7 +317,7 @@ French는 현재 영어 `ifeval_metrics`를 재사용한다. B안을 선택하�
 
 의도한 예외 fixture에서 같은 예외가 발생한 것은 예외 계약 검증이며 정상 채점 완료로 세지 않는다. 원본이 내부 처리하는 예외와 밖으로 전파되는 오류를 구분한다. 비결정적 판정은 seed·반복 실행·worker 설정을 기록하고 조사한다. loose 변환으로 실패 응답이 통과할 수 있으므로 strict/loose 기대값은 각각 명시한다.
 
-checker 단독 진단과 실제 등록 task 경로를 모두 확인한다. 합격 기준은 [분석보고서 9.2절](analysis.md)의 개별 판정·분모 일치와 네 지표 허용 오차를 따른다. 21종·25개 입력 경로의 통과·실패 fixture 작성과 원본 reference 실행은 6.2.1~6.2.4절에서 완료했다. **새 task 회귀는 미수행**이며 6.3절의 sample-coverage 집계는 입력 포함 범위만 뜻한다.
+checker 단독 진단과 실제 등록 task 경로를 모두 확인한다. 합격 기준은 [분석보고서 9.2절](analysis.md)의 개별 판정·분모 일치와 네 지표 허용 오차를 따른다. 21종·25개 입력 경로의 통과·실패 fixture 작성과 원본 reference 실행은 6.2.1~6.2.4절에서 완료했다. 이후 **새 등록 task의 고정 응답 156건과 보조 18건 검증도 통과**했으며 근거는 [분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)에 있다. 6.3절의 sample-coverage 집계는 입력 포함 범위만 뜻한다.
 
 #### 6.2.1. 기존 형식을 유지한 고정 응답 확장 구현
 
@@ -370,9 +371,9 @@ strict 실패가 loose에서 통과로 바뀔 수 있으므로 두 기대값을 
 | 출처·해시·환경·검증 범위 | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
 | 선택적 로컬 ZIP | `package_results.py`로 `evidence/checker-audit/attachments/ifeval-ko-regression.zip` 생성. 이슈 초안은 제외 |
 
-원본 영어·Ko 평가기의 판정 차이와 실행 동작을 확인했다. **새 Lighteval-Ko의 동등성, 기존 Lighteval 영어/French 회귀, optional dependency 로딩, 23문항 모델 통합과 전체 split 평가는 미수행**이다. 새 task에는 같은 입력·응답을 전달해 instruction별·문항별 strict·loose Boolean 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12를 요구한다. 누락·미처리 예외·미해결 불일치는 없어야 한다. Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다.
+위 원본 실험은 영어·Ko 평가기의 판정 차이와 실행 동작을 확인한다. 새 task에는 같은 입력·응답을 전달해 instruction별·문항별 strict·loose Boolean 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12를 요구한다. 누락·미처리 예외·미해결 불일치는 없어야 한다. Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다. 후속 등록 task 검증은 이 기준을 통과했다([분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)). **기존 Lighteval 영어/French 회귀·optional dependency 로딩과 모델 23문항·전체 split 평가는 미수행**이다.
 
-실행 순서는 원본·입력 무결성 확인 → 기준 입력 재현 → Ko 기대값 확인 → 새 task의 동일 응답 비교 → 기존 영어/French·객체 격리·의존성 회귀 → 23문항 모델 통합 → 전체 342문항·481개 instruction 평가다. 현재는 Ko 기대값 확인까지 완료했으며, 커밋·푸시·이슈 댓글이나 첨부 자료 게시는 하지 않았다.
+실행 순서는 원본·입력 무결성 확인 → 기준 입력 재현 → Ko 기대값 확인 → 새 task의 동일 응답 비교 → 기존 영어/French·객체 격리·의존성 회귀 → 23문항 모델 통합 → 전체 342문항·481개 instruction 평가다. 현재는 새 task의 동일 고정 응답 비교까지 완료했으며, 실제 출력과 결과 파일은 팀 코드 PR #2에 첨부되어 있다.
 
 ### 6.3. 문항 선정 규칙과 검증 범위
 
@@ -502,13 +503,13 @@ Ko 수정 클래스 표시는 [기존에 열거된 수정 클래스와 등록 �
 | full 부수 조건 | JSON·sections·bullet·highlight·title 5종 | index를 지정한 isolated/full 검증으로 전용 대상에 포함 |
 | 미포함 유형 | 두 응답·자리 표시자·추신·고정 선택 문구·언어·단락 수·쉼표 금지·큰따옴표 8종 | 모두 전용 통과·실패 응답으로 보완 |
 
-156건의 실험에서는 원본 영어·Ko 평가기를 full-package 방식으로 실행해 입력 재현 여부와 동일 Ko 입력의 판정을 확인했다. 재현 근거와 판정은 원시 결과·비교표에 기록했다. 새 task 동등성이나 모델 생성은 미수행이며, 회귀 156건과 모델 선정안 23문항은 서로 다른 단위다.
+156건의 원본 실험에서는 영어·Ko 평가기를 full-package 방식으로 실행해 입력 재현 여부와 동일 Ko 입력의 판정을 확인했다. 재현 근거와 판정은 원시 결과·비교표에 기록했다. 이 원본 실험에는 새 task 실행이나 모델 생성이 포함되지 않는다. 후속 새 task 검증은 분석보고서 9.3.5절에 별도로 기록하며, 회귀 156건과 모델 선정안 23문항은 서로 다른 단위다.
 
 ### 6.6. 분석보고서 반영 항목과 현재 상태
 
 통합 평가의 실행 조건·선정안의 key 목록·결과·관련 실행 자료를 분석보고서에 기록한다. 문항 선정 근거로 지시 유형별 대응표와 검사 조건의 포함 범위를 제시한다.
 
-선정한 23문항·40개 지시의 입력 범위 집계는 6.5절의 스크립트로 실행하여 첨부하였다. 원본 평가기로 수행한 156건의 실험과 보조 입력 18건의 결과는 6.2.1~6.2.4절에 정리했다. 모델 통합 실행과 새 task 동등성 결과는 아니다.
+선정한 23문항·40개 지시의 입력 범위 집계는 6.5절의 스크립트로 실행하여 첨부하였다. 원본 평가기로 수행한 156건의 실험과 보조 입력 18건의 결과는 6.2.1~6.2.4절에 정리했다. 이후 새 task의 모델 없는 검증은 [분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)에 코드 revision·실행 자료·개별 판정과 네 지표를 기록했다. 모델 통합 실행은 미수행이다.
 
 ## 7. 작업 분담과 일정
 
