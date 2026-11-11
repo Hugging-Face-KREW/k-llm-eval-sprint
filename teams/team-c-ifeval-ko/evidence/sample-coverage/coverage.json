@@ -26,10 +26,10 @@
       "sha256": "4c6faf50abb4fbc740776a330990be29dcb5a4ce9fb34560fc1433ecaccc56c6"
     }
   },
-  "script_sha256": "5f20f874267a0bb693feade514bbdc5f9f4d1636d3b45c27bf2205b618c85f0c",
-  "selection_sha256": "aa98e14bc50b6665a5857c13b8569f5a3a8d0cdfcc138ff791b0a702095f50fa",
+  "script_sha256": "b1bb6fa113a4bf26c45ae03e10a071f0c2a2f4d695b72c895d3ae4379b33d91b",
+  "selection_sha256": "1be1775d153013cc2ada551f195c4c8da21bacc998fccacdf20573fadad04d12",
   "runtime": {
-    "python": "3.14.6",
+    "python": "3.12.3",
     "pyarrow": "26.0.0"
   },
   "checkers": {
