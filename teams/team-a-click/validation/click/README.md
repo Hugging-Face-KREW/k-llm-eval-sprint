@@ -1,5 +1,8 @@
 # CLIcK 데이터와 프롬프트 검증
 
+2026-11-12: Polyglot-Ko 1.3B·12.8B의 harness 버전 × 채점 방식 8개 전체 평가를 완료했습니다.
+[통합 비교와 조건별 상세 보고서](polyglot-matrix-results/README.md)에서 결과·평가 조건·검증 범위를 확인할 수 있습니다.
+
 2026-11-06 기준으로 `@GeonRyoung` 담당인 분야별 파일 목록·데이터 검사·추적 연결과
 prompt function·입력 단위 테스트를 구현했습니다. [설계 문서](../../design.md)의
 U01–U07, D01–D03을 대상으로 합니다.
