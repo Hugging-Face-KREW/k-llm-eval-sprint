@@ -15,3 +15,4 @@
 | 2 | KorMedMCQA 분석 보고서와 업스트림 이슈 초안 | [#23](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/23) |
 | 3 | KorMedMCQA 설계 문서와 이슈 초안, doctor 재현 실험 | [#26](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/26) |
 | 4 | 업스트림 이슈 게시, 태스크 파일과 단위 테스트 PR, design.md에 4주차 결정 반영 | [huggingface/lighteval#1481](https://github.com/huggingface/lighteval/issues/1481), [lighteval#3](https://github.com/Hugging-Face-KREW/lighteval/pull/3), [#32](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/32) |
+| 5 | 팀 브랜치 PR 머지, dentist를 Qwen으로 harness와 문항 단위 대조, 네 직종 3,009문항 검증 결과와 비교 스크립트 정리 | [lighteval#3](https://github.com/Hugging-Face-KREW/lighteval/pull/3), [#40](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/40) |
