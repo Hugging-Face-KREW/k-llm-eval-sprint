@@ -1,5 +1,7 @@
 # [EVAL] CLIcK: Korean cultural and language understanding
 
+> Archived proposal draft from 2026-10-19. The submitted issue is [huggingface/lighteval#1437](https://github.com/huggingface/lighteval/issues/1437); later updates, including the reported license confirmation, are recorded there.
+
 ## Evaluation short description
 
 ### Why is this evaluation interesting?

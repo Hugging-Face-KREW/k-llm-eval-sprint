@@ -1,7 +1,7 @@
 # 벤치마크 분석 보고서 — CLIcK
 
 > 팀: 베이직파이브 · 데이터셋: [EunsuKim/CLIcK][hf]
-> 상태: 초안 (팀 리뷰 전). 자료 확인 및 전체 데이터 구조 검사: **2026-10-19**. 모델 평가는 아직 실행하지 않았다.
+> 상태: **2026-10-19 조사 기록**(당시 모델 평가 전). **2026-11-15** 팀 리뷰를 반영해 정답 위치 편향의 제한사항을 보완했다. 이후 구현·평가 결과는 [팀 결과 PR #37](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/37)에 별도로 기록했다.
 > 기여 배경: KMMLU에는 이미 외부 기여자의 이슈·PR이 있어, 운영진과 회의한 결과 **CLIcK 추가를 Lighteval 이슈로 제안하기로 결정했다.** 기존 [KMMLU 분석](../team-a-kmmlu/analysis.md)은 조사 이력으로 보존한다. 아래의 구체적인 구현 방식은 별도로 합의할 **팀 검토안**이다.
 
 ## 1. 한 줄 요약: 무엇을 측정하는가
@@ -253,6 +253,8 @@ fewshot_split: train  # few-shot 예시로 사용할 문제·정답의 출처
 - 세 표현 및 순환 배치를 사용하지 않는다는 차이를 이슈와 결과에 명시한다. 이 점수를 논문 Table 5의 직접 재현 결과로 표시하지 않는다.
 - 원형 평가의 확장은 완전한 템플릿·실행 조건을 확인한 뒤 논의한다. 생성형 API 평가도 별도 범위로 제안할 수 있다.
 
+**원본 보기 순서의 제한사항:** 고정 데이터 revision에서 정답이 A인 비율은 Culture **469/1,345 = 34.87%**, Language **130/650 = 20.00%**이며, Korean Society는 **136/309 = 44.01%**다. 이는 데이터의 정답 위치 분포이며 모델의 A 예측 비율을 뜻하지 않는다. 원본 순서만 사용하면 이 분포와 모델의 특정 위치 선호가 함께 정확도에 영향을 줄 수 있으므로, 원본 순서 조건의 결과로 명시하고 논문의 보기 순환 평가와 같은 조건으로 해석하지 않는다. 집계는 아래 재현 코드의 `gold A` 출력으로 확인할 수 있다.
+
 ## 6. 기존 구현: 공식 코드, 다른 평가 도구
 
 | 대상                  | 확인 결과                                                       | 활용 범위                                                         |
@@ -480,6 +482,12 @@ for category in sorted({cat for _, cat, _ in records}):
     group = [r for _, cat, r in records if cat == category]
     print(category, len(group), Counter(len(r["choices"]) for r in group),
           "paragraph:", sum(bool(r["paragraph"].strip()) for r in group))
+    gold_a = sum(r["choices"].index(r["answer"]) == 0 for r in group)
+    print("gold A", category, gold_a, "/", len(group), f"{100 * gold_a / len(group):.2f}%")
+for domain in ("Culture", "Language"):
+    group = [r for key, _, r in records if key.startswith(f"Dataset/{domain}/")]
+    gold_a = sum(r["choices"].index(r["answer"]) == 0 for r in group)
+    print("gold A", domain, gold_a, "/", len(group), f"{100 * gold_a / len(group):.2f}%")
 ids = Counter(r["id"] for r in rows)
 print("unique IDs / duplicate IDs:", len(ids), {k: n for k, n in ids.items() if n > 1})
 print("empty questions:", sum(not r["question"].strip() for r in rows))
