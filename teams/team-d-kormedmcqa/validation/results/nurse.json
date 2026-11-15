@@ -1,0 +1,26 @@
+{
+  "task": "kormedmcqa:nurse|5",
+  "items": 878,
+  "fewshot_counts": [
+    5
+  ],
+  "same": {
+    "prompt_text": 878,
+    "prompt_token_ids": 878,
+    "generation": 878,
+    "extracted": 878,
+    "score": 878
+  },
+  "accuracy": {
+    "lighteval": 0.5113895216400911,
+    "harness": 0.5113895216400911,
+    "correct": 449,
+    "stderr": 0.01687941939416643
+  },
+  "letters_in_output": {
+    "one": 859,
+    "none": 0,
+    "several": 19
+  },
+  "mismatches": []
+}
