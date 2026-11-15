@@ -11,4 +11,6 @@
 
 | 주차 | 한 일 | 링크 |
 |---|---|---|
-| 1 | 첫 PR | |
+| 1 | 첫 PR | 내 프로필 작성 및 팀원들 프로필 리뷰 작성|
+| 2 | 관련 논문 서치 | https://velog.io/@clcok/%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4-AI-%EC%BB%A8%ED%8A%B8%EB%A6%AC%EB%B7%B0%ED%84%B0-%EC%B1%8C%EB%A6%B0%EC%A7%80 |
+| 3 | 이슈 초안 리뷰 및 채점기 비교 실험 저장소 리뷰 | https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/21 |
