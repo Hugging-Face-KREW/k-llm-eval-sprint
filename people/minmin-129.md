@@ -24,7 +24,7 @@
 
 # |---|---|---|
 
-# | 1 | 첫 PR | |
+# | 1 | 첫 PR | [k-llm-eval-sprint#7](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/7) |
 
 # | 2 | KorMedMCQA 분석 보고서와 업스트림 이슈 초안 작성 | \[k-llm-eval-sprint#23](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/23) |
 
