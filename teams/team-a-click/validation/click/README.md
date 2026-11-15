@@ -1,12 +1,21 @@
 # CLIcK 데이터와 프롬프트 검증
 
+2026-11-12: **lm-evaluation-harness**로 Polyglot-Ko 1.3B·12.8B의 태스크 버전 × 채점 방식 8개 전체 평가를 완료했습니다.
+[통합 비교와 조건별 상세 보고서](polyglot-matrix-results/README.md)에서 결과·평가 조건·검증 범위를 확인할 수 있습니다.
+8개 결과는 모두 lm-evaluation-harness 결과이며, Lighteval 수치는 이전 실행 참고값으로 따로 표시합니다.
+
+이전 **Lighteval ↔ 입력을 정렬한 lm-evaluation-harness** 비교도 2026-11-11 전체 평가를 통과했습니다.
+[통합 보고서의 이전 실행 참고값](polyglot-matrix-results/README.md)에 두 도구의 결과를 각각 표시했습니다.
+아래의 기존 `results.json`은 데이터·프롬프트 검증 결과이며 모델 정확도 결과가 아닙니다.
+
 2026-11-06 기준으로 `@GeonRyoung` 담당인 분야별 파일 목록·데이터 검사·추적 연결과
 prompt function·입력 단위 테스트를 구현했습니다. [설계 문서](../../design.md)의
 U01–U07, D01–D03을 대상으로 합니다.
 
 ## 코드와 검증 자료
 
-실제 태스크 코드는 Lighteval 커밋 `efb7e657802dd0d760473ffa9307063928ce4b41`에 있습니다.
+이하의 태스크 구현·데이터·프롬프트 검증은 **Lighteval**에 관한 설명입니다.
+해당 태스크 코드는 Lighteval 커밋 `efb7e657802dd0d760473ffa9307063928ce4b41`에 있습니다.
 문서와 코드 모두 `docs/week5-basicfive` 브랜치를 사용합니다.
 
 | 산출물 | 위치와 역할 |
@@ -123,4 +132,8 @@ Lighteval 변경 파일의 pre-commit 검사는 모두 통과했습니다. 저�
 `Metrics.loglikelihood_acc`(길이 정규화 없음)이고 `must_remove_duplicate_docs=False`와 0-shot입니다.
 지표·집계·등록 테스트 6개는 `7bb0dcd`에서 추가돼 `test_click.py`는 입력 테스트 70개를 포함해
 모두 76개입니다(`efb7e65` 기준 76개 통과).
-전체 요청 생성 I02와 실제 모델 검산 M01–M04는 아직 수행하지 않았습니다.
+2026-11-11에는 Polyglot 두 모델의 native 요청·독립 forward 파일럿·전체 비교를 추가로 완료했습니다.
+I02·M01·M03·M04의 전체 비교 결과는 [통합 보고서의 이전 실행 참고값](polyglot-matrix-results/README.md)에,
+두 도구의 정답 수·예측 일치·점수 차이는 [기계 판독용 집계](polyglot-matrix-results/results.json)의 `previous_run_references`에 있습니다.
+M02는 전체 실제 입력의 길이·잘림 검사와 초과 차단 단위 테스트 범위이며,
+합성 문항의 GPU 문맥 한도 경계 실험과 CLI 전체 실행 검증은 포함하지 않습니다.
