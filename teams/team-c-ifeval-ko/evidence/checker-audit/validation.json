@@ -1,0 +1,273 @@
+{
+  "validated_at_utc": "2026-11-03T15:09:46.284122+00:00",
+  "unit_tests_run": 25,
+  "unit_test_failures": 0,
+  "verifier_sha256": "2109ff1dd7cc1a6ec344edf4ead54e4899ab5feb37dd53416f524755c0c260f2",
+  "test_code_sha256": "2db143dad2231fcd12ac8e9af44eb62af21ebe691c8e4be89bdf4715194ba0ec",
+  "packager_sha256": "770ef4700d2449418e145073e5b743027505ee241825fbe7b7e8e611295d5771",
+  "summary": {
+    "normal_cases": 156,
+    "support_cases": 18,
+    "normal_full_instruction_occurrences": 247,
+    "normal_scope_counts": {
+      "dataset": 116,
+      "controlled_override": 2,
+      "synthetic": 38
+    },
+    "source_keys": 32,
+    "source_instructions": 55,
+    "dataset_rows": 342,
+    "dataset_instructions": 481,
+    "dataset_ids": 21,
+    "dataset_input_partitions": 25,
+    "explicit_ids_with_TT_and_FF": 21,
+    "explicit_partitions_with_TT_and_FF": 25,
+    "boundary_families": 13,
+    "boundary_offsets_per_family": [
+      -1,
+      0,
+      1
+    ],
+    "primary_pairs_english_ko": {
+      "strict": {
+        "F,F": 47,
+        "T,T": 74,
+        "F,T": 22,
+        "T,F": 13
+      },
+      "loose": {
+        "F,F": 43,
+        "T,T": 84,
+        "F,T": 21,
+        "T,F": 8
+      }
+    },
+    "full_instruction_pairs_english_ko": {
+      "strict": {
+        "F,F": 101,
+        "T,T": 111,
+        "F,T": 22,
+        "T,F": 13
+      },
+      "loose": {
+        "F,F": 97,
+        "T,T": 121,
+        "F,T": 21,
+        "T,F": 8
+      }
+    },
+    "metrics": {
+      "original": {
+        "prompt_strict": {
+          "numerator": 61,
+          "denominator": 156,
+          "value": 0.391025641025641
+        },
+        "instruction_strict": {
+          "numerator": 124,
+          "denominator": 247,
+          "value": 0.5020242914979757
+        },
+        "prompt_loose": {
+          "numerator": 66,
+          "denominator": 156,
+          "value": 0.4230769230769231
+        },
+        "instruction_loose": {
+          "numerator": 129,
+          "denominator": 247,
+          "value": 0.5222672064777328
+        }
+      },
+      "ko": {
+        "prompt_strict": {
+          "numerator": 71,
+          "denominator": 156,
+          "value": 0.4551282051282051
+        },
+        "instruction_strict": {
+          "numerator": 133,
+          "denominator": 247,
+          "value": 0.5384615384615384
+        },
+        "prompt_loose": {
+          "numerator": 79,
+          "denominator": 156,
+          "value": 0.5064102564102564
+        },
+        "instruction_loose": {
+          "numerator": 142,
+          "denominator": 247,
+          "value": 0.5748987854251012
+        }
+      }
+    },
+    "baseline_reproduction": {
+      "original": {
+        "retained_cases": 86,
+        "exact_result_rows_matched": 86,
+        "included_in_experiment": true
+      },
+      "ko": {
+        "retained_cases": 86,
+        "exact_result_rows_matched": 86,
+        "included_in_experiment": true
+      }
+    },
+    "experiment": {
+      "retained_cases": 86,
+      "added_cases": 70,
+      "normal_cases": 156,
+      "reproduction_integrated": true
+    },
+    "baseline_cases_hash_verified": true,
+    "support_outcomes_by_evaluator": {
+      "original": {
+        "strict": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        },
+        "loose": {
+          "normal_returns": 16,
+          "expected_exceptions": 2
+        }
+      },
+      "ko": {
+        "strict": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        },
+        "loose": {
+          "normal_returns": 10,
+          "expected_exceptions": 8
+        }
+      }
+    },
+    "normal_unhandled_exceptions": 0,
+    "unresolved_ko_oracle_mismatches": 0,
+    "identical_input_hashes_verified": 156,
+    "comparison_scope": "English reference vs Ko reference; identical Ko input",
+    "model_inference_run": false,
+    "new_lighteval_ko_parity_run": false,
+    "existing_lighteval_english_french_regression_run": false
+  },
+  "document_structure": {
+    "expected_headings": {
+      "analysis.md": [
+        "# 벤치마크 분석 보고서",
+        "## **1. 한 줄 요약: 무엇을 측정하는가**",
+        "## **2. 출처: 논문, 저자, 연도, 공식 코드**",
+        "## **3. 데이터셋: Hugging Face ID, config와 split, 문항 수, 필드, 예시 2개**",
+        "### **3.1. 기본 정보**",
+        "### **3.2. 필드**",
+        "### **3.3. 예시 1 — key 3345**",
+        "### **3.4. 예시 2 — key 3442**",
+        "## **4. 라이선스와 접근: 라이선스, 약관 동의 필요 여부**",
+        "## **5. 공식 평가 방식**",
+        "### **5.1. 프롬프트와 few-shot**",
+        "### **5.2. 채점 경로와 정답 추출**",
+        "### **5.3. Strict와 loose**",
+        "### **5.4. 네 가지 지표**",
+        "### **5.5. 논문 보고 수치**",
+        "## **6. 기존 구현과 Ko 이식의 근거**",
+        "### **6.1. French는 재사용하고 Ko는 변경이 필요한 이유**",
+        "### **6.2. 보존 범위와 구현 인계**",
+        "## **7. 중복 확인과 관련 선행 작업**",
+        "### **7.1. 검색 일자·대상·검색어**",
+        "### **7.2. 관련 선행 작업과 발언의 범위**",
+        "## **8. 구현상 어려운 점과 Known Issues**",
+        "### **8.1. 핵심 난점**",
+        "### **8.2. 실제 evaluator로 확인한 Known Issues**",
+        "#### **8.2.1. 문자열 정합성과 고정 선택지**",
+        "#### **8.2.2. 부등호 번역 불일치**",
+        "#### **8.2.3. 단어 수·Markdown 정책에 관한 관찰**",
+        "### **8.3. 규칙 적용 범위와 확인한 판정 차이**",
+        "## **9. 검증 계획과 현재 확보한 자료**",
+        "### **9.1. 모델 후보와 현재 상태**",
+        "#### **9.1.1. 검증 모델 및 통합 검증 23문항 선정안**",
+        "### **9.2. 비교 방법과 합격 기준**",
+        "### **9.3. 현재까지 확보한 검증 자료**",
+        "#### **9.3.1. 기존 86건의 구성과 실행 방식**",
+        "#### **9.3.2. 후속 실행과 미완료 항목**",
+        "#### **9.3.3. 첨부 범위와 재현 조건**",
+        "### **9.4. 구현·후속 검증으로의 인계**",
+        "## **10. 고정 revision과 공개 출처**"
+      ],
+      "design.md": [
+        "# 설계문서",
+        "## 1. 태스크 이름과 파일 위치",
+        "### 1.1. 태스크의 목적과 지원 범위",
+        "### 1.2. 두 아키텍처의 선택 범위",
+        "### 1.3. A안: 파일별 책임",
+        "### 1.4. B안: 공통 엔진과 Ko 정책",
+        "### 1.5. 보존 범위와 의존성",
+        "## 2. subset, 평가 split, few-shot split",
+        "## 3. prompt function과 원본 필드–Doc 대응표",
+        "### 3.1. 대응 계약",
+        "### 3.2. prompt 함수 제안",
+        "## 4. 채점, 생성 길이, stop sequence, 정답 추출 규칙",
+        "### 4.1. 지표와 집계",
+        "### 4.2. 생성 설정과 task config",
+        "# ifeval_ko_metrics는 선택한 A/B 구조로 별도 생성한다.",
+        "### 4.3. 정답 추출과 scorer 입력",
+        "### 4.4. Ko strict/loose 알고리즘",
+        "### 4.5. 예외, 오류, 실행 기록",
+        "## 5. 공식 방식과 다른 점 및 그 이유",
+        "## 6. 테스트 계획과 실행 기록",
+        "### 6.1. 실행 순서",
+        "### 6.2. 등록 task·고정 응답 검증",
+        "### 6.3. 문항 선정 규칙과 검증 범위",
+        "#### 6.3.1. 검증 문항과 지시 유형별 대응",
+        "#### 6.3.2. kwargs 값에 따른 검사 경로",
+        "#### 6.3.3. 진단 문항과 확인 대상",
+        "#### 6.3.4. 선정 완료 조건과 불일치 처리",
+        "### 6.4. 결과 비교 기준",
+        "### 6.5. 문항 선정 근거와 재현 자료",
+        "### 6.6. 분석보고서 반영 항목과 현재 상태",
+        "## 7. 작업 나누기: 담당과 날짜",
+        "### 7.1. 배정·일정의 상태",
+        "### 7.2. 선행 의존성과 결정 목록"
+      ]
+    },
+    "files": {
+      "analysis.md": {
+        "existing_headings_preserved": true,
+        "top_level_sections_preserved": true,
+        "added_headings": [
+          "#### **6.1.1. 동일 Ko 입력에서 확인한 양방향 판정 경계**",
+          "#### **9.3.4. 전용 고정 응답 확장 구현과 원본 실행 결과**"
+        ],
+        "file_sha256": "4c4bf6176925917d0a477463bf974156c6d3d114c442aba354a64d902290090c"
+      },
+      "design.md": {
+        "existing_headings_preserved": true,
+        "top_level_sections_preserved": true,
+        "added_headings": [
+          "#### 1.3.1. 동일 Ko 입력 실험으로 확인한 A안의 근거",
+          "#### 6.2.1. 기존 형식을 유지한 고정 응답 확장 구현",
+          "#### 6.2.2. 21종·25개 경로의 전용 대상과 경계",
+          "#### 6.2.3. 원본 엔진 계약과 별도 오류 검증",
+          "#### 6.2.4. 재현 자료와 이후 이식 완료 기준"
+        ],
+        "file_sha256": "cf3ec473edb76e9e8525cab2a0d3affcc0917d5a1e56f571d450af9b8a33f76c"
+      }
+    },
+    "local_worktree_checks": {
+      "head_unchanged": "54a9fa53ac8f716fb79eec716db90ec1fd5bbd70",
+      "index_has_no_staged_changes": true,
+      "outside_scope_files_unchanged": true,
+      "baseline_bundle_bytes_unchanged": true
+    }
+  },
+  "document_languages": {
+    "pairs": 9,
+    "documents": 18,
+    "top_language_links": 18,
+    "local_body_links_checked": 224,
+    "broken_links": 0,
+    "unexpected_language_switches": 0
+  },
+  "remote_publication_performed": false,
+  "new_lighteval_ko_parity_run": false,
+  "model_inference_run": false
+}

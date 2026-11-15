@@ -1,0 +1,160 @@
+{
+  "harness": {
+    "repository": "https://github.com/EleutherAI/lm-evaluation-harness",
+    "revision": "d6de81643928d653435c431bae19945d41d32520",
+    "files": {
+      "lm_eval/tasks/ifeval/utils.py": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/utils.py",
+        "sha256": "1ab8f14808c826f93f2364883487ed63cf4267980bf4761fda8053899c013632",
+        "bytes": 4510,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/utils.py"
+      },
+      "lm_eval/tasks/ifeval/instructions.py": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions.py",
+        "sha256": "511cc41a53787d818c292d8335c8e98aa833296a0789ac470db56bcd6496345e",
+        "bytes": 57806,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/instructions.py"
+      },
+      "lm_eval/tasks/ifeval/instructions_registry.py": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions_registry.py",
+        "sha256": "9db1c062cdb70a91420d3789a588235a1064c2b9a1a66e09e5fb9df9e7584a6c",
+        "bytes": 7237,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/instructions_registry.py"
+      },
+      "lm_eval/tasks/ifeval/instructions_util.py": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions_util.py",
+        "sha256": "e8c4d9187bac1482d93941fb46469609c3ae78d896195bfcb300a0707d492567",
+        "bytes": 26830,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/instructions_util.py"
+      },
+      "lm_eval/tasks/ifeval/README.md": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/README.md",
+        "sha256": "6759456b3130980616e16f63e7a088a7f9b0e743e9e470589e478209c6596425",
+        "bytes": 2326,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/README.md"
+      },
+      "lm_eval/tasks/ifeval/ifeval.yaml": {
+        "url": "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/ifeval.yaml",
+        "sha256": "3d8a3eb32de03f6a23ac87b46951d972a4ec7cb137e753365c0271594e38f84b",
+        "bytes": 729,
+        "local_path": "sources/harness/lm_eval/tasks/ifeval/ifeval.yaml"
+      }
+    },
+    "package_snapshot": {
+      "archive_url": "https://codeload.github.com/EleutherAI/lm-evaluation-harness/tar.gz/d6de81643928d653435c431bae19945d41d32520",
+      "archive_sha256": "c60d18c7dcedb03fdd95d43cd2f0bc4a575862a64eb8c9b390e96f5129e442a4",
+      "archive_path": "sources/harness.tar.gz",
+      "local_path": "sources/harness_full",
+      "extracted_files": 103,
+      "scope": "Unmodified Python package sources and IFEval task; unrelated task assets not required for importing the evaluator."
+    }
+  },
+  "lighteval": {
+    "repository": "https://github.com/Hugging-Face-KREW/lighteval",
+    "revision": "c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14",
+    "files": {
+      "src/lighteval/tasks/tasks/ifeval/instructions.py": {
+        "url": "https://raw.githubusercontent.com/Hugging-Face-KREW/lighteval/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/instructions.py",
+        "sha256": "1e5ac3c04ee4868058ea5f8b68e9b5f251d36b10296f748032cdc8594bd4ef35",
+        "bytes": 56088,
+        "local_path": "sources/lighteval/src/lighteval/tasks/tasks/ifeval/instructions.py"
+      },
+      "src/lighteval/tasks/tasks/ifeval/instructions_registry.py": {
+        "url": "https://raw.githubusercontent.com/Hugging-Face-KREW/lighteval/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/instructions_registry.py",
+        "sha256": "f4e260af41ccd718c29be71485e37cd20c72ef0a249158850d1e65cebc9f04e2",
+        "bytes": 7256,
+        "local_path": "sources/lighteval/src/lighteval/tasks/tasks/ifeval/instructions_registry.py"
+      },
+      "src/lighteval/tasks/tasks/ifeval/instructions_utils.py": {
+        "url": "https://raw.githubusercontent.com/Hugging-Face-KREW/lighteval/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/instructions_utils.py",
+        "sha256": "dbdd5b177545ae4ecb4b5d3d2a0ac5ca58ff885e7b87fcdaabcef1aaa56edf54",
+        "bytes": 26604,
+        "local_path": "sources/lighteval/src/lighteval/tasks/tasks/ifeval/instructions_utils.py"
+      },
+      "src/lighteval/tasks/tasks/ifeval/main.py": {
+        "url": "https://raw.githubusercontent.com/Hugging-Face-KREW/lighteval/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/main.py",
+        "sha256": "2a6c25d2ac8645cc444d152f4ed17a911a139bd8e07cfba7ade375f78af30803",
+        "bytes": 7725,
+        "local_path": "sources/lighteval/src/lighteval/tasks/tasks/ifeval/main.py"
+      }
+    }
+  },
+  "original_dataset": {
+    "repository": "https://huggingface.co/datasets/google/IFEval",
+    "revision": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+    "files": {
+      "README.md": {
+        "url": "https://huggingface.co/datasets/google/IFEval/resolve/966cd89545d6b6acfd7638bc708b98261ca58e84/README.md",
+        "sha256": "c3e2d7da8286ae27649f526e3153cc72f071c21a6a7702d06f09cef5f9c114f1",
+        "bytes": 5523,
+        "local_path": "sources/original_dataset/README.md"
+      },
+      "ifeval_input_data.jsonl": {
+        "url": "https://huggingface.co/datasets/google/IFEval/resolve/966cd89545d6b6acfd7638bc708b98261ca58e84/ifeval_input_data.jsonl",
+        "sha256": "6a85310ca8ce15eff755aa08a3a4ff931c7e273e7515ebb3c492ea85fd8288f2",
+        "bytes": 207111,
+        "local_path": "sources/original_dataset/ifeval_input_data.jsonl"
+      }
+    }
+  },
+  "ko": {
+    "repository": "https://huggingface.co/datasets/allganize/IFEval-Ko",
+    "revision": "54199e3801116897697babf341865741dcd06fc8",
+    "files": {
+      "README.md": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/README.md",
+        "sha256": "a5166c3eab1b92b76f89c59721c3553f214c81ce62ba02c7f95f08f0988b6b6d",
+        "bytes": 6634,
+        "local_path": "sources/ko/README.md"
+      },
+      "README_Ko.md": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/README_Ko.md",
+        "sha256": "4c6faf50abb4fbc740776a330990be29dcb5a4ce9fb34560fc1433ecaccc56c6",
+        "bytes": 5189,
+        "local_path": "sources/ko/README_Ko.md"
+      },
+      "ifeval_ko/README.md": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/README.md",
+        "sha256": "ffc3b48567c6607751679360bb04d1bd36577ad711d6e87e2dc573e73cc89220",
+        "bytes": 3204,
+        "local_path": "sources/ko/ifeval_ko/README.md"
+      },
+      "ifeval_ko/ifeval_ko.yaml": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/ifeval_ko.yaml",
+        "sha256": "5be0e47d832327d68c4eb5463df44aea296ff4ccc4ae930e28fee57e4d7c837b",
+        "bytes": 776,
+        "local_path": "sources/ko/ifeval_ko/ifeval_ko.yaml"
+      },
+      "ifeval_ko/instructions.py": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions.py",
+        "sha256": "afdbf1e2cafe8f3a1480d36aeff245365e1f896bacd87cd3c1ea48278e673842",
+        "bytes": 58635,
+        "local_path": "sources/ko/ifeval_ko/instructions.py"
+      },
+      "ifeval_ko/instructions_registry.py": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions_registry.py",
+        "sha256": "3c7247b270eb51e5a6eb937b865f68fad05617b7648299c9f0b6bcd2f9b82116",
+        "bytes": 7240,
+        "local_path": "sources/ko/ifeval_ko/instructions_registry.py"
+      },
+      "ifeval_ko/instructions_util.py": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/instructions_util.py",
+        "sha256": "95d2b002aa4d12bbab524e48c1dbbcfe6f444078c5f4ed41f79cddc1f455ddd2",
+        "bytes": 5708,
+        "local_path": "sources/ko/ifeval_ko/instructions_util.py"
+      },
+      "ifeval_ko/utils.py": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/ifeval_ko/utils.py",
+        "sha256": "d65b40fd09b96babfa55ce14d024cf17244a9b29a4e0f041ab7adeaad897c12a",
+        "bytes": 4829,
+        "local_path": "sources/ko/ifeval_ko/utils.py"
+      },
+      "data/train-00000-of-00001.parquet": {
+        "url": "https://huggingface.co/datasets/allganize/IFEval-Ko/resolve/54199e3801116897697babf341865741dcd06fc8/data/train-00000-of-00001.parquet",
+        "sha256": "91e0efeef3ea81191e48ce358ebb30d399abdfadc58cbc42e943281820038fa0",
+        "bytes": 67128,
+        "local_path": "sources/ko/data/train-00000-of-00001.parquet"
+      }
+    }
+  }
+}
