@@ -1,0 +1,26 @@
+{
+  "task": "kormedmcqa:doctor|5",
+  "items": 435,
+  "fewshot_counts": [
+    5
+  ],
+  "same": {
+    "prompt_text": 435,
+    "prompt_token_ids": 435,
+    "generation": 435,
+    "extracted": 435,
+    "score": 435
+  },
+  "accuracy": {
+    "lighteval": 0.3310344827586207,
+    "harness": 0.3310344827586207,
+    "correct": 144,
+    "stderr": 0.02258882385373979
+  },
+  "letters_in_output": {
+    "one": 430,
+    "none": 0,
+    "several": 5
+  },
+  "mismatches": []
+}

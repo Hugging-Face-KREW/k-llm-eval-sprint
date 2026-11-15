@@ -1,0 +1,21 @@
+{
+  "task": "kormedmcqa:pharm|5",
+  "items": 885,
+  "same": {
+    "prompt_token_ids": 885,
+    "generation": 885,
+    "score": 885
+  },
+  "accuracy": {
+    "lighteval": 0.3954802259887006,
+    "harness": 0.3954802259887006,
+    "correct": 350,
+    "stderr": 0.01644528900210331
+  },
+  "letters_in_output": {
+    "one": 850,
+    "none": 0,
+    "several": 35
+  },
+  "mismatches": []
+}
