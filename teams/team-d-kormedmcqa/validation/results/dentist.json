@@ -1,0 +1,26 @@
+{
+  "task": "kormedmcqa:dentist|5",
+  "items": 811,
+  "fewshot_counts": [
+    5
+  ],
+  "same": {
+    "prompt_text": 811,
+    "prompt_token_ids": 811,
+    "generation": 811,
+    "extracted": 811,
+    "score": 811
+  },
+  "accuracy": {
+    "lighteval": 0.35511713933415534,
+    "harness": 0.35511713933415534,
+    "correct": 288,
+    "stderr": 0.01681449098304394
+  },
+  "letters_in_output": {
+    "one": 803,
+    "none": 0,
+    "several": 8
+  },
+  "mismatches": []
+}
