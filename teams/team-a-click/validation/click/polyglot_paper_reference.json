@@ -1,0 +1,19 @@
+{
+  "source": "https://arxiv.org/html/2403.06412v2#S4.T5",
+  "table": "Table 5, Polyglot-Ko 1.3B and 12.8B columns",
+  "unit": "percent",
+  "comparison": "Reference only: three instruction wordings and cyclic option permutations differ from this single-condition experiment.",
+  "average_aggregation": "Do not equate paper Average with our micro or macro without verifying its denominator.",
+  "models": {
+    "1.3b": {
+      "categories": {"history": 26.30, "geography": 30.18, "law": 38.44, "politics": 30.53, "society": 34.69, "tradition": 32.48, "economy": 42.54, "popular": 29.77, "textual": 23.44, "functional": 23.77, "grammar": 21.87},
+      "reported_culture_average": 32.71,
+      "reported_language_average": 22.88
+    },
+    "12.8b": {
+      "categories": {"history": 24.43, "geography": 30.12, "law": 43.44, "politics": 27.15, "society": 37.37, "tradition": 33.96, "economy": 45.03, "popular": 29.59, "textual": 22.96, "functional": 19.84, "grammar": 23.05},
+      "reported_culture_average": 33.40,
+      "reported_language_average": 22.24
+    }
+  }
+}
