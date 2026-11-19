@@ -32,8 +32,9 @@
 
 - [벤치마크 분석 보고서](analysis.md) (2주차)
 - [설계 문서](design.md) (4주차)
+- [검증 기록](validation.md) (6주차)
 
 ## 업스트림 링크
 
-- 제안 이슈:
-- PR:
+- 제안 이슈: [huggingface/lighteval#1479](https://github.com/huggingface/lighteval/issues/1479)
+- PR: [huggingface/lighteval#1513](https://github.com/huggingface/lighteval/pull/1513)
