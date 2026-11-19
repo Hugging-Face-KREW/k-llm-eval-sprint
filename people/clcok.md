@@ -11,6 +11,9 @@
 
 | 주차 | 한 일 | 링크 |
 |---|---|---|
-| 1 | 첫 PR | 내 프로필 작성 및 팀원들 프로필 리뷰 작성|
-| 2 | 관련 논문 서치 | https://velog.io/@clcok/%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4-AI-%EC%BB%A8%ED%8A%B8%EB%A6%AC%EB%B7%B0%ED%84%B0-%EC%B1%8C%EB%A6%B0%EC%A7%80 |
-| 3 | 이슈 초안 리뷰 및 채점기 비교 실험 저장소 리뷰 | https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/21 |
+| 1 | 첫 PR | [#9](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/9) |
+| 2 | 관련 논문 서치 | [velog 리뷰](https://velog.io/@clcok/%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4-AI-%EC%BB%A8%ED%8A%B8%EB%A6%AC%EB%B7%B0%ED%84%B0-%EC%B1%8C%EB%A6%B0%EC%A7%80) |
+| 3 | 이슈 초안 리뷰 및 채점기 비교 실험 저장소 리뷰 | [#21](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/21) |
+| 4 | HRM8K 업스트림 이슈 리뷰 | [huggingface/lighteval#1479](https://github.com/huggingface/lighteval/issues/1479) |
+| 5 | HRM8K Design Document 리뷰 | [#33](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/33) |
+| 6 | HRM8K 데이터셋 lighteval 및 lm-eval 실행 | [#43](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/43), [huggingface/lighteval#1513](https://github.com/huggingface/lighteval/pull/1513) |
