@@ -233,8 +233,6 @@ The following 20 searches were performed on **2026-10-30 (KST)**. PR searches co
 | Lighteval upstream PRs; upstream/harness PRs | `IFEval 한국어`, `IFEval Korea` | 3 | Zero results in each search |
 | Issues in Lighteval upstream and harness | `"allganize"` | 2 | Zero results in each search |
 
-The returned results contained no Lighteval/harness maintainer instruction to change Ko checkers. This does not prove the absence of duplicate implementations or relevant comments. The 20 searches and 23-prompt integration selection are separate counts.
-
 ### **7.2. Related work and limits of the cited comments**
 
 | Reference | Finding | Interpretation limit |
@@ -348,21 +346,21 @@ The frequency of judgment differences across full model responses and their effe
 
 ## **9. Validation plan and available evidence**
 
-### **9.1. Candidate models and current status**
+### **9.1. Validation model and execution settings**
 
 | Role | Model | Current status |
 | --- | --- | --- |
 | Environment check | `HuggingFaceTB/SmolLM2-135M-Instruct` | Ran 10 ARC Easy prompts with `batch_size=1`; not an IFEval-Ko result |
-| Preferred integration/full-evaluation candidate | `Qwen/Qwen2.5-1.5B-Instruct` | Reviewed Korean support and official chat template; team adoption unconfirmed |
+| Selected/full response generation | `Qwen/Qwen2.5-1.5B-Instruct` | Generated responses for the selected 23 and all 342 prompts on MPS/float16 |
 | Lightweight alternative | `Qwen/Qwen2.5-0.5B-Instruct` | Consider if the primary candidate is too costly to run |
 
-The 1.54B model in the [official Qwen card](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) is the first proposal. The team must confirm model/tokenizer revisions, backend, dtype, environment and integration keys, currently 23 proposed prompts. [Additional candidates](evidence/analysis-details.en.md#extra-models) are in the supplementary analysis; model cards were not rechecked during this documentation update.
+The model and tokenizer used for validation are `Qwen/Qwen2.5-1.5B-Instruct@989aa7980e4cf806f80c7fef2b1adb7bc71aa306`. Generation used zero-shot prompting, greedy decoding, batch size 1, up to 1,280 new tokens and the official chat template. The manifests in [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) and [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) record settings and environments. The [additional candidate survey](evidence/analysis-details.en.md#extra-models) is retained as a historical record.
 
-#### **9.1.1. Proposed validation model and 23 integration prompts**
+#### **9.1.1. Validation model and the selected 23 prompts**
 
-We propose `Qwen/Qwen2.5-1.5B-Instruct`: a 1.54B instruction model with Korean support and an official chat template. It was chosen with repeated-run memory costs in mind. Freeze detailed settings after confirming model loading and generation in the actual environment. The validation objective is agreement between original Ko and new Lighteval-Ko scoring on identical responses.
+We used `Qwen/Qwen2.5-1.5B-Instruct` for its Korean support, official chat template and manageable memory requirements for repeated runs. The validation objective is agreement between original Ko and new Lighteval-Ko scoring on identical responses.
 
-The following 23 prompts are proposed from `allganize/IFEval-Ko` at revision `54199e3801116897697babf341865741dcd06fc8`. The count follows instruction-type/path coverage rules; add prompts if the rules are not satisfied.
+The following 23 prompts from `allganize/IFEval-Ko` at revision `54199e3801116897697babf341865741dcd06fc8` were used for generation and scoring comparison. Applying the instruction-type and input-path coverage rules resulted in a selection of 23 prompts.
 
 ```json
 [3743, 136, 3518, 1233, 3445, 3442, 1262, 1082, 1127, 3710,
@@ -394,7 +392,7 @@ Pass the same pinned prompts and responses to original Ko and new Lighteval-Ko. 
 | Aggregation | Matching numerators/denominators; absolute error ≤`1e-12` for all four metrics |
 | Stability/regression | Pass/fail/boundary inputs covered; no omissions or unhandled exceptions; existing English task judgments preserved |
 
-100% means **agreement between evaluators**, not model accuracy. Matching expected exceptions validates auxiliary error contracts; those inputs are excluded from successful normal scoring and metric denominators. Section 9.3.5 records four-metric parity on fixed responses. Metrics on model-generated responses have not yet been measured.
+100% means **agreement between evaluators**, not model accuracy. Matching expected exceptions validates auxiliary error contracts; those inputs are excluded from successful normal scoring and metric denominators. Section 9.3.5 records four-metric parity on fixed responses; [section 9.3.6](#saved-model-parity) separately records the saved model response scores.
 
 <a id="verification-status"></a>
 
@@ -415,7 +413,7 @@ The directly compared references are the [English evaluator](https://github.com/
 | Raw and merged results | [156 English results](evidence/checker-audit/original_results.json), [156 Ko results](evidence/checker-audit/ko_results.json), [results.json](evidence/checker-audit/results.json); reproduction evidence for all 86 baseline cases is embedded in the corresponding cases |
 | Reproduction metadata | [provenance.json](evidence/checker-audit/provenance.json), [requirements.lock.txt](evidence/checker-audit/requirements.lock.txt), [SHA256SUMS](evidence/checker-audit/SHA256SUMS) |
 
-#### **9.3.2. Further execution and pending items**
+#### **9.3.2. Subsequent validation status**
 
 | Evidence | Inputs/comparison path | Findings and limits |
 | --- | --- | --- |
@@ -423,11 +421,13 @@ The directly compared references are the [English evaluator](https://github.com/
 | Normal paths, boundaries, diagnostics | 21 types/25 paths, 13 N−1/N/N+1 boundary families, four repeated-ID combinations | Dedicated pass/fail judgments, observed counts and loose recovery through line deletion, etc. |
 | Compatibility/error contracts | 18 auxiliary inputs × original English/Ko | Ko: 10 normal returns/8 expected exceptions; English: 16/2. Each reference has its own oracle; exceptions are not successful scoring |
 | Verification tools | 25 tests | Detect incorrect indexes, hashes, duplicates, aggregation and missing/tampered reproduction evidence, among other errors |
-| Existing Lighteval English/French regression | Before/after new implementation | **Not run**; reference comparison does not replace it |
-| 23-prompt integration | Registered new task versus original Ko | **Input coverage counted for 23 prompts/40 instructions; model integration not run** |
+| Existing Lighteval English/French regression | Paths affected by shared-code changes | Option A adds a separate Ko package. Moving to a common engine requires regression checks for affected existing paths |
+| 23 saved model responses | Original Ko, direct ported scorer and registered task | **Strict and loose judgments each match for 23/23 prompts and 40/40 instructions; all four metrics match exactly. See section 9.3.6** |
+| Full split of saved model responses | Original Ko, direct ported scorer and registered task | **Strict and loose judgments each match for 342/342 prompts and 481/481 instructions; all four metrics match exactly. See section 9.3.6** |
+| Native Lighteval on MPS | Fresh generation, scoring and aggregation for 3 prompts/5 instructions | **All individual strict/loose judgments and all four metrics match original Ko. See section 9.3.7** |
 | New Lighteval-Ko parity | Identical fixed responses through original Ko, ported scorer and registered task | **156/156 cases match; zero differences across four aggregate metrics. Also checked 18 auxiliary cases and all 342 Docs. See section 9.3.5** |
 
-[results.json](evidence/checker-audit/results.json) records raw judgments, reproduction evidence, input hashes and aggregates for the original English/Ko comparison. Earlier investigations are in the [supplementary analysis](evidence/analysis-details.en.md#language-controls). These reference-comparison materials are separate from the subsequent new-task validation in section 9.3.5. Model generation remains pending.
+[results.json](evidence/checker-audit/results.json) records individual judgments, reproduction evidence, input hashes and aggregates for the original English/Ko comparison. Earlier investigations are documented in the [supplementary analysis](evidence/analysis-details.en.md#language-controls). That reference comparison, fixed-response validation in section 9.3.5, and independent scoring of saved model responses in section 9.3.6 were conducted separately and have separate evidence records. Model generation records are attached to team code PRs #5 and #7.
 
 #### **9.3.3. Attachment scope and reproduction requirements**
 
@@ -464,9 +464,9 @@ These are aggregates over diagnostic stored responses. The 25 paths count checks
 
 Adding 1954 and 240 to the 23-prompt proposal gives 25 collected prompts/42 instructions. Including baseline prompts gives 32 source prompts/55 instructions. **The model integration selection remains 23 prompts/40 instructions.** We preserve `peace` in 1203, `predatory` in 2142, `<6` in 1268, 600 words in 3538 and the `first_word` normalization asymmetry. Auxiliary inputs cover the four registered types absent from the data and an unregistered checker. The 8 expected-exception Ko inputs, including `capital_word_frequency` AttributeError cases, and 2 expected-exception English inputs are excluded from successful scoring for their respective evaluators.
 
-Review/reproduction materials: [guide](evidence/checker-audit/README.en.md), [English/Ko comparison](evidence/checker-audit/results.en.md), [inputs/expectations](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [source prompts](evidence/checker-audit/source_rows.en.md). A local ZIP of the experiment materials can be generated with `package_results.py` when needed. Issue drafting and remote publication are outside this change.
+Review/reproduction materials: [guide](evidence/checker-audit/README.en.md), [English/Ko comparison](evidence/checker-audit/results.en.md), [inputs/expectations](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [source prompts](evidence/checker-audit/source_rows.en.md). A local ZIP of the experiment materials can be generated with `package_results.py` when needed. Issue drafts and remote publication are outside the attachment scope of this reference experiment.
 
-The reference experiment above does not execute the newly registered task. Subsequent new-task validation is recorded separately in section 9.3.5. **Not run:** before/after regression, metric-object isolation and optional-dependency loading for existing English/French paths; 23-prompt model integration; full-split model evaluation.
+The reference experiment above does not execute the newly registered task. Subsequent fixed-response validation, saved-response scoring and native MPS execution are recorded separately in sections 9.3.5, 9.3.6 and 9.3.7.
 
 #### **9.3.5. Model-free integration validation of the registered task**
 
@@ -487,11 +487,45 @@ Task implementation `21faccc` in [team code PR #2](https://github.com/Hugging-Fa
 | `prompt_level_loose_acc` | 79/156 | 0 |
 | `inst_level_loose_acc` | 142/247 | 0 |
 
-See the [code PR README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md) for validation code and reproduction commands. These are compatibility results on fixed responses, not model-performance scores. Model integration on 23 prompts/40 instructions and model evaluation on all 342 prompts/481 instructions remain pending.
+See the [code PR README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md) for validation code and reproduction commands. These results measure compatibility on fixed responses. The next section reports model scores and evaluator agreement for saved model responses.
+
+<a id="saved-model-parity"></a>
+
+#### **9.3.6. Independent validation of saved model responses**
+
+On 2026-11-14, joony0905 independently scored the 23 selected responses attached to [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) and all 342 responses attached to [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) on CPU. The run used evaluation code at `4cff81a2794cc7b0b7fb6bdd52f301fe887acf44` and the original Ko evaluator at `54199e3801116897697babf341865741dcd06fc8`. The [evidence guide](evidence/analysis-details.en.md#model-response-parity) gives the sources, hashes and reproduction steps for the generation records and independent scoring results.
+
+Each saved response was passed unchanged to three evaluation paths: the original Ko evaluator, a direct call to the ported scorer, and the registered task through Registry → Doc → `compute_sample` → corpus aggregation. Outputs produced by the original Ko evaluator during the run served as the reference. Python and langdetect seeds were reset to zero before each call. Input checksums, prompt order, kwargs and response hashes were verified. Repeated instructions were compared separately using `(key, instruction_index, instruction_id)`.
+
+| Scope | Strict prompt / instruction agreement | Loose prompt / instruction agreement | Scoring or aggregation errors / mismatches |
+| --- | --- | --- | --- |
+| Selected 23 prompts / 40 instructions | 23/23 · 40/40 | 23/23 · 40/40 | 0 / 0 |
+| Full 342 prompts / 481 instructions | 342/342 · 481/481 | 342/342 · 481/481 | 0 / 0 |
+
+| Model metric | Selected 23 prompts | Full 342 prompts | Absolute error across the three paths |
+| --- | --- | --- | --- |
+| `prompt_level_strict_acc` | 6/23 | 117/342 | 0 |
+| `inst_level_strict_acc` | 19/40 | 207/481 | 0 |
+| `prompt_level_loose_acc` | 9/23 | 125/342 | 0 |
+| `inst_level_loose_acc` | 23/40 | 220/481 | 0 |
+
+Agreement counts measure compatibility between evaluators; model scores describe Qwen/Qwen2.5-1.5B-Instruct's performance on the saved responses. Responses that reached the generation token limit were retained in the denominators: all 12 in the full split and key `1127` in the selected run.
+
+Tokenization and decoding with the pinned tokenizer reproduced all 342 records, and all 50 related tests passed at that revision. The earlier results for 156 fixed responses and 18 auxiliary inputs are preserved. This CPU run replayed saved responses; the subsequent native Lighteval MPS run is recorded separately below.
+
+<a id="native-mps-validation"></a>
+
+#### **9.3.7. Native Lighteval execution on MPS and follow-up checks**
+
+On 2026-11-19, kiimyjun ran native Lighteval on an Apple M5 GPU using MPS/float16, as recorded in [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156). The run used code at `321d68b`, Python 3.11.18, PyTorch 2.15.0, Transformers 5.22.2 and NLTK 3.10.4, with the model/tokenizer revision in section 9.1.
+
+Starting with an empty response cache, the run generated fresh responses for 3 prompts (keys `2209`, `2304` and `1418`) with 5 instructions, scored them, aggregated the corpus metrics and saved results and details. The same responses were cross-checked against original Ko and the direct ported scorer. All individual strict/loose judgments and all four metrics matched: prompt accuracy was `1/3` and instruction accuracy was `2/5` in both modes.
+
+The validation reported in that review also replayed all 342 saved responses/481 instructions with NLTK 3.10.4 and confirmed agreement on all judgments and four metrics. All 58 tests with 32 subtests and the Ruff checks passed. The full-split result is a saved-response replay; native GPU generation covers the three prompts above. The public ZIP checksum and enclosed result files were also checked. The [evidence guide](evidence/analysis-details.en.md#model-response-parity) links the logs, configuration, results and hashes.
 
 ### **9.4. Handoff to implementation and further validation**
 
-[design.en.md](design.en.md) specifies architecture, input/output contracts, tests, generation settings and open decisions. Integration and full evaluation follow team confirmation of the model, environment and integration selection, currently 23 proposed prompts. Upstream proposals and data-error reports to dataset authors are handled separately. Their drafts are not included in these materials.
+[design.en.md](design.en.md) records the architecture and validation contracts. Upstream [PR #1503](https://github.com/huggingface/lighteval/pull/1503) presents the task implementation and validation evidence. [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8) addresses code style and clarifies reproduction instructions and the MPS validation scope. The current implementation uses a separate Ko package (option A) with native metric/Pipeline support. A common engine or Inspect support requires separate discussion with maintainers. Changes to shared code require regression checks for affected existing tasks. Dataset Known Issue corrections remain separate from reference-compatibility validation.
 
 ---
 

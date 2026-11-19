@@ -6,7 +6,7 @@
 
 ## 자료
 
-- [selection.json](selection.json): 검증 문항 23개 key와 유지할 진단 문항 목록. 선정안은 팀 검토 전 제안이다.
+- [selection.json](selection.json): 검증 문항 23개 key와 유지할 진단 문항 목록. 원래 제안 당시의 메타데이터를 보존하며, 같은 23문항을 후속 모델 응답 생성·채점에 사용했다.
 - [audit_coverage.py](audit_coverage.py): 데이터·원본 코드의 SHA-256 확인, registry·checker AST 분석, 선정안 집계.
 - [coverage.json](coverage.json): 원본 URL·revision·hash, 스크립트·선정 파일 hash, 환경, 지시 index별 대응과 집계.
 - [coverage.md](coverage.md): 같은 결과의 유형별·입력 경로별 표.
@@ -17,7 +17,7 @@
 
 `check_following`에서 kwargs로 설정한 속성의 값에 따라 다른 연산·정규식으로 갈라지는 조건을 조사했다. 정상 데이터에 실제 등장하는 분기 값은 `relation`을 쓰는 3종의 각 2개, 추신의 `P.P.S`·`P.S.` 2개다. 나머지 17종은 관찰된 정상 입력에서 해당 값 분기가 없어 ID당 `default` 1개로 센다. 합계는 25개 `(instruction ID, 입력 경로)` 쌍이다. 스크립트는 AST에서 상수와 비교하는 조건을 확인하고, 검토하지 않은 분기 필드·클래스·값이 나오면 중단한다.
 
-이는 코드 분기 실행률이 아니다. 응답에 따른 성공·실패, 누락·잘못된 kwargs·난수 fallback, 추신의 기타 표지, 모든 숫자·문구·언어 값의 조합을 25개로 포함했다는 뜻도 아니다. 이 항목은 [설계 문서 6.2절](../../design.md#fixed-response-regression)의 고정 응답 회귀 범위에서 확인한다. 원본 평가기로 수행한 [156건의 실험 결과](../checker-audit/results.md)를 확인할 수 있다. 후속 새 등록 task의 고정 응답 156건과 보조 입력 18건 검증은 완료했으며, 결과는 [분석보고서 9.3.5절](../../analysis.md#935-등록-태스크의-모델-없는-통합-검증)에 있다. 23문항·40개 instruction 모델 통합 평가와 전체 342문항 모델 평가는 미수행이다.
+이 집계는 입력 경로의 포함 범위를 나타내며 코드 분기의 실행률을 뜻하지 않는다. 응답에 따른 성공·실패, kwargs 누락·오류, 난수 fallback, 기타 추신 표지나 모든 숫자·문구·언어 값의 조합을 25개 경로로 포괄한 것은 아니다. 이 항목은 [설계 문서 6.2절](../../design.md#fixed-response-regression)의 고정 응답 회귀 범위에서 확인한다. 원본 평가기로 수행한 [156건의 실험 결과](../checker-audit/results.md)를 확인할 수 있다. 이후 새 등록 태스크를 고정 응답 156건과 보조 입력 18건으로 검증했다([분석보고서 9.3.5절](../../analysis.md#935-등록-태스크의-모델-없는-통합-검증)). 선정 23문항·40개 지시와 전체 342문항·481개 지시의 저장 응답 채점 비교는 [9.3.6절](../../analysis.md#saved-model-parity), native MPS 3문항 실행은 [9.3.7절](../../analysis.md#native-mps-validation)에 각각 기록했다.
 
 ## 재현
 

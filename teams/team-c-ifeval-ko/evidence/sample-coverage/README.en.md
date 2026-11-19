@@ -6,7 +6,7 @@ This audit compares pinned IFEval-Ko data and checker code to count the instruct
 
 ## Materials
 
-- [selection.json](selection.json): 23 proposed prompt keys and retained diagnostic prompts, pending team review.
+- [selection.json](selection.json): 23 selected prompt keys and retained diagnostic prompts. Original proposal metadata is preserved; the same 23 prompts were used for subsequent model generation and scoring.
 - [audit_coverage.py](audit_coverage.py): checks source SHA-256 hashes, analyzes registry/checker ASTs and counts selection coverage.
 - [coverage.json](coverage.json): source URLs/revisions/hashes, script/selection hashes, environment, index-level mappings and aggregates.
 - [coverage.en.md](coverage.en.md): type/path tables for the same result.
@@ -15,9 +15,9 @@ This audit compares pinned IFEval-Ko data and checker code to count the instruct
 
 The `train` split at revision `54199e3801116897697babf341865741dcd06fc8` contains 342 prompts, 481 instruction occurrences and 21 IDs. Repeated IDs in a prompt count separately by instruction index.
 
-We examined `check_following` conditions where kwargs-derived attributes select different operations or regexes. Normal data uses two `relation` values for each of three types and two postscript markers, `P.P.S`/`P.S.`. The other 17 types have no such observed normal-input value branch and each contributes one `default` path. The total is 25 `(instruction ID, input path)` pairs. The script checks constant comparisons in the AST and stops on an unreviewed branch field, class or value.
+We examined `check_following` conditions where kwargs-derived attributes select different operations or regexes. Normal data uses two `relation` values for each of three types and two postscript markers, `P.P.S`/`P.S.`. No such value-dependent branch was observed in normal inputs for the other 17 types, so each contributes one `default` path. The total is 25 `(instruction ID, input path)` pairs. The script checks constant comparisons in the AST and stops on an unreviewed branch field, class or value.
 
-This is not executed code-branch coverage. The 25 paths do not include all response pass/fail branches, missing/invalid kwargs, random fallbacks, other postscript markers or every numeric/phrase/language combination. These belong to the stored-response scope in [design section 6.2](../../design.en.md#fixed-response-regression). See the [156-case reference results](../checker-audit/results.en.md). Subsequent validation of the newly registered task is complete for all 156 fixed-response cases and 18 auxiliary inputs; see [analysis section 9.3.5](../../analysis.en.md#935-model-free-integration-validation-of-the-registered-task). Model integration on 23 prompts/40 instructions and model evaluation on all 342 prompts remain pending.
+This is not executed code-branch coverage. The 25 paths do not include all response pass/fail branches, missing/invalid kwargs, random fallbacks, other postscript markers or every numeric/phrase/language combination. These belong to the stored-response scope in [design section 6.2](../../design.en.md#fixed-response-regression). See the [156-case reference results](../checker-audit/results.en.md). Later validation of the registered task covered all 156 fixed-response cases and 18 auxiliary inputs; see [analysis section 9.3.5](../../analysis.en.md#935-model-free-integration-validation-of-the-registered-task). Scoring comparisons on saved responses for the selected 23 prompts/40 instructions and all 342 prompts/481 instructions are recorded in [section 9.3.6](../../analysis.en.md#saved-model-parity). The three-prompt native MPS run is recorded separately in [section 9.3.7](../../analysis.en.md#native-mps-validation).
 
 ## Reproduction
 

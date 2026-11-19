@@ -83,13 +83,13 @@ native 집계 함수의 별도 입력 `[[True, True, True], [False]]`는 instruc
 | NLTK · pyarrow | 3.10.3 · 26.0.0 |
 | 패키지 lock | 고정 70개 패키지가 현재 환경과 일치한 것을 확인 |
 | 실행 응답 | 저장 응답. 기준 환경 점검에는 모델 생성·GPU가 필요하지 않았음 |
-| 모델 생성 환경 | 최종 모델·tokenizer revision·dtype·chat template·backend 미확정 |
+| 모델 생성 환경 | 이 기준 실험 당시에는 미확정. 후속 Qwen 응답 생성과 MPS 실행은 [모델 응답 검증 안내](#model-response-parity)에 기록 |
 
 기준 환경 최소 재실행의 영어·Ko runner는 각 3건, 종료 코드 0·오류 0이었다. 기존 86건의 주요 13개 파일 hash가 실행 전후 동일했다. 부등호·Known Issue 실행에서도 원본 보존과 양쪽 종료 코드·입력 및 결과 hash를 manifest에 남겼다.
 
 native Lighteval metric은 기준 평가기와 분리된 Lighteval 가상환경에서 실행했다.
 
-저장 응답을 `ModelResponse`에 넣고 `post_process`는 호출하지 않아 raw response와 final_text가 같음을 확인했다. 실제 모델 통합에서는 별도로 후처리·최종 응답 추출 범위를 고정해야 한다. NLTK는 기존 cache를 사용했다. 이 저장 응답 검사는 모델 생성·GPU 가용성이나 전체 모델 평가 완료를 뜻하지 않는다.
+저장 응답을 `ModelResponse`에 넣고 `post_process`는 호출하지 않아 raw response와 final_text가 같음을 확인했다. 실제 모델 통합에서는 별도로 후처리·최종 응답 추출 범위를 고정해야 한다. NLTK는 기존 cache를 사용했다. 이 기준 실험의 저장 응답 검사는 모델 생성·GPU 가용성을 확인한 실행이 아니다. 이후 저장 모델 응답의 전체 채점과 native MPS 실행은 [분석보고서 9.3.6~9.3.7절](../analysis.md#saved-model-parity)에 구분해 기록했다. 당시 NLTK 3.10.3 기록은 보존하며, 현재 재채점 환경의 NLTK 3.10.4와 구별한다.
 
 <a id="public-sources"></a>
 
@@ -105,3 +105,59 @@ native Lighteval metric은 기준 평가기와 분리된 Lighteval 가상환경�
 | 영어 counter·checker 대조 | [utility](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions_util.py), [instructions](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions.py) |
 | Lighteval 입력 변환·metric·Inspect scorer | [IFEval main](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/main.py) |
 | French의 기존 metric 재사용 | [French task](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/multilingual/tasks/french.py) |
+
+<a id="model-response-parity"></a>
+
+## 7. 저장 모델 응답과 native MPS 검증 자료
+
+저장 응답 채점과 native MPS 검증의 공개 자료 및 재현 경로를 정리했다. 기존 [156건 고정 응답 실험](checker-audit/README.md), [저장 모델 응답 채점](../analysis.md#saved-model-parity), [native MPS 실행](../analysis.md#native-mps-validation)의 자료를 구분해 제공한다.
+
+### 검증 범위와 비교 기준
+
+| 실행 | 응답 범위 | 확인 결과 |
+| --- | --- | --- |
+| 선정 응답 재채점 | PR #5의 23문항·40개 지시 | CPU에서 원본 Ko·이식 scorer·등록 태스크의 개별 strict/loose 판정과 네 지표 일치 |
+| 전체 응답 재채점 | PR #7의 342문항·481개 지시 | 같은 세 경로에서 개별 strict/loose 판정과 네 지표 일치 |
+| Native MPS 실행 | 새로 생성한 3문항·5개 지시 | native Lighteval의 생성·채점·집계·결과 저장 완료, 원본 Ko·이식 scorer와 판정 및 네 지표 일치 |
+
+재채점 경로는 고정 원본 Ko 평가기, 이식 scorer 직접 호출, 등록 태스크의 Registry → Doc → `compute_sample` → native corpus 집계다. 원본 Ko 평가기의 실제 실행 결과를 비교 기준으로 삼는다. 저장 응답은 추가 가공 없이 전달하고 매 채점 호출 전 Python·langdetect seed를 재설정한다. key·문항 순서·kwargs·입력 체크섬·응답 해시를 확인하며, 반복 지시는 `(key, instruction_index, instruction_id)`로 구분한다.
+
+모든 개별 판정과 네 지표의 분자·분모가 일치하고 값의 절대 오차가 `1e-12` 이하여야 한다. 입력 누락·채점 오류·미해결 불일치는 검증 실패이며 오류 문항을 제외해 분모를 줄이지 않는다. 결과에는 개별 판정·지표·불일치·재현 입력·코드 revision·패키지 버전·실행 명령을 기록한다.
+
+전체 응답은 별도 Transformers 스크립트를 MPS·float16 환경에서 실행해 생성했다. 저장 응답 재채점에는 GPU나 모델 가중치가 필요하지 않다. native Lighteval로 새 응답을 생성한 범위는 3문항이다. 전체 342문항 결과는 저장 응답의 채점·집계 결과다.
+
+### 공개 첨부 자료와 해시
+
+ZIP은 해당 PR의 공개 첨부 링크에서 받고, 별도 체크섬 파일이 제공되면 함께 받는다. 압축 해제 전에 아래 표의 ZIP 해시와 대조하고 이후 내부 파일의 체크섬도 검사한다. 기존 입력·결과를 보존하고 재실행 보고서는 새 경로에 저장한다.
+
+| 자료 | 공개 출처 | ZIP SHA-256 |
+| --- | --- | --- |
+| 선정 응답 | [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5), [ZIP](https://github.com/user-attachments/files/34706481/qwen-23-001.zip), [체크섬](https://github.com/user-attachments/files/34706603/qwen-23-001.zip.sha256.txt) | `a28e35bde3327a05efa9c255c228fa5ea2e711328e6e997c654d5f3b4f9e0e05` |
+| 전체 응답 | [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7), [ZIP](https://github.com/user-attachments/files/34839513/qwen-342-001-public.zip), [체크섬](https://github.com/user-attachments/files/34839521/qwen-342-001-public.zip.sha256.txt) | `8d398dfbe60656daa4c9cd20bda61a91120fcea86d7e3b9fcebb7c0c91e4ddbb` |
+| 전체 채점 비교 결과 | [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7), [ZIP](https://github.com/user-attachments/files/34839530/qwen-342-parity-001-public.zip), [체크섬](https://github.com/user-attachments/files/34839550/qwen-342-parity-001-public.zip.sha256.txt) | `81846baa55d5e64a5090ad80e26efd555727e1e15deb9e510a58d4a01405a368` |
+| MPS 검증과 현재 환경의 전체 재채점 | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156), [ZIP](https://github.com/user-attachments/files/35070624/pr8-validation.zip) | `55c99f22f109fc2e959683208e83d96a6c5f43c9c02f4a273f12c7d71bfc1f44` |
+
+MPS ZIP에는 native 실행 설정·로그·결과 JSON·상세 Parquet·원본 Ko 교차 검증·전체 저장 응답 재채점 결과가 있다. [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7#issuecomment-6877811099)의 독립 CPU 검증에서는 고정 tokenizer로 전체 342개 응답의 토큰화·디코딩 기록을 재현하고, 길이 제한에 도달한 응답 12개가 포함되었음을 확인했다. 선정 응답의 key `1127`도 제외하지 않았다.
+
+### 코드 revision과 실행 환경
+
+| 구분 | revision 또는 환경 |
+| --- | --- |
+| 원본 Ko 평가기·데이터 | `54199e3801116897697babf341865741dcd06fc8` |
+| 최초 독립 CPU 재채점 | Lighteval `4cff81a2794cc7b0b7fb6bdd52f301fe887acf44`; 당시 환경 기록 보존 |
+| 업스트림 제출 | [PR #1503](https://github.com/huggingface/lighteval/pull/1503), `f5feb8fe9d30000986cd9667e872ff7602022c9a` |
+| Native MPS 리뷰 | 포크 `321d68bf559cc6222b42b699e3764deee3f31f0f`; Apple M5 GPU, MPS·float16, Python 3.11.18, PyTorch 2.15.0, Transformers 5.22.2, NLTK 3.10.4 |
+| 재현 문서 보완 | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8), `2d4f8c358cfae9c9ba81b4979a1a8df900e82ade` |
+| 모델·tokenizer | `Qwen/Qwen2.5-1.5B-Instruct@989aa7980e4cf806f80c7fef2b1adb7bc71aa306` |
+
+응답 생성에는 0-shot, 공식 chat template 1회 적용, greedy decoding, batch size 1, 최대 신규 토큰 1,280개 설정을 사용했다. 저장 응답 생성 스크립트의 seed는 0이며, native Pipeline의 seed와 세부 실행 설정은 MPS ZIP에 기록했다. native 실행의 문항 key는 `2209`, `2304`, `1418`이다. strict·loose 모두 문항 점수는 `1/3`, 지시 점수는 `2/5`다.
+
+과거 audit·응답 생성 환경에서는 NLTK 3.10.3을, 현재 재채점·native MPS 환경에서는 3.10.4를 사용했다. 과거 실행을 재현하려면 당시 lock과 메타데이터를 사용하고, 현재 환경에서 재채점하려면 최신 안내를 따른다. 두 실행은 사용한 버전이 다르므로 구분해 기록한다.
+
+### 재현 안내
+
+의존성 설치·NLTK tokenizer 자료 사전 준비·원본 복원·고정/선정/전체 응답 재채점 명령은 고정 revision의 [Lighteval 채점 안내](https://github.com/Hugging-Face-KREW/lighteval/blob/2d4f8c358cfae9c9ba81b4979a1a8df900e82ade/tests/ifeval_ko/README.md)를 따른다. 생성 manifest·문항 선정 근거·저장 응답 첨부 자료는 [생성 안내](https://github.com/Hugging-Face-KREW/lighteval/blob/2d4f8c358cfae9c9ba81b4979a1a8df900e82ade/scripts/ifeval_ko/README.md)에서 확인한다. 두 문서는 과거 생성 환경과 현재 채점 의존성을 구분한다.
+
+초기 환경에서는 안내된 NLTK tokenizer 자료를 채점 전에 설치한다. 공개 ZIP의 선정·전체 응답을 각각 재채점하고 보고서는 새 경로에 저장한다. 개별 판정과 네 지표의 분자·분모를 [분석보고서 9.3.6절](../analysis.md#saved-model-parity)의 결과와 비교한다. native MPS 실행을 확인하거나 재현하려면 [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156)의 설정과 실행 명령을 확인한다.
+
+태스크 구현과 검증 자료를 제출한 [PR #1503](https://github.com/huggingface/lighteval/pull/1503)에 [이슈 #1463](https://github.com/huggingface/lighteval/issues/1463)을 연결했다. [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8)은 코드 스타일·재현 안내 보완과 native MPS 검증 자료를 담고 있다. 데이터셋 Known Issues와 수정 overlay는 원본 판정을 보존하는 이식 작업과 별도로 다룬다.
