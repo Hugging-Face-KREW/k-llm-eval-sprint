@@ -61,8 +61,8 @@ Since no output has zero letters, the two gaps in the harness regex that we deli
  
 ### Scope of the check
  
-- **doctor, dentist**: all five items were compared with this script (435/435, 811/811). The results are in `results/`.
-- **nurse, pharm**: before this script existed, team members compared prompt text, generation and score on their own PCs. Token IDs and extracted letters were not compared, and the run files are on the members' PCs. pharm was run on Windows, so four local edits outside the task were made to Lighteval (the `list_models` argument, `:` and `|` in the cache and details file names, and `xxhash` encoding). None of them touch prompts, generation or scoring.
+- **doctor, nurse, dentist**: all five items were compared (435/435, 878/878, 811/811). The results are in `results/`.
+- **pharm**: before this script existed, a team member compared prompt token IDs, generation and score on their own PC with a separate script (885/885, `results/pharm.json`). Prompt text and extracted letters were not compared separately. pharm was run on Windows, so four local edits outside the task were made to Lighteval (the `list_models` argument, `:` and `|` in the cache and details file names, and `xxhash` encoding). None of them touch prompts, generation or scoring.
 ## Reproduction
  
 ```bash
