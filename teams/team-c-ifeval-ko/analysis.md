@@ -235,8 +235,6 @@ Ko의 변경은 [제작자 설명](https://huggingface.co/datasets/allganize/IFE
 | Lighteval upstream PR, Lighteval upstream·harness PR | `IFEval 한국어`, `IFEval Korea` | 3 | 각 조회에서 결과 0건 |
 | Lighteval upstream·harness의 issue | `"allganize"` | 2 | 각 조회에서 결과 0건 |
 
-반환 범위에서는 Lighteval·harness 메인테이너의 Ko checker 변경 지시를 찾지 못했다. 중복 구현·관련 발언의 완전한 부재를 증명하는 결과는 아니며, 조회 20회와 통합 점검 23문항은 별개다.
-
 ### **7.2. 관련 선행 작업과 발언의 범위**
 
 | 참고 기록 | 확인한 내용 | 해석의 한계 |
@@ -350,21 +348,21 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 ## **9. 검증 계획과 현재 확보한 자료**
 
-### **9.1. 모델 후보와 현재 상태**
+### **9.1. 검증 모델과 실행 설정**
 
 | 역할 | 모델 | 현재 상태 |
 | --- | --- | --- |
 | 환경 점검 | `HuggingFaceTB/SmolLM2-135M-Instruct` | `batch_size=1`로 ARC Easy 10문항 실행. IFEval-Ko 결과는 아님 |
-| 통합·전체 평가 우선 후보 | `Qwen/Qwen2.5-1.5B-Instruct` | 한국어 지원·공식 chat template를 검토한 후보. 팀 채택 미확정 |
+| 선정·전체 응답 생성 | `Qwen/Qwen2.5-1.5B-Instruct` | MPS·float16으로 선정 23문항과 전체 342문항의 응답 생성 완료 |
 | 경량 대안 | `Qwen/Qwen2.5-0.5B-Instruct` | 주 후보의 실행 부담이 클 때 검토 |
 
-[Qwen 공식 모델 카드](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)의 1.54B 모델을 우선 제안하되 모델·tokenizer revision·backend·dtype·실행 환경·통합 검증 문항 key(현재 23문항 제안)는 팀 확정이 필요하다. [추가 후보 조사](evidence/analysis-details.md#extra-models)는 보조 자료로 옮겼으며 이번 문서 정리에서 모델 카드를 재조회하지 않았다.
+검증에 사용한 모델과 tokenizer는 `Qwen/Qwen2.5-1.5B-Instruct@989aa7980e4cf806f80c7fef2b1adb7bc71aa306`이다. 0-shot, greedy decoding, batch size 1, 최대 신규 토큰 1,280개와 공식 chat template를 사용했다. 생성 설정·환경은 [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5)와 [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7)의 manifest에 기록했다. [추가 후보 조사](evidence/analysis-details.md#extra-models)는 당시의 검토 기록으로 보존한다.
 
-#### **9.1.1. 검증 모델 및 통합 검증 23문항 선정안**
+#### **9.1.1. 검증 모델과 선정 23문항**
 
-주 검증 모델로 `Qwen/Qwen2.5-1.5B-Instruct`를 제안한다. 한국어를 지원하는 1.54B instruction 모델이며 공식 chat template를 제공한다. 반복 실행 시 메모리 부담을 고려하여 선정했으며, 실제 실행 환경에서 모델 로딩과 응답 생성을 확인한 뒤 세부 설정을 고정한다. 이번 검증의 목적은 동일한 응답에 대한 원본 Ko와 새 Lighteval-Ko의 채점 일치 여부를 확인하는 것이다.
+한국어 지원 여부, 공식 chat template 제공 여부와 반복 실행 시 메모리 부담을 고려해 `Qwen/Qwen2.5-1.5B-Instruct`를 사용했다. 검증의 목적은 동일한 응답에 대한 원본 Ko와 새 Lighteval-Ko의 채점 일치 여부를 확인하는 것이다.
 
-고정 데이터 revision `54199e3801116897697babf341865741dcd06fc8`의 `allganize/IFEval-Ko`에서 다음 23문항을 선정안으로 제안한다. 문항 수는 목표가 아니라 지시 유형·검사 경로 포함 규칙의 결과이며, 규칙을 만족하지 못하면 문항을 더 추가한다.
+고정 데이터 revision `54199e3801116897697babf341865741dcd06fc8`의 `allganize/IFEval-Ko`에서 다음 23문항을 선정해 응답 생성과 채점 비교에 사용했다. 지시 유형과 입력 경로를 모두 포함하도록 선정한 결과 23문항이 되었다.
 
 ```json
 [3743, 136, 3518, 1233, 3445, 3442, 1262, 1082, 1127, 3710,
@@ -396,7 +394,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 집계 | 분자·분모 일치, 네 지표 절대 오차 `1e-12` 이하 |
 | 안정성·회귀 | 정상·실패·경계 입력 충족, 누락·미처리 예외 없음, 기존 영어 task 판정 유지 |
 
-100%는 모델 정답률이 아닌 **두 evaluator의 판정 일치율**이다. 예상 예외의 일치는 보조 입력의 오류 계약 검증으로 기록하고 정상 채점 성공이나 지표 분모에는 포함하지 않는다. 고정 응답의 네 지표 비교 결과는 9.3.5절에 있으며, 모델이 생성한 응답의 지표는 아직 미측정이다.
+100%는 모델 정답률이 아닌 **평가기 간 판정 일치율**이다. 예상 예외의 일치는 보조 입력의 오류 계약 검증으로 기록하고 정상 채점 성공이나 지표 분모에는 포함하지 않는다. 고정 응답의 네 지표 비교 결과는 9.3.5절, 저장된 모델 응답의 지표는 [9.3.6절](#saved-model-parity)에 구분해 기록했다.
 
 <a id="verification-status"></a>
 
@@ -417,7 +415,7 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 통합 원시·비교 결과 | [영어 156건](evidence/checker-audit/original_results.json), [Ko 156건](evidence/checker-audit/ko_results.json), [results.json](evidence/checker-audit/results.json). 기존 86건 재현 근거도 해당 case에 포함 |
 | 재현 정보 | [provenance.json](evidence/checker-audit/provenance.json), [requirements.lock.txt](evidence/checker-audit/requirements.lock.txt), [SHA256SUMS](evidence/checker-audit/SHA256SUMS) |
 
-#### **9.3.2. 후속 실행과 미완료 항목**
+#### **9.3.2. 후속 검증 상태**
 
 | 자료 | 입력 수·비교 경로 | 확인한 결과·제한 |
 | --- | --- | --- |
@@ -425,11 +423,13 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | 정상 경로·경계·진단 | 실험에 포함된 21종·25개 입력 경로, 13개 N−1/N/N+1 경계 검사, 반복 ID 네 조합 | 경로별 통과·실패, 실제 개수, 줄 삭제 등으로 loose에서 통과하는 경우 확인 |
 | 호환성·오류 계약 | 보조 18건 × 원본 영어·Ko | Ko 정상 반환 10·예상 예외 8, 영어 정상 반환 16·예상 예외 2. 각자의 기대값으로 검증하며 예외는 정상 채점 성공으로 세지 않음 |
 | 검증 도구 | 검증 테스트 25개 | 잘못된 index·해시·중복·집계와 재현 근거의 누락·변조를 검출하는 검사 등 통과 |
-| 기존 Lighteval 영어/French 회귀 | 새 구현의 변경 전후 비교 | **미수행**. 원본 reference 비교로 대체하지 않음 |
-| 통합 23문항 | 새 등록 task와 원본 Ko | **23문항·40개 instruction 선정안의 입력 범위 집계 완료. 모델 통합 평가 미수행** |
+| 기존 Lighteval 영어/French 회귀 | 공통 코드 변경 시 영향받는 경로 | A안은 Ko 패키지를 별도로 추가했다. 공통 엔진으로 전환할 경우 해당 경로의 회귀 검증 필요 |
+| 저장된 모델 응답 23문항 | 원본 Ko·이식 scorer·등록 task | **strict·loose 각각 문항 23/23, 지시 40/40 일치. 네 지표 차이 0. 9.3.6절 참고** |
+| 저장된 모델 응답 전체 문항 | 원본 Ko·이식 scorer·등록 task | **strict·loose 각각 문항 342/342, 지시 481/481 일치. 네 지표 차이 0. 9.3.6절 참고** |
+| Native Lighteval MPS | 신규 생성 3문항·5개 지시 → 채점·집계 | **원본 Ko와 개별 strict·loose 판정 및 네 지표 일치. 9.3.7절 참고** |
 | 새 Lighteval-Ko 동등성 | 원본 Ko·이식 scorer·등록 task에 같은 고정 응답 입력 | **156/156건 일치, 네 지표 집계 차이 0. 보조 18건과 전체 342문항 Doc 변환도 확인. 9.3.5절 참고** |
 
-원본 영어·Ko 비교의 원시 판정, 재현 근거, 입력 해시와 집계는 [results.json](evidence/checker-audit/results.json)에 함께 기록했다. 이전 조사 내용은 [분석 보조 자료](evidence/analysis-details.md#language-controls)에서 확인할 수 있다. 이 원본 비교 자료와 이후 새 task 검증 자료(9.3.5절)를 구분하며, 모델 생성은 미수행이다.
+원본 영어·Ko 비교의 개별 판정, 재현 근거, 입력 해시와 집계는 [results.json](evidence/checker-audit/results.json)에 기록했다. 이전 조사 내용은 [분석 보조 자료](evidence/analysis-details.md#language-controls)에서 확인할 수 있다. 원본 평가기 비교, 새 태스크의 고정 응답 검증(9.3.5절), 저장된 모델 응답의 독립 채점(9.3.6절)은 각각 별도로 수행했으며, 관련 자료도 구분해 기록했다. 모델 응답 생성 자료는 팀 코드 PR #5·#7에 첨부되어 있다.
 
 #### **9.3.3. 첨부 범위와 재현 조건**
 
@@ -466,9 +466,9 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 
 선정안 23문항에 1954·240을 추가해 25문항·42개 instruction을 수집했다. 기준 자료의 문항까지 합치면 원본 32문항·55개 instruction을 사용한다. **모델 통합 선정안은 23문항·40개 instruction으로 유지한다.** 1203의 `peace`, 2142의 `predatory`, 1268의 `<6`, 3538의 600단어와 `first_word` 정규화의 비대칭은 원본대로 보존했다. registry 25종 중 데이터에서 사용하지 않는 4종과 미등록 checker는 보조 입력으로 검사했다. Ko의 `capital_word_frequency` AttributeError 등을 포함한 Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않았다.
 
-재현·검토 자료: [안내](evidence/checker-audit/README.md), [영어·Ko 비교표](evidence/checker-audit/results.md), [입력/사전 기대값](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [원본 문항](evidence/checker-audit/source_rows.md). 필요하면 `package_results.py`로 실험 자료의 로컬 ZIP을 생성할 수 있다. 이슈 초안 작성과 원격 게시는 이번 변경 범위에 포함하지 않는다.
+재현·검토 자료: [안내](evidence/checker-audit/README.md), [영어·Ko 비교표](evidence/checker-audit/results.md), [입력/사전 기대값](evidence/checker-audit/cases.json), [manifest](evidence/checker-audit/manifest.json), [coverage](evidence/checker-audit/coverage.json), [원본 문항](evidence/checker-audit/source_rows.md). 필요하면 `package_results.py`로 실험 자료의 로컬 ZIP을 생성할 수 있다. 이 원본 비교 실험의 첨부 범위에는 이슈 초안과 원격 게시 작업을 포함하지 않는다.
 
-위 원본 비교 실험에는 새 등록 task의 실행이 포함되지 않는다. 이후 수행한 새 task 검증은 9.3.5절에 별도로 기록한다. **미수행:** 기존 Lighteval 영어/French 변경 전후 회귀·metric 객체 격리·optional dependency 로딩, 모델 23문항 통합, 전체 split 모델 평가.
+위 원본 비교 실험에는 새 등록 태스크의 실행이 포함되지 않는다. 이후 수행한 고정 응답 검증은 9.3.5절, 저장된 모델 응답의 채점 검증은 9.3.6절, native MPS 실행은 9.3.7절에 각각 기록했다.
 
 #### **9.3.5. 등록 태스크의 모델 없는 통합 검증**
 
@@ -489,11 +489,45 @@ checker 직접 호출만으로는 실제 평가 경로를 검증할 수 없다. 
 | `prompt_level_loose_acc` | 79/156 | 0 |
 | `inst_level_loose_acc` | 142/247 | 0 |
 
-검증 코드와 재현 명령은 [코드 PR의 README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md)에 있다. 이 수치는 고정 응답에 대한 구현 호환성 결과이며 모델 성능 점수가 아니다. 23문항·40개 instruction 모델 통합과 전체 342문항·481개 instruction 모델 평가는 남아 있다.
+검증 코드와 재현 명령은 [코드 PR의 README](https://github.com/Hugging-Face-KREW/lighteval/blob/9909ee938934274e74bef2347268d06697c62517/tests/ifeval_ko/README.md)에 있다. 이 수치는 고정 응답에 대한 구현 호환성 결과이며 모델 성능 점수가 아니다. 저장된 모델 응답의 채점 결과와 평가기 간 판정 비교는 다음 절에 정리했다.
+
+<a id="saved-model-parity"></a>
+
+#### **9.3.6. 저장 모델 응답의 독립 채점 검증**
+
+2026-11-14 송예준(joony0905)은 [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5)에 첨부된 선정 23문항의 응답과 [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7)에 첨부된 전체 342문항의 응답을 CPU에서 독립적으로 채점했다. 평가 코드는 `4cff81a2794cc7b0b7fb6bdd52f301fe887acf44`, 원본 Ko 평가기는 `54199e3801116897697babf341865741dcd06fc8`로 고정했다. 응답 생성 자료와 독립 채점 결과의 출처·해시·재현 절차는 [검증 자료 안내](evidence/analysis-details.md#model-response-parity)에서 확인할 수 있다.
+
+각 응답을 그대로 유지한 채 세 경로로 채점했다. 원본 Ko 평가기 실행, 이식 scorer 직접 호출, 등록 태스크의 Registry → Doc → `compute_sample` → corpus 집계 경로다. 원본 Ko 평가기를 실제로 실행한 결과를 비교 기준으로 삼았으며, 매 호출 전에 Python과 langdetect의 seed를 0으로 재설정했다. 입력 체크섬·문항 순서·kwargs·응답 해시를 검사하고, 반복되는 지시도 `(key, instruction_index, instruction_id)`로 구분해 각각 비교했다.
+
+| 범위 | strict 문항·지시 일치 | loose 문항·지시 일치 | 채점·집계 오류 / 불일치 |
+| --- | --- | --- | --- |
+| 선정 23문항·40개 지시 | 23/23 · 40/40 | 23/23 · 40/40 | 0 / 0 |
+| 전체 342문항·481개 지시 | 342/342 · 481/481 | 342/342 · 481/481 | 0 / 0 |
+
+| 모델 점수 | 선정 23문항 | 전체 342문항 | 세 경로의 절대 오차 |
+| --- | --- | --- | --- |
+| `prompt_level_strict_acc` | 6/23 | 117/342 | 0 |
+| `inst_level_strict_acc` | 19/40 | 207/481 | 0 |
+| `prompt_level_loose_acc` | 9/23 | 125/342 | 0 |
+| `inst_level_loose_acc` | 23/40 | 220/481 | 0 |
+
+판정 일치 수는 평가기 간 호환성을, 모델 점수는 Qwen/Qwen2.5-1.5B-Instruct가 생성한 저장 응답의 성능을 나타낸다. 생성 토큰 한도에 도달한 응답도 제외하지 않았다. 전체 평가의 12개 응답과 선정 평가의 문항 `1127`을 모두 분모에 포함했다.
+
+고정된 tokenizer로 전체 342개 응답의 토큰화·디코딩 기록을 재현했고, 당시 관련 테스트 50개도 통과했다. 기존 고정 응답 156건과 보조 입력 18건의 결과는 그대로 보존했다. 이 CPU 검증에서는 저장 응답을 재채점했다. 이후 수행한 native Lighteval MPS 실행 결과는 다음 절에 별도로 기록했다.
+
+<a id="native-mps-validation"></a>
+
+#### **9.3.7. Native Lighteval MPS 실행과 후속 검증**
+
+2026-11-19 김형준(kiimyjun)은 [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156)에서 Apple M5 GPU의 MPS·float16 환경으로 native Lighteval을 실행했다. 코드 `321d68b`, Python 3.11.18, PyTorch 2.15.0, Transformers 5.22.2, NLTK 3.10.4를 사용했고, 모델·tokenizer revision은 9.1절과 같다.
+
+빈 응답 캐시에서 3문항(key `2209`, `2304`, `1418`)·5개 지시의 새 응답 생성 → 채점 → corpus 집계 → 결과·상세 자료 저장을 확인했다. 같은 응답을 원본 Ko와 이식 scorer에 전달한 결과 개별 strict·loose 판정과 네 지표가 모두 일치했다. strict·loose 문항 점수는 각각 `1/3`, 지시 점수는 각각 `2/5`다.
+
+이 검증에서는 NLTK 3.10.4로 전체 저장 응답 342문항·481개 지시를 재채점해 판정과 네 지표가 일치함을 확인했다. 테스트 58개와 subtest 32개, Ruff 검사도 통과했다. 전체 문항 결과는 저장 응답의 재채점 결과이며, native GPU에서 새로 응답을 생성한 범위는 위 3문항이다. 공개 ZIP의 체크섬과 내부 결과 자료도 대조했다. 실행 로그·설정·결과와 해시는 [검증 자료 안내](evidence/analysis-details.md#model-response-parity)에서 확인할 수 있다.
 
 ### **9.4. 구현·후속 검증으로의 인계**
 
-구현 구조·입출력·테스트·생성 설정·미결정 사항은 [design.md](design.md)에 정리했다. 팀이 모델·환경·통합 검증 문항(현재 23문항 제안)을 확정한 뒤 통합 점검과 전체 평가를 진행한다. 업스트림 제안과 데이터셋 제작자에게 보내는 오류 제보는 별도 담당 범위이며, 이번 문서에는 해당 초안을 포함하지 않는다.
+구현 구조와 검증 계약은 [design.md](design.md)에 정리했다. 업스트림 [PR #1503](https://github.com/huggingface/lighteval/pull/1503)에 태스크 구현과 검증 자료를 정리했다. [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8)에서는 코드 스타일을 수정하고 재현 안내와 MPS 검증 범위를 명확히 했다. 현재 구현은 독립 Ko 패키지인 A안에 따라 native metric/Pipeline을 지원하며, 공통 엔진 전환이나 Inspect 지원은 메인테이너와 별도 협의한다. 공통 코드를 변경할 경우 영향받는 기존 태스크의 회귀 검증을 수행한다. 데이터셋 Known Issues 수정은 원본 호환성 검증과 분리한다.
 
 ---
 

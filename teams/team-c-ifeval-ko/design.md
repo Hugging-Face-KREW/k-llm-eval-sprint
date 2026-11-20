@@ -12,7 +12,7 @@
 | --- | --- |
 | task 이름 | `ifeval_ko` |
 | 구현·팀 리뷰 대상 | `Hugging-Face-KREW/lighteval` |
-| 향후 기여 대상 | `huggingface/lighteval`; 제출 시 최신 API와 재대조 |
+| 업스트림 제출 | 태스크 구현과 검증 자료: [PR #1503](https://github.com/huggingface/lighteval/pull/1503) |
 | 등록 진입점 | `src/lighteval/tasks/tasks/ifeval_ko/main.py` |
 | 초기 지원 | native metric/Pipeline의 네 지표 |
 | 별도 범위 | Inspect scorer/backend 지원, 데이터 오류 수정, 새 채점 정책 |
@@ -97,11 +97,11 @@ registry 교체만으로는 충분하지 않다. Ko의 응답 정규화·고정 
 | 전체 문항 | 342개, 고유 key 342개 | 전체 prompt-level 분모 |
 | 전체 instruction | 481개 출현, 고유 ID 21종 | 전체 instruction-level 분모 |
 | 문항 식별 | 원본 `key` | 행 인덱스와 구별 |
-| 통합 표본 | 지시 유형과 검사 경로를 포괄하도록 선정한 N문항. 현재 제안은 23문항·40개 지시 | 문항 수는 목표가 아니라 6.3절 선정 규칙의 결과이며, 규칙을 만족하지 못하면 추가 |
+| 통합 표본 | 선정 23문항·40개 지시 | 6.3절의 유형·입력 경로 포함 규칙에 따라 선정하고 응답 생성·채점 비교에 사용 |
 
 로딩 시 key 중복·누락, instruction 목록과 kwargs 길이, 각 ID의 registry 존재 여부를 확인한다. 같은 ID가 한 문항에서 반복되어도 순서와 개수를 유지한다. 반복 ID를 set이나 ID별 dict로 합치지 않는다.
 
-현재 제안하는 23문항 선정안은 고정 데이터 재집계 결과 21종 ID와 25개 `(ID, 입력 경로)`를 모두 포함하며 지시는 40개다. 선정 규칙·목록·근거와 더 깊은 branch 검증은 6절에서 구분한다.
+선정 23문항은 고정 데이터 재집계 결과 21종 ID와 25개 `(ID, 입력 경로)`를 모두 포함하며 지시는 40개다. 선정 규칙·목록·근거와 더 깊은 branch 검증은 6절에서 구분한다.
 
 <a id="input-contract"></a>
 
@@ -166,7 +166,7 @@ instruction-level은 문항별 정확도의 단순 평균이 아니다. 입력 `
 
 ### 4.2. 생성 설정과 task config
 
-| 항목 | 제안 기준                                                                     |
+| 항목 | 생성 설정                                                                     |
 | --- |---------------------------------------------------------------------------|
 | 출력 | instruction 조건을 평가하는 자유 생성 응답                                             |
 | 생성 수 | 문항당 1개                                                                    |
@@ -175,7 +175,7 @@ instruction-level은 문항별 정확도의 단순 평균이 아니다. 입력 `
 | stop sequence | `<end_of_turn>`, `<\|im_end\|>` |
 | 모델별 EOS | 실제 EOS token/stop 처리 값을 별도 기록                                             |
 | chat template | 한 번만 적용하고 최종 렌더링 입력 보관                                                    |
-| 모델 후보 | PR의 `Qwen/Qwen2.5-1.5B-Instruct`를 우선 검토, 최종 채택·revision·dtype·backend 미확정 |
+| 검증 모델 | `Qwen/Qwen2.5-1.5B-Instruct`, 모델·tokenizer revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`, MPS·float16 |
 
 고정 LightEval API에 맞춘 등록 예시는 다음과 같다. 생성 backend의 sampling 설정은 별도로 고정한다.
 
@@ -286,10 +286,10 @@ French는 현재 영어 `ifeval_metrics`를 재사용한다. B안을 선택하�
 | 단계 | 작업 | 완료 확인 |
 | --- | --- | --- |
 | 1. reference·환경 고정 | 데이터·Ko 코드·harness·Lighteval·의존성 revision 기록 | 입력·source·환경 manifest로 재구성 가능 |
-| 2. 문항 선정·로딩 확인 | 6.3절의 ID·입력 경로·복수/반복 지시 기준 확인 후 key·prompt·kwargs 대응 점검 | 기준 충족 집계와 팀이 확정한 선정안 확보, 누락·중복·연결 오류 없음 |
+| 2. 문항 선정·로딩 확인 | 6.3절의 ID·입력 경로·복수/반복 지시 기준 확인 후 key·prompt·kwargs 대응 점검 | 선정 기준 충족과 key·prompt·kwargs 대응 확인, 누락·중복·연결 오류 없음 |
 | 3. 등록 task·유형별 고정 응답 회귀 | 6.2절의 유형별 통과·실패·경계 입력으로 원본 Ko와 새 task 비교 | 모델 없이 모든 대상 ID·입력 경로의 판정과 집계 일치 |
 | 4. 기존 task 회귀 | 공통 코드 변경 전후 영어 및 영향을 받는 French 경로 비교 | 의도하지 않은 기존 판정 변화 없음. 공통 코드 수정 직후 실행 |
-| 5. 선정안 통합 평가 | 팀이 확정한 모델·선정안으로 생성·저장·양쪽 재채점 | 실제 assistant 응답 추출·종료·잘림·메모리·실행 오류와 개별 판정 일치 확인 |
+| 5. 선정안 통합 평가 | 팀이 확정한 모델·선정안으로 생성·저장·양쪽 재채점 | assistant 응답 추출, 종료·길이 제한, 메모리 사용·실행 오류를 확인하고 개별 판정 대조 |
 | 6. 전체 split 평가 | 통합 검증 후 같은 조건으로 전체 응답 생성·저장·재채점 | 모든 key 처리, 네 지표와 불일치 목록 확보 |
 
 현재 완료 여부는 [분석보고서의 검증 상태](analysis.md#verification-status)를 기준으로 한다. 기존 영어·Ko 차이 분석을 새 Ko task의 동등성 결과로 대체하지 않는다.
@@ -298,7 +298,7 @@ French는 현재 영어 `ifeval_metrics`를 재사용한다. B안을 선택하�
 
 ### 6.2. 등록 task·고정 응답 검증
 
-다음 검사는 모델 없이 저장 응답으로 수행한다. 원본 Ko와 새 task에 같은 scorer 입력을 전달하고 지시 index별 strict/loose·문항 판정·집계를 비교한다. T8의 기존 경로 회귀는 공통 코드 수정 직후 실행하며 모델 통합 평가보다 먼저 통과해야 한다.
+다음 검사는 모델 없이 저장 응답으로 수행한다. 원본 Ko와 새 task에 같은 scorer 입력을 전달하고 지시 index별 strict/loose·문항 판정·집계를 비교한다. 공통 코드를 수정하는 경우 T8을 해당 변경 직후 실행하고 통합 평가 전에 통과해야 한다. 현재 A안의 Ko scorer는 기존 영어/French scorer와 분리되어 있다.
 
 | 검사 | 입력 | 확인할 내용 | 합격 조건 |
 | --- | --- | --- | --- |
@@ -371,9 +371,11 @@ strict 실패가 loose에서 통과로 바뀔 수 있으므로 두 기대값을 
 | 출처·해시·환경·검증 범위 | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
 | 선택적 로컬 ZIP | `package_results.py`로 `evidence/checker-audit/attachments/ifeval-ko-regression.zip` 생성. 이슈 초안은 제외 |
 
-위 원본 실험은 영어·Ko 평가기의 판정 차이와 실행 동작을 확인한다. 새 task에는 같은 입력·응답을 전달해 instruction별·문항별 strict·loose Boolean 일치율 100%, 네 지표의 분자·분모 일치와 절대 오차 ≤1e-12를 요구한다. 누락·미처리 예외·미해결 불일치는 없어야 한다. Ko 예상 예외 8건과 영어 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다. 후속 등록 task 검증은 이 기준을 통과했다([분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)). **기존 Lighteval 영어/French 회귀·optional dependency 로딩과 모델 23문항·전체 split 평가는 미수행**이다.
+위 원본 실험은 영어·Ko 평가기의 판정 차이와 실행 동작을 확인한다. 새 태스크에 같은 입력·응답을 전달했을 때 지시별·문항별 strict·loose Boolean 판정이 원본 Ko와 100% 일치해야 한다. 네 지표의 분자·분모가 같고, 지표 값의 절대 오차가 1e-12 이하여야 한다. 누락·미처리 예외·미해결 불일치도 없어야 한다. Ko의 예상 예외 8건과 영어의 예상 예외 2건은 각 평가기의 정상 채점 성공으로 세지 않는다. 후속 등록 태스크 검증은 이 기준을 통과했다([분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)).
 
-실행 순서는 원본·입력 무결성 확인 → 기준 입력 재현 → Ko 기대값 확인 → 새 task의 동일 응답 비교 → 기존 영어/French·객체 격리·의존성 회귀 → 23문항 모델 통합 → 전체 342문항·481개 instruction 평가다. 현재는 새 task의 동일 고정 응답 비교까지 완료했으며, 실제 출력과 결과 파일은 팀 코드 PR #2에 첨부되어 있다.
+선정 23문항과 전체 342문항의 저장 응답 비교는 [9.3.6절](analysis.md#saved-model-parity), native Lighteval의 MPS 3문항·5개 지시 실행과 원본 Ko 교차 검증은 [9.3.7절](analysis.md#native-mps-validation)에 기록했다. 전체 342문항 결과는 저장 응답의 채점·집계 결과이며, native GPU 신규 생성 범위와 구분한다.
+
+원본·입력 무결성 확인, 고정 응답 비교, 선정·전체 저장 응답 비교를 완료했다. 이후 native Lighteval의 소규모 MPS 실행도 확인했다. 고정 응답 자료는 팀 코드 [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2), 모델 생성 자료는 [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5)·[PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7), 재현 안내와 후속 검증 자료는 [검증 자료 안내](evidence/analysis-details.md#model-response-parity)에서 확인할 수 있다. 공통 엔진으로 변경할 경우에는 기존 영어/French 경로와 객체 격리·의존성 로딩을 변경 범위에 맞게 다시 확인한다.
 
 ### 6.3. 문항 선정 규칙과 검증 범위
 
@@ -386,9 +388,9 @@ strict 실패가 loose에서 통과로 바뀔 수 있으므로 두 기대값을 
 
 유형·입력 경로 포함은 문항 선정의 조건이며, checker의 판정 정확성은 6.2절의 모델 없는 고정 응답 회귀로 확인한다. 이 표본의 점수를 전체 데이터셋의 모델 성능 추정치로 사용하지 않는다.
 
-#### 6.3.1. 검증 문항과 지시 유형별 대응
+#### 6.3.1. 선정 문항과 instruction 유형 대응
 
-검증 문항 선정안은 **23문항·40개 지시**이며 팀 검토 전 제안이다. 문항 목록은 다음과 같다.
+다음 **23문항·40개 지시**를 선정해 [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5)에서 응답 생성에 사용하고 [PR #6](https://github.com/Hugging-Face-KREW/lighteval/pull/6)에서 세 경로의 채점을 비교했다. 처음 제안한 선정 목록과 원시 집계 자료는 그대로 보존한다.
 
 ```json
 [3743, 136, 3518, 1233, 3445, 3442, 1262, 1082, 1127, 3710,
@@ -478,7 +480,7 @@ Ko 수정 클래스 표시는 [기존에 열거된 수정 클래스와 등록 �
 | 지시 판정 | 선정한 모든 지시 각각의 strict·loose Boolean 일치 |
 | 문항 판정 | 선정한 모든 문항 각각의 strict·loose 전체 통과 여부 일치 |
 | 집계 | 네 지표의 분자·분모 일치, 절대 오차 `1e-12` 이하 |
-| 실행 상태 | 모든 문항 생성·채점 완료, 누락·미처리 오류 없음. 생성/채점 실패를 빈 응답이나 축소 분모로 숨기지 않음 |
+| 실행 상태 | 모든 문항의 응답 생성·채점 완료, 누락·미처리 오류 없음. 생성/채점 실패를 빈 응답이나 축소 분모로 숨기지 않음 |
 | 기존 경로 | 영어/French 판정·public export·metric 객체 격리 보존. 합성 adapter만 확인했다면 그 범위를 표시 |
 
 
@@ -503,13 +505,13 @@ Ko 수정 클래스 표시는 [기존에 열거된 수정 클래스와 등록 �
 | full 부수 조건 | JSON·sections·bullet·highlight·title 5종 | index를 지정한 isolated/full 검증으로 전용 대상에 포함 |
 | 미포함 유형 | 두 응답·자리 표시자·추신·고정 선택 문구·언어·단락 수·쉼표 금지·큰따옴표 8종 | 모두 전용 통과·실패 응답으로 보완 |
 
-156건의 원본 실험에서는 영어·Ko 평가기를 full-package 방식으로 실행해 입력 재현 여부와 동일 Ko 입력의 판정을 확인했다. 재현 근거와 판정은 원시 결과·비교표에 기록했다. 이 원본 실험에는 새 task 실행이나 모델 생성이 포함되지 않는다. 후속 새 task 검증은 분석보고서 9.3.5절에 별도로 기록하며, 회귀 156건과 모델 선정안 23문항은 서로 다른 단위다.
+156건의 원본 실험에서는 영어·Ko 평가기를 full-package 방식으로 실행해 입력 재현 여부와 동일 Ko 입력의 판정을 확인했다. 재현 근거와 판정은 원시 결과·비교표에 기록했다. 이 원본 실험에는 새 task 실행이나 모델 생성이 포함되지 않는다. 이후 새 태스크의 검증 결과는 분석보고서 9.3.5절에 별도로 기록했다. 고정 응답 회귀 156건과 모델 응답 생성에 사용한 23문항은 집계 단위가 다르다.
 
 ### 6.6. 분석보고서 반영 항목과 현재 상태
 
 통합 평가의 실행 조건·선정안의 key 목록·결과·관련 실행 자료를 분석보고서에 기록한다. 문항 선정 근거로 지시 유형별 대응표와 검사 조건의 포함 범위를 제시한다.
 
-선정한 23문항·40개 지시의 입력 범위 집계는 6.5절의 스크립트로 실행하여 첨부하였다. 원본 평가기로 수행한 156건의 실험과 보조 입력 18건의 결과는 6.2.1~6.2.4절에 정리했다. 이후 새 task의 모델 없는 검증은 [분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증)에 코드 revision·실행 자료·개별 판정과 네 지표를 기록했다. 모델 통합 실행은 미수행이다.
+6.5절의 스크립트로 선정 23문항·40개 지시의 입력 범위를 집계해 첨부했다. 원본 평가기로 수행한 156건의 실험과 보조 입력 18건의 결과는 6.2.1~6.2.4절에 정리했다. 새 태스크의 고정 응답 검증은 [분석보고서 9.3.5절](analysis.md#935-등록-태스크의-모델-없는-통합-검증), 선정·전체 저장 응답 채점은 [9.3.6절](analysis.md#saved-model-parity), native MPS 3문항 실행은 [9.3.7절](analysis.md#native-mps-validation)에 각각 기록했다. 업스트림 제출과 후속 문서 보완의 작업 내역은 [팀 README](README.md)에서 확인할 수 있다.
 
 ## 7. 작업 분담과 일정
 
@@ -518,17 +520,20 @@ Ko 수정 클래스 표시는 [기존에 열거된 수정 클래스와 등록 �
 | 주차 | 담당 | 작업 내용 | 관련 기록 |
 | --- | --- | --- | --- |
 | 1주차 | 팀 전체 | 각자 첫 PR을 올렸다. 서로 PR 리뷰에 참여하고 팀 PR을 생성했다. | [예준 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/joony0905.md) · [준섭 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/SubJeeLee.md) · [형준 기여 기록](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/blob/main/people/kiimyjun.md) |
-| 2주차 | [송예준](https://github.com/joony0905), [이준섭](https://github.com/SubJeeLee), [김형준](https://github.com/kiimyjun) | 예준은 IFEval-Ko 벤치마크 보고서를 작성하고 리뷰를 요청했다. 준섭과 형준은 보고서를 리뷰했다. 리뷰한 내용들을 각자 보완했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
+| 2주차 | [송예준](https://github.com/joony0905), [이준섭](https://github.com/SubJeeLee), [김형준](https://github.com/kiimyjun) | 예준은 IFEval-Ko 벤치마크 보고서를 작성하고 리뷰를 요청했다. 준섭과 형준은 보고서를 검토하고 각자 확인한 내용을 보완했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
 | 3주차 | [송예준](https://github.com/joony0905) | 리뷰 피드백을 반영해 벤치마크 보고서를 보완하고 `design.md` 초안을 작성했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
 | 3주차 | [이준섭](https://github.com/SubJeeLee) | Lighteval에 게시할 업스트림 이슈 초안 `issue-draft.md`를 작성했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
 | 3주차 | [김형준](https://github.com/kiimyjun) | 비교 모델 후보를 정리하고 우선 실험할 모델을 확정했다. 지시 유형별 검증 문항의 선정 근거를 정리했다. | [PR #18](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/18) |
 | 4주차 | [송예준](https://github.com/joony0905) | 원본 영어·Ko 채점기의 판정 차이를 정리하고, 고정 응답 회귀 케이스를 86건에서 156건으로 확장했다. 영문 문서를 추가했다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
 | 4주차 | [이준섭](https://github.com/SubJeeLee) | Ko 전용 패키지 구조를 제안하고 Inspect 지원 범위에 대한 의견을 구하는 업스트림 이슈를 게시했다. | [업스트림 이슈 #1463](https://github.com/huggingface/lighteval/issues/1463) |
 | 4주차 | [김형준](https://github.com/kiimyjun) | `analysis.md`와 `design.md`의 통합 검증 표본을 23문항·40개 지시로 맞췄다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| 4주차 | [송예준](https://github.com/joony0905) | `scoring.py`에 NFC 정규화와 strict·loose 채점 로직을 구현한다. 고정 응답 **156건**의 지시별·문항별 판정이 원본 Ko와 100% 일치하는지 검증한다. 팀 포크 `Hugging-Face-KREW/lighteval`에 `team-c/ifeval-ko`를 대상으로 PR을 연다.| [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| 4주차 | [이준섭](https://github.com/SubJeeLee) | 원본 Ko의 `instructions.py`, `instructions_registry.py`, `instructions_util.py`를 이식한다. 원본 출처와 라이선스 헤더를 보존하고 패키지 구조에 맞게 import 경로를 조정한다. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| 4주차 | [김형준](https://github.com/kiimyjun) | `main.py`에 `Doc` 변환, 데이터셋과 0-shot 설정, 네 평가 지표 연결을 구현하고 `TASKS_TABLE`에 `ifeval_ko`를 등록한다. 모델 없이 `lighteval tasks inspect`를 실행해 원본 프롬프트와 대조하고, 출력과 대조 결과를 코드 PR에 첨부한다. |  |
-| 4주차 | 팀 전체 | 팀 포크 `Hugging-Face-KREW/lighteval`의 `src/lighteval/tasks/tasks/ifeval_ko/`에 각자 구현한 코드를 통합하고, `team-c/ifeval-ko`를 대상으로 코드 PR을 올린다. | [포크 팀 브랜치](https://github.com/Hugging-Face-KREW/lighteval/tree/team-c/ifeval-ko) |
-| 5주차 | [김형준](https://github.com/kiimyjun) | 세션에서 고른 비교 모델의 revision과 생성 설정을 기록한다. 23문항의 모델 응답을 생성·저장하고, 통합 검증을 통과하면 같은 설정으로 전체 split 342문항을 실행한다. | [설계 문서 6절](#validation-plan) |
-| 5주차 | [송예준](https://github.com/joony0905) | 저장한 동일 응답을 원본 Ko와 새 태스크에 넣어 지시별·문항별 strict·loose 판정과 네 집계 지표를 대조한다. 23문항과 전체 342문항의 비교 결과를 구분해 기록하고, 불일치가 있으면 재현 사례와 원인을 정리한다. | — |
-| 5주차 | [이준섭](https://github.com/SubJeeLee) | 구현 범위, 원본 코드 출처, 검증 결과를 PR 본문에 정리한다. 팀 검토를 마친 코드를 `huggingface/lighteval`에 제출하고 관련 이슈를 연결한다. | [업스트림 이슈 #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| 4주차 | [송예준](https://github.com/joony0905) | `scoring.py`에 원본 Ko의 NFC·strict/loose 채점을 구현하고 고정 응답 156건의 판정과 집계를 대조했다. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| 4주차 | [이준섭](https://github.com/SubJeeLee) | 원본 Ko의 checker·registry·utility를 이식하고 출처·라이선스 헤더를 보존하며 import 경로를 조정했다. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| 4주차 | [김형준](https://github.com/kiimyjun) | `main.py`에 Doc 변환·데이터셋·0-shot·네 지표를 연결하고 `ifeval_ko`를 등록했다. 모델 없이 `tasks inspect` 출력과 원본 프롬프트를 대조했다. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| 4주차 | 팀 전체 | 팀 포크의 Ko 패키지에 구현을 통합하고 `team-c/ifeval-ko` 대상 코드 PR에서 검토했다. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| 5주차 | [김형준](https://github.com/kiimyjun) | 모델·tokenizer revision과 MPS·float16 생성 설정을 고정하고, 선정 23문항과 전체 342문항의 응답을 생성·저장했다. 응답 ZIP과 생성 manifest를 공개했다. | [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) · [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) |
+| 5주차 | [송예준](https://github.com/joony0905) | 동일한 저장 응답을 원본 Ko·이식 scorer·등록 태스크의 세 경로로 채점했다. 선정 23문항·40개 지시와 전체 342문항·481개 지시의 strict·loose 판정 및 네 지표가 모두 일치함을 확인하고, 입력 무결성·반복 지시·분모·예외 검사를 보완했다. | [독립 검증 결과](analysis.md#saved-model-parity) · [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7#issuecomment-6877811099) |
+| 5주차 | [이준섭](https://github.com/SubJeeLee) | 구현 범위, 원본 코드 출처와 검증 자료를 정리하고 업스트림 제출을 준비했다. | [업스트림 이슈 #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| 6주차 | [송예준](https://github.com/joony0905) | 업스트림 PR을 검토하고 Ruff 오류를 수정했다. 과거 응답 생성 환경과 현재 채점 환경의 NLTK 버전을 구분했다. 문항 선정 근거·재현 절차·문서 링크를 점검하고 공개 ZIP의 무결성을 확인했다. CPU 재채점 결과와 검토한 MPS 검증 자료를 공통 문서에 반영했다. | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8) · [검증 자료 안내](evidence/analysis-details.md#model-response-parity) |
+| 6주차 | [이준섭](https://github.com/SubJeeLee) | 업스트림 PR #1503을 게시하고 이슈 #1463을 연결했다. 제출 범위와 공개 응답·검증 자료의 무결성을 확인했다. | [PR #1503](https://github.com/huggingface/lighteval/pull/1503) |
+| 6주차 | [김형준](https://github.com/kiimyjun) | Apple M5 GPU의 MPS·float16 환경에서 native Lighteval로 3문항·5개 지시에 대한 응답을 새로 생성하고 채점·집계했다. 동일 응답을 원본 Ko로 채점해 교차 검증했다. NLTK 3.10.4에서 전체 저장 응답을 재채점해 판정과 네 지표가 일치함을 확인하고 실행 자료를 공개했다. | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156) |

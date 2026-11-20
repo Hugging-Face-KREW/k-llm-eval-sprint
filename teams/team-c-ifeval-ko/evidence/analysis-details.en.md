@@ -83,13 +83,13 @@ The native aggregation control `[[True, True, True], [False]]` yielded 0.75 inst
 | NLTK · pyarrow | 3.10.3 · 26.0.0 |
 | Package lock | All 70 pinned packages matched the environment |
 | Responses | Stored responses; reference-environment checks required no model generation/GPU |
-| Model environment | Final model/tokenizer revisions, dtype, chat template and backend unconfirmed |
+| Model environment | Unconfirmed at the time of this reference experiment; subsequent Qwen generation and MPS execution are recorded in the [model-response guide](#model-response-parity) |
 
 Minimal environment reruns processed three cases per English/Ko runner, with exit code 0 and zero errors. The 13 main files for the existing 86 cases had identical before/after hashes. Inequality/Known Issue runs also recorded source preservation, both exit codes and input/result hashes in manifests.
 
 Native Lighteval metrics ran in a Lighteval virtual environment separate from the reference evaluator.
 
-Stored responses were placed in `ModelResponse` without calling `post_process`, confirming raw response=final_text. Actual model integration must separately freeze post-processing and final-response extraction. NLTK reused its cache. These stored-response checks do not establish model generation, GPU availability or full model evaluation.
+Stored responses were placed in `ModelResponse` without calling `post_process`, confirming raw response=final_text. Actual model integration must separately freeze post-processing and final-response extraction. NLTK reused its cache. These reference checks did not exercise model generation or GPU execution. Subsequent full saved-response scoring and native MPS execution are recorded separately in [analysis sections 9.3.6–9.3.7](../analysis.en.md#saved-model-parity). Historical NLTK 3.10.3 records are preserved and distinguished from the current NLTK 3.10.4 replay environment.
 
 <a id="public-sources"></a>
 
@@ -105,3 +105,59 @@ Stored responses were placed in `ModelResponse` without calling `post_process`, 
 | English counters/checkers | [Utilities](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions_util.py), [instructions](https://github.com/EleutherAI/lm-evaluation-harness/blob/d6de81643928d653435c431bae19945d41d32520/lm_eval/tasks/ifeval/instructions.py) |
 | Lighteval input mapping, metric and Inspect scorer | [IFEval main](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/tasks/ifeval/main.py) |
 | French metric reuse | [French task](https://github.com/Hugging-Face-KREW/lighteval/blob/c2af9e5f2fde494539f84c8ea9d09f18ac9e9c14/src/lighteval/tasks/multilingual/tasks/french.py) |
+
+<a id="model-response-parity"></a>
+
+## 7. Saved-response parity and native MPS validation
+
+This guide records the model-response validation that followed the [156-case fixed-response experiment](checker-audit/README.en.md). [Analysis section 9.3.6](../analysis.en.md#saved-model-parity) separates judgment agreement from model scores; [section 9.3.7](../analysis.en.md#native-mps-validation) records the native MPS run.
+
+### Validation scope
+
+| Run | Responses | Execution and result |
+| --- | --- | --- |
+| Selected-response replay | 23 prompts / 40 instructions from [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) | CPU scoring through three paths; all strict/loose judgments and four metrics match |
+| Full-split replay | 342 prompts / 481 instructions from [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) | CPU scoring through three paths; all strict/loose judgments and four metrics match |
+| Native MPS run | 3 prompts / 5 instructions, newly generated | Native Lighteval generation, scoring, aggregation and result/detail export; judgments and metrics match original Ko and the direct ported scorer |
+
+The three replay paths are the pinned original Ko evaluator, a direct call to the ported scorer, and the registered task through Registry → Doc → `compute_sample` → native corpus aggregation. Actual outputs from the original Ko evaluator serve as the comparison reference. Saved text is passed verbatim; Python and langdetect seeds are reset before each scoring call. Keys, instruction order, kwargs, input checksums and response hashes are checked, with repeated instructions identified by `(key, instruction_index, instruction_id)`.
+
+Agreement must include every prompt/instruction strict/loose judgment, all four numerators and denominators, and metric values within an absolute error of `1e-12`. Missing inputs, scoring errors and unresolved mismatches fail validation. Failed inputs are not dropped to reduce denominators. Reports retain judgments, metrics, mismatches, reproduction inputs, code revisions, package versions and execution commands.
+
+The full-split responses were originally generated with the separate Transformers script on MPS/float16. Replaying those responses requires no GPU or model weights. The native GPU run covers three prompts; it does not represent native generation of all 342 prompts.
+
+### Public artifacts and checksums
+
+Download the ZIP from the linked PR attachment, together with its separate checksum file where provided. Check the ZIP against the hash below before extraction, then verify the included payload checksums. Keep the published inputs and results unchanged, and choose a new output path for each replay.
+
+| Artifact | Public source | ZIP SHA-256 |
+| --- | --- | --- |
+| Selected responses | [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5), [ZIP](https://github.com/user-attachments/files/34706481/qwen-23-001.zip), [checksum](https://github.com/user-attachments/files/34706603/qwen-23-001.zip.sha256.txt) | `a28e35bde3327a05efa9c255c228fa5ea2e711328e6e997c654d5f3b4f9e0e05` |
+| Full-split responses | [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7), [ZIP](https://github.com/user-attachments/files/34839513/qwen-342-001-public.zip), [checksum](https://github.com/user-attachments/files/34839521/qwen-342-001-public.zip.sha256.txt) | `8d398dfbe60656daa4c9cd20bda61a91120fcea86d7e3b9fcebb7c0c91e4ddbb` |
+| Full-split parity results | [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7), [ZIP](https://github.com/user-attachments/files/34839530/qwen-342-parity-001-public.zip), [checksum](https://github.com/user-attachments/files/34839550/qwen-342-parity-001-public.zip.sha256.txt) | `81846baa55d5e64a5090ad80e26efd555727e1e15deb9e510a58d4a01405a368` |
+| MPS validation and current full-split replay | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156), [ZIP](https://github.com/user-attachments/files/35070624/pr8-validation.zip) | `55c99f22f109fc2e959683208e83d96a6c5f43c9c02f4a273f12c7d71bfc1f44` |
+
+The MPS bundle contains the native configuration, execution log, result JSON, detail Parquet, original-Ko cross-check and full-split replay report. The independent CPU verification in [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7#issuecomment-6877811099) confirms inclusion of all 12 length-limited responses and reproduces tokenization and decoding for all 342 records with the pinned tokenizer. Key `1127` is retained in the selected run as well.
+
+### Pinned code and environments
+
+| Component | Revision or environment |
+| --- | --- |
+| Original Ko evaluator and dataset | `54199e3801116897697babf341865741dcd06fc8` |
+| Historical independent CPU replay | Lighteval `4cff81a2794cc7b0b7fb6bdd52f301fe887acf44`; original environment metadata preserved |
+| Upstream submission | [PR #1503](https://github.com/huggingface/lighteval/pull/1503), `f5feb8fe9d30000986cd9667e872ff7602022c9a` |
+| Native MPS review | Fork `321d68bf559cc6222b42b699e3764deee3f31f0f`; Apple M5 GPU, MPS, float16, Python 3.11.18, PyTorch 2.15.0, Transformers 5.22.2, NLTK 3.10.4 |
+| Reproduction-guide updates | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8), `2d4f8c358cfae9c9ba81b4979a1a8df900e82ade` |
+| Model and tokenizer | `Qwen/Qwen2.5-1.5B-Instruct@989aa7980e4cf806f80c7fef2b1adb7bc71aa306` |
+
+Response generation used zero-shot prompting, the official chat template applied once, greedy decoding, batch size 1 and up to 1,280 new tokens. The saved-response generation script used seed 0; native Pipeline seeds and the full runtime configuration are recorded in the MPS bundle. The native run covers keys `2209`, `2304` and `1418`, with strict/loose prompt accuracy `1/3` and instruction accuracy `2/5`.
+
+The historical audit and response-generation environments used NLTK 3.10.3; current replay and native MPS runs used NLTK 3.10.4. Use the historical locks and metadata to reproduce the old run, or follow the current guide to rescore in the current environment. Record these as separate runs because their dependency versions differ.
+
+### Reproduction instructions
+
+Use the pinned Lighteval [scoring guide](https://github.com/Hugging-Face-KREW/lighteval/blob/2d4f8c358cfae9c9ba81b4979a1a8df900e82ade/tests/ifeval_ko/README.md) for dependency installation, NLTK data preparation, source restoration, and fixed/selected/full replay commands. Use the [generation guide](https://github.com/Hugging-Face-KREW/lighteval/blob/2d4f8c358cfae9c9ba81b4979a1a8df900e82ade/scripts/ifeval_ko/README.md) for the generation manifest, selection rationale and saved-response artifacts. These guides include the published ZIP downloads and distinguish historical generation from current scoring dependencies.
+
+A fresh environment needs the documented NLTK tokenizer resources installed before scoring. Run the selected and full replay with the corresponding published inputs and a fresh report path, then compare all judgments and the numerators and denominators of all four metrics with [analysis section 9.3.6](../analysis.en.md#saved-model-parity). To inspect or repeat the native MPS run, use the configuration and command attached to [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156).
+
+The upstream proposal is [PR #1503](https://github.com/huggingface/lighteval/pull/1503), linked to [issue #1463](https://github.com/huggingface/lighteval/issues/1463). [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8) contains style fixes, reproduction-guide updates and native MPS validation evidence. Dataset Known Issues and any correction overlays remain separate from reference-compatible scoring.

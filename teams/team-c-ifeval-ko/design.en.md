@@ -12,7 +12,7 @@
 | --- | --- |
 | Task name | `ifeval_ko` |
 | Implementation/team review repository | `Hugging-Face-KREW/lighteval` |
-| Future contribution target | `huggingface/lighteval`; recheck the current API before submission |
+| Upstream submission | Task implementation and validation evidence: [PR #1503](https://github.com/huggingface/lighteval/pull/1503) |
 | Registration entry point | `src/lighteval/tasks/tasks/ifeval_ko/main.py` |
 | Initial support | Four metrics through the native metric/Pipeline path |
 | Separate scope | Inspect scorer/backend support, data corrections and new scoring policies |
@@ -97,11 +97,11 @@ Sources: [Lighteval Registry](https://github.com/Hugging-Face-KREW/lighteval/blo
 | Full prompts | 342 prompts, 342 unique keys | Full prompt-level denominator |
 | Full instructions | 481 occurrences, 21 unique IDs | Full instruction-level denominator |
 | Prompt identifier | Original `key` | Distinct from row index |
-| Integration selection | N prompts covering types and paths; current proposal: 23 prompts/40 instructions | Count follows section 6.3 rules; add prompts if needed |
+| Integration selection | 23 selected prompts / 40 instructions | Selected using section 6.3 coverage rules and used for generation and scoring comparison |
 
 On loading, check missing/duplicate keys, instruction/kwargs list lengths and registry membership. Preserve order and multiplicity when IDs repeat. Do not collapse repeated IDs into a set or ID-keyed dictionary.
 
-The pinned-data count confirms that the 23-prompt proposal covers all 21 IDs and 25 `(ID, input path)` pairs with 40 occurrences. Section 6 distinguishes selection rules, evidence and deeper branch checks.
+The pinned-data count confirms that the 23 selected prompts cover all 21 IDs and 25 `(ID, input path)` pairs with 40 occurrences. Section 6 distinguishes selection rules, evidence and deeper branch checks.
 
 <a id="input-contract"></a>
 
@@ -166,7 +166,7 @@ Instruction accuracy is not the mean of per-prompt accuracies. `[[True, True, Tr
 
 ### 4.2. Generation settings and task config
 
-| Setting | Proposed baseline |
+| Setting | Generation configuration |
 | --- | --- |
 | Output | Free-form generated response checked against instructions |
 | Responses | One per prompt |
@@ -175,7 +175,7 @@ Instruction accuracy is not the mean of per-prompt accuracies. `[[True, True, Tr
 | Stop sequences | `<end_of_turn>`, `<\|im_end\|>` |
 | Model-specific EOS | Record actual EOS token/stop handling separately |
 | Chat template | Apply once and retain final rendered input |
-| Model candidate | Prefer reviewing PR candidate `Qwen/Qwen2.5-1.5B-Instruct`; adoption, revisions, dtype and backend unconfirmed |
+| Validation model | `Qwen/Qwen2.5-1.5B-Instruct`, model/tokenizer revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`, MPS/float16 |
 
 Registration example for the pinned Lighteval API follows. Freeze backend sampling settings separately.
 
@@ -298,7 +298,7 @@ See [analysis verification status](analysis.en.md#verification-status). Existing
 
 ### 6.2. Registered-task and stored-response validation
 
-These checks use stored responses without a model. Send identical scorer inputs to original Ko/new task and compare index-specific strict/loose flags, prompt judgments and aggregates. T8 runs immediately after shared-code changes and must pass before model integration.
+These checks use stored responses without a model. Send identical scorer inputs to original Ko/new task and compare index-specific strict/loose flags, prompt judgments and aggregates. When shared code changes, run T8 immediately afterward and require it to pass before integration. The current option A keeps the Ko scorer separate from the existing English/French scorer.
 
 | Test | Input | What to inspect | Acceptance |
 | --- | --- | --- | --- |
@@ -332,7 +332,7 @@ The evidence and [reproduction commands](evidence/checker-audit/README.en.md) sh
 | Baseline reproduction | 86 baseline cases checked by both evaluators within the experiment | Exact 86/86 stored-row agreement per side, in `baseline_reproduction` and the comparison table |
 | Source prompt collection | Add last-paragraph key 1954 and Russian-language key 240 to the 23-prompt proposal | 25 collected prompts/42 instructions; with baseline prompts, 32 source prompts/55 instructions |
 
-The 156-case experiment and 18 auxiliary inputs give 174 input records. The model integration proposal remains **23 prompts/40 instructions**.
+The 156-case experiment and 18 auxiliary inputs give 174 input records. Model-response validation used the selected **23 prompts/40 instructions**.
 
 #### 6.2.2. Dedicated targets and boundaries for 21 types/25 paths
 
@@ -371,9 +371,11 @@ All 25 [verification-tool tests](evidence/checker-audit/test_audit.py) pass. The
 | Provenance, hashes, environment, scope | [manifest.json](evidence/checker-audit/manifest.json), [coverage.json](evidence/checker-audit/coverage.json) |
 | Optional local ZIP | Generate `evidence/checker-audit/attachments/ifeval-ko-regression.zip` with `package_results.py`; issue drafts are excluded |
 
-The original experiment verifies English/Ko judgment differences and execution behavior. The new task must receive identical inputs/responses and match every instruction/prompt strict/loose Boolean, all four numerators/denominators and metric values within absolute error ≤1e-12. Require zero omissions, unhandled exceptions and unresolved mismatches. The 8 expected Ko exceptions and 2 expected English exceptions are not successful scoring for their respective evaluators. Subsequent registered-task validation met these criteria; see [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task). **Existing English/French regression, optional-dependency loading, 23-prompt model integration and full-split model evaluation remain pending.**
+The original experiment compares judgments and execution behavior between the English and Ko evaluators. Given identical inputs and responses, the new task must match every strict/loose instruction and prompt judgment, all four metric numerators and denominators, and metric values within an absolute error of 1e-12. There must be no omissions, unhandled exceptions or unresolved mismatches. The 8 expected Ko exceptions and 2 expected English exceptions do not count as successful scoring for their respective evaluators. Subsequent registered-task validation met these criteria; see [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task).
 
-Dependencies are source/input integrity → baseline reproduction → Ko expectation confirmation → identical-response comparison with the new task → English/French, object-isolation and dependency regressions → 23-prompt model integration → all 342 prompts/481 instructions. Work is complete through identical-fixed-response comparison with the new task, with actual outputs and result files attached to team code PR #2.
+Independent comparisons of the selected 23 and full 342 saved responses are recorded in [section 9.3.6](analysis.en.md#saved-model-parity). Native Lighteval execution on MPS for 3 prompts/5 instructions and cross-checks against original Ko are recorded in [section 9.3.7](analysis.en.md#native-mps-validation). Full-split results come from scoring and aggregating saved responses; native GPU generation has a separate, smaller scope.
+
+Source/input integrity checks, fixed-response comparisons and selected/full saved-response comparisons are complete. A subsequent small native Lighteval run on MPS also passed. Team code [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) contains fixed-response evidence, [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) and [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) contain generation records, and the [evidence guide](evidence/analysis-details.en.md#model-response-parity) links reproduction instructions and follow-up validation. A change to a common engine would require checks of affected English/French paths, object isolation and dependency loading.
 
 <a id="selection-rules"></a>
 
@@ -388,9 +390,9 @@ Select prompts using these rules:
 
 Type/path inclusion determines prompt selection; model-free stored-response regression in section 6.2 checks scoring behavior. Do not use selection scores to estimate whole-dataset model performance.
 
-#### 6.3.1. Proposed prompts and instruction-type mapping
+#### 6.3.1. Selected prompts and instruction-type mapping
 
-The proposal contains **23 prompts/40 instructions**, pending team review:
+The following **23 prompts/40 instructions** were used for generation in [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) and three-path scoring comparison in [PR #6](https://github.com/Hugging-Face-KREW/lighteval/pull/6). The original proposal and raw coverage records are preserved:
 
 ```json
 [3743, 136, 3518, 1233, 3445, 3442, 1262, 1082, 1127, 3710,
@@ -510,7 +512,7 @@ Both references ran through full-package imports to verify reproduction and iden
 
 Record integration execution settings, selected keys, results and artifacts in the analysis report. Include instruction-type mapping and input-condition coverage as selection evidence.
 
-The script in section 6.5 has counted and attached coverage for 23 prompts/40 instructions. Sections 6.2.1–6.2.4 record the 156-case reference experiment and 18 auxiliary inputs. Subsequent model-free new-task validation is documented in [analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task), with code revisions, execution evidence, individual judgments and four metrics. Model integration remains pending.
+The script in section 6.5 counted and attached coverage for 23 prompts/40 instructions. Sections 6.2.1–6.2.4 record the 156-case reference experiment and 18 auxiliary inputs. [Analysis section 9.3.5](analysis.en.md#935-model-free-integration-validation-of-the-registered-task) records new-task fixed-response validation, [section 9.3.6](analysis.en.md#saved-model-parity) records selected/full saved-response scoring, and [section 9.3.7](analysis.en.md#native-mps-validation) records the three-prompt native MPS run. The [team README](README.en.md) describes the upstream submission and follow-up documentation work.
 
 ## 7. Work allocation and schedule
 
@@ -526,10 +528,13 @@ Detailed contributions by each member are recorded under [people](https://github
 | Week 4 | [Yejun Song](https://github.com/joony0905) | Documented judgment differences between the original English and Ko evaluators, expanded fixed-response regression cases **from 86 to 156**, and added English documentation. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
 | Week 4 | [Junseop Lee](https://github.com/SubJeeLee) | Opened an upstream issue proposing a dedicated Ko package and requesting feedback on the scope of Inspect support. | [Upstream issue #1463](https://github.com/huggingface/lighteval/issues/1463) |
 | Week 4 | [Hyeongjun Kim](https://github.com/kiimyjun) | Aligned the integration validation sample in `analysis.md` and `design.md` to **23 prompts and 40 instructions**. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| Week 4 | [Yejun Song](https://github.com/joony0905) | Implement NFC normalization and strict/loose scoring in `scoring.py`. Verify 100% agreement with the original Ko evaluator for each instruction and prompt across **156 fixed-response cases**. Open a PR in the team fork `Hugging-Face-KREW/lighteval` targeting `team-c/ifeval-ko`. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| Week 4 | [Junseop Lee](https://github.com/SubJeeLee) | Port the original Ko `instructions.py`, `instructions_registry.py` and `instructions_util.py`. Preserve source attribution and license headers, and adapt import paths to the package structure. | [PR #30](https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/30) |
-| Week 4 | [Hyeongjun Kim](https://github.com/kiimyjun) | Implement `Doc` conversion, dataset and zero-shot settings, and the four evaluation metrics in `main.py`; register `ifeval_ko` in `TASKS_TABLE`. Run `lighteval tasks inspect` without a model and compare the output with the original prompts. Attach the output and comparison results to the code PR. |  |
-| Week 4 | Entire team | Integrate each member's implementation under `src/lighteval/tasks/tasks/ifeval_ko/` in the team fork `Hugging-Face-KREW/lighteval`, and open a code PR targeting `team-c/ifeval-ko`. | [Team branch in the fork](https://github.com/Hugging-Face-KREW/lighteval/tree/team-c/ifeval-ko) |
-| Week 5 | [Hyeongjun Kim](https://github.com/kiimyjun) | Record the revision and generation settings of the comparison model selected during the session. Generate and save model responses for the 23 prompts. After integration validation passes, run all 342 prompts in the full split with the same settings. | [Design section 6](#validation-plan) |
-| Week 5 | [Yejun Song](https://github.com/joony0905) | Pass the same saved responses to the original Ko evaluator and the new task. Compare strict/loose judgments for each instruction and prompt, and all four aggregate metrics. Record comparison results separately for the 23 prompts and the full 342-prompt split. For any mismatches, document a reproducible example and its cause. | — |
-| Week 5 | [Junseop Lee](https://github.com/SubJeeLee) | Summarize the implementation scope, original code provenance and validation results in the PR description. Submit the code to `huggingface/lighteval` after team review and link the relevant issue. | [Upstream issue #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| Week 4 | [Yejun Song](https://github.com/joony0905) | Implemented original Ko NFC and strict/loose scoring in `scoring.py`, and compared judgments and aggregation on 156 fixed responses. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| Week 4 | [Junseop Lee](https://github.com/SubJeeLee) | Ported the original Ko checkers, registry and utilities, preserving attribution and license headers and adapting import paths. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| Week 4 | [Hyeongjun Kim](https://github.com/kiimyjun) | Connected Doc conversion, dataset settings, zero-shot evaluation and four metrics in `main.py`, registered `ifeval_ko`, and compared model-free `tasks inspect` output with source prompts. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| Week 4 | Entire team | Integrated the implementation in the fork's Ko package and reviewed it in a code PR targeting `team-c/ifeval-ko`. | [PR #2](https://github.com/Hugging-Face-KREW/lighteval/pull/2) |
+| Week 5 | [Hyeongjun Kim](https://github.com/kiimyjun) | Pinned the model/tokenizer revision and MPS/float16 generation settings. Generated and saved responses for the selected 23 and all 342 prompts, and published the response ZIPs and generation manifests. | [PR #5](https://github.com/Hugging-Face-KREW/lighteval/pull/5) · [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7) |
+| Week 5 | [Yejun Song](https://github.com/joony0905) | Scored identical saved responses through original Ko, the direct ported scorer and the registered task. Confirmed agreement on every strict/loose judgment and all four metrics for the selected 23 prompts/40 instructions and all 342 prompts/481 instructions. Added checks for input integrity, repeated instructions, denominators and exceptions. | [Independent validation](analysis.en.md#saved-model-parity) · [PR #7](https://github.com/Hugging-Face-KREW/lighteval/pull/7#issuecomment-6877811099) |
+| Week 5 | [Junseop Lee](https://github.com/SubJeeLee) | Organized the implementation scope, source attribution and validation evidence in preparation for upstream submission. | [Upstream issue #1463](https://github.com/huggingface/lighteval/issues/1463) |
+| Week 6 | [Yejun Song](https://github.com/joony0905) | Reviewed the upstream PR and fixed Ruff errors. Clarified NLTK versions for historical response generation and current scoring environments. Checked the selection rationale, reproduction instructions, documentation links and public ZIP integrity, and updated the shared documentation with CPU replay results and reviewed MPS evidence. | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8) · [Evidence guide](evidence/analysis-details.en.md#model-response-parity) |
+| Week 6 | [Junseop Lee](https://github.com/SubJeeLee) | Opened upstream PR #1503 and linked issue #1463. Checked the submission scope and the integrity of public response and validation artifacts. | [PR #1503](https://github.com/huggingface/lighteval/pull/1503) |
+| Week 6 | [Hyeongjun Kim](https://github.com/kiimyjun) | Generated fresh responses for 3 prompts/5 instructions through native Lighteval on an Apple M5 GPU with MPS/float16, scored them and aggregated the metrics. Cross-checked the same responses against original Ko. Also confirmed full saved-response replay agreement with NLTK 3.10.4 and published the execution evidence. | [PR #8](https://github.com/Hugging-Face-KREW/lighteval/pull/8#pullrequestreview-5970474156) |
