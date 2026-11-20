@@ -1,0 +1,4 @@
+# local run output (contains question text / model responses; may contain logs with API keys)
+custom_tasks/
+results-harness-*/
+*.log

@@ -1,0 +1,305 @@
+{
+  "benchmark": "KorMedMCQA",
+  "dataset": {
+    "path": "sean0042/KorMedMCQA",
+    "split": "test",
+    "n": 3009,
+    "revision": "79efd6f91edfc8036330d7a4daa88b9f2deb9a82",
+    "revision_note": "Not passed as an option to lm_eval (latest at run time). The local Hugging Face cache holds only this one snapshot, which equals the revision pinned in teams/team-d-kormedmcqa/design.md."
+  },
+  "run_date": "2026-11-20",
+  "evaluation_tool": {
+    "name": "lm-evaluation-harness",
+    "version": "0.4.13",
+    "task": "copy of the built-in kormedmcqa task, renamed kormedmcqa_stop_{doctor,nurse,pharm,dentist}",
+    "change_vs_original": "answer filter cuts each response at the task's stop strings before the original extraction (API servers did not apply the stop strings)",
+    "created_by": "make_stop_task.py",
+    "task_version": "3.0 (read from results_*.json of the gpt-4o-mini run; same value as the task version in design.md)",
+    "environment_file": "requirements-harness.txt",
+    "os_python": "Windows 11 Home, Python 3.13.12, CPU only"
+  },
+  "settings": {
+    "num_fewshot": 5,
+    "fewshot_source": "fewshot split, first_n (task default)",
+    "temperature": 0.0,
+    "max_gen_toks": 1024,
+    "stop_strings": [
+      "Q:",
+      "</s>",
+      "<|im_end|>",
+      ".",
+      "\\n\\n"
+    ],
+    "metric": "exact_match (accuracy) after answer extraction (task default)",
+    "stderr": "sqrt(p(1-p)/(n-1)) as reported by the harness",
+    "weighted_average": "sum of correct / 3009 (matches how the paper's averages are computed)",
+    "api": "OpenRouter (https://openrouter.ai/api/v1)"
+  },
+  "models": [
+    {
+      "model": "openai/gpt-4o-mini",
+      "harness_model": "local-chat-completions",
+      "apply_chat_template": true,
+      "fewshot_as_multiturn": true,
+      "fewshot_delivery": "5 examples + question sent as 6 consecutive user messages (observed in logged samples)",
+      "provider": "not recorded",
+      "tokenizer": null,
+      "provider_pinned": false,
+      "subjects": {
+        "doctor": {
+          "n": 435,
+          "correct": 293,
+          "accuracy_pct": 67.36,
+          "stderr_pct_harness": 2.25,
+          "paper_accuracy_pct": 63.22,
+          "diff_vs_paper_pp": 4.14,
+          "empty_pred": 24
+        },
+        "nurse": {
+          "n": 878,
+          "correct": 700,
+          "accuracy_pct": 79.73,
+          "stderr_pct_harness": 1.36,
+          "paper_accuracy_pct": 83.14,
+          "diff_vs_paper_pp": -3.41,
+          "empty_pred": 57
+        },
+        "pharm": {
+          "n": 885,
+          "correct": 623,
+          "accuracy_pct": 70.4,
+          "stderr_pct_harness": 1.54,
+          "paper_accuracy_pct": 71.3,
+          "diff_vs_paper_pp": -0.9,
+          "empty_pred": 102
+        },
+        "dentist": {
+          "n": 811,
+          "correct": 514,
+          "accuracy_pct": 63.38,
+          "stderr_pct_harness": 1.69,
+          "paper_accuracy_pct": 59.06,
+          "diff_vs_paper_pp": 4.32,
+          "empty_pred": 24
+        }
+      },
+      "weighted_average": {
+        "n": 3009,
+        "correct": 2130,
+        "accuracy_pct": 70.79,
+        "stderr_pct": 0.83,
+        "paper_accuracy_pct": 70.29,
+        "diff_vs_paper_pp": 0.5,
+        "empty_pred": 207
+      },
+      "total_evaluation_time_seconds": 825.4
+    },
+    {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "harness_model": "local-completions",
+      "apply_chat_template": false,
+      "provider": "DeepInfra (pinned: provider.order=[DeepInfra], allow_fallbacks=false)",
+      "provider_pinned": true,
+      "tokenizer": "unsloth/Llama-3.1-8B-Instruct (copy; official meta-llama repo is gated)",
+      "tokenized_requests": false,
+      "subjects": {
+        "doctor": {
+          "n": 435,
+          "correct": 152,
+          "accuracy_pct": 34.94,
+          "stderr_pct_harness": 2.29,
+          "paper_accuracy_pct": 40.69,
+          "diff_vs_paper_pp": -5.75,
+          "empty_pred": 0
+        },
+        "nurse": {
+          "n": 878,
+          "correct": 456,
+          "accuracy_pct": 51.94,
+          "stderr_pct_harness": 1.69,
+          "paper_accuracy_pct": 59.57,
+          "diff_vs_paper_pp": -7.63,
+          "empty_pred": 0
+        },
+        "pharm": {
+          "n": 885,
+          "correct": 424,
+          "accuracy_pct": 47.91,
+          "stderr_pct_harness": 1.68,
+          "paper_accuracy_pct": 55.25,
+          "diff_vs_paper_pp": -7.34,
+          "empty_pred": 0
+        },
+        "dentist": {
+          "n": 811,
+          "correct": 313,
+          "accuracy_pct": 38.59,
+          "stderr_pct_harness": 1.71,
+          "paper_accuracy_pct": 42.05,
+          "diff_vs_paper_pp": -3.46,
+          "empty_pred": 0
+        }
+      },
+      "weighted_average": {
+        "n": 3009,
+        "correct": 1345,
+        "accuracy_pct": 44.7,
+        "stderr_pct": 0.91,
+        "paper_accuracy_pct": 50.85,
+        "diff_vs_paper_pp": -6.15,
+        "empty_pred": 0
+      },
+      "total_evaluation_time_note": "per subject about 4-21 minutes (terminal logs; varies with DeepInfra 429 retries); not stored in a results file here",
+      "tokenizer_snapshot": "4699cc75b550f9c6f3173fb80f4703b62d946aa5"
+    }
+  ],
+  "notes": [
+    "Paper reference: Kweon et al., arXiv 2403.01469v3, Table 1.",
+    "Empty predictions (no extractable letter) are scored wrong, as in the task's filter.",
+    "Single run per model; repeating a call may change a few answers even at temperature 0.",
+    "Dataset revision is not enforced by the command; the cached snapshot equals the team's pinned revision.",
+    "Differences vs the paper per subject are 3-8 pp for several Llama subjects (modified task); the cause was not identified (unconfirmed candidates: model version, provider precision/quantization, prompt or scoring details).",
+    "Same-setting repeat runs differ by 10+ correct answers per subject (13 overall for Llama)."
+  ],
+  "run_date_note": "gpt-4o-mini: started 2026-11-20 07:54 UTC (from the harness results file). Llama: 2026-11-20 (KST); start time not recorded.",
+  "cost": {
+    "status": "estimate, not billed amount",
+    "method": "saved-sample token counts x OpenRouter list price read 2026-11-20 (estimate_cost.py)",
+    "prices_usd_per_1m_tokens": {
+      "openai/gpt-4o-mini": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "meta-llama/llama-3.1-8b-instruct (DeepInfra)": {
+        "input": 0.02,
+        "output": 0.04
+      }
+    },
+    "runs": {
+      "gpt-4o-mini_modified": {
+        "input_tokens": 2348149,
+        "output_tokens": 29171,
+        "estimated_usd": 0.3697
+      },
+      "gpt-4o-mini_original": {
+        "input_tokens": 2348149,
+        "output_tokens": 29349,
+        "estimated_usd": 0.3698
+      },
+      "llama_modified": {
+        "input_tokens": 2405434,
+        "output_tokens": 243515,
+        "estimated_usd": 0.0578
+      },
+      "llama_original": {
+        "input_tokens": 2405434,
+        "output_tokens": 219720,
+        "estimated_usd": 0.0569
+      }
+    },
+    "not_included": "retries, per-message overhead, provider-side token accounting differences, requests sent before the failed first attempt of llama original dentist"
+  },
+  "original_task_runs": {
+    "gpt-4o-mini": {
+      "task": "kormedmcqa_{subject} (built-in, unmodified)",
+      "provider": "not pinned (not recorded)",
+      "subjects": {
+        "doctor": {
+          "n": 435,
+          "correct": 294,
+          "accuracy_pct": 67.59
+        },
+        "nurse": {
+          "n": 878,
+          "correct": 722,
+          "accuracy_pct": 82.23
+        },
+        "pharm": {
+          "n": 885,
+          "correct": 628,
+          "accuracy_pct": 70.96
+        },
+        "dentist": {
+          "n": 811,
+          "correct": 513,
+          "accuracy_pct": 63.26
+        }
+      },
+      "weighted_average": {
+        "n": 3009,
+        "correct": 2157,
+        "accuracy_pct": 71.69
+      },
+      "correct_counts_note": "computed from harness accuracy x n"
+    },
+    "meta-llama/llama-3.1-8b-instruct": {
+      "task": "kormedmcqa_orig_{subject} (copy of the built-in task; only the task name and provider pin differ)",
+      "provider": "DeepInfra pinned",
+      "max_gen_toks": 1024,
+      "num_concurrent": "4 (dentist re-run with 2 after a server-disconnect failure)",
+      "subjects": {
+        "doctor": {
+          "n": 435,
+          "correct": 164,
+          "accuracy_pct": 37.7,
+          "stderr_pct": 2.33
+        },
+        "nurse": {
+          "n": 878,
+          "correct": 328,
+          "accuracy_pct": 37.36,
+          "stderr_pct": 1.63
+        },
+        "pharm": {
+          "n": 885,
+          "correct": 278,
+          "accuracy_pct": 31.41,
+          "stderr_pct": 1.56
+        },
+        "dentist": {
+          "n": 811,
+          "correct": 160,
+          "accuracy_pct": 19.73,
+          "stderr_pct": 1.4
+        }
+      },
+      "weighted_average": {
+        "n": 3009,
+        "correct": 930,
+        "accuracy_pct": 30.91
+      },
+      "correct_counts_note": "computed from harness accuracy x n; stderr computed with sqrt(p(1-p)/(n-1)) (the harness formula)",
+      "offline_rescore_cut_at_stop_strings": {
+        "doctor": {
+          "accuracy_pct": 37.7,
+          "cut_changed": "432/435"
+        },
+        "nurse": {
+          "accuracy_pct": 53.08,
+          "cut_changed": "870/878"
+        },
+        "pharm_combined": {
+          "accuracy_pct": 46.55,
+          "correct": 412,
+          "cut_changed": "855/885"
+        },
+        "dentist": {
+          "accuracy_pct": 38.96,
+          "cut_changed": "802/811"
+        },
+        "all": {
+          "accuracy_pct": 45.13,
+          "correct": 1358,
+          "cut_changed": "2959/3009"
+        }
+      },
+      "run_to_run_vs_final_modified_correct": {
+        "doctor": "164 vs 152",
+        "nurse": "466 vs 456",
+        "pharm": "412 vs 424",
+        "dentist": "316 vs 313",
+        "all": "1358 vs 1345"
+      }
+    }
+  }
+}
