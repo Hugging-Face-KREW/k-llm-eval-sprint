@@ -1,0 +1,529 @@
+{
+  "complete": true,
+  "input_and_scoring_audit_passed": true,
+  "prediction_parity": false,
+  "results": [
+    {
+      "model": "kanana2-3b",
+      "condition": "lighteval_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 752,
+      "acc": 0.3769423558897243,
+      "acc_norm": null,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "bf4c95f3964b6f22b31de0b09093573e723dcdf73061ebc4b27a47098246448e"
+    },
+    {
+      "model": "kanana2-3b",
+      "condition": "aligned_harness_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 794,
+      "acc": 0.3979949874686717,
+      "acc_norm": null,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "5ee0815475de8cb1d2f04b8f8473cd85f28999f5863877bcd3a4e31b09de86c4"
+    },
+    {
+      "model": "kanana2-3b",
+      "condition": "base_letter",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1042,
+      "acc": 0.5223057644110276,
+      "acc_norm": 0.5223057644110276,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "8c731f2c67b6cdd4c631a68453ebfc5e9a52e9f62c8370a067127c4936627a69"
+    },
+    {
+      "model": "kanana2-3b",
+      "condition": "pr4420_letter",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1053,
+      "acc": 0.5278195488721804,
+      "acc_norm": 0.5278195488721804,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "f3564825a9b8c0bce017f2ae3f2352ea37c3c33cd8a6f4c728e0e3961507a2b5"
+    },
+    {
+      "model": "kanana2-3b",
+      "condition": "base_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 776,
+      "acc": 0.38897243107769425,
+      "acc_norm": 0.4270676691729323,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "0357161b757989c0164fecc76720a10d46a38cc8fcc36db3a52a6f49e613fd4f"
+    },
+    {
+      "model": "kanana2-3b",
+      "condition": "pr4420_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 775,
+      "acc": 0.38847117794486213,
+      "acc_norm": 0.4245614035087719,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "880585faa67143d77e50ac9f1aed7f3c8669417b05a4d78573317bb3d8b1cbcd"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "lighteval_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1396,
+      "acc": 0.699749373433584,
+      "acc_norm": null,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "801d60db9a34be51155dd1a5da8d57aca2f1399ef85b74df6d530808516d0eeb"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "aligned_harness_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1404,
+      "acc": 0.7037593984962406,
+      "acc_norm": null,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "8ba44e29547b387caba65ea635b0403d288d65ef4b6edc15aa02a914bdc0b96f"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "base_letter",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1449,
+      "acc": 0.7263157894736842,
+      "acc_norm": 0.7263157894736842,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "72ab1ca6326486dd5882a96227b85c32438dfb3cb3b5c9e2e1d38268d8237a5f"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "pr4420_letter",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1481,
+      "acc": 0.7423558897243108,
+      "acc_norm": 0.7423558897243108,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "cb9c30bdf354cd9ff9fe3d921ccbe594cafc06d53f01885bdb61c5286f273f11"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "base_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1375,
+      "acc": 0.6892230576441103,
+      "acc_norm": 0.6781954887218045,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "ba03f55dacc6dd468f7a86fb20f0782ed862519e92f84b609e9fb623e30ae369"
+    },
+    {
+      "model": "qwen38-27b",
+      "condition": "pr4420_full",
+      "backend": "transformers",
+      "weight_dtype": "bfloat16",
+      "items": 1995,
+      "correct": 1396,
+      "acc": 0.699749373433584,
+      "acc_norm": 0.6887218045112782,
+      "input_and_scoring_audit_passed": true,
+      "result_sha256": "11cde5746e31acf7dcd4d3021c28b401c59538a81a57a0458344874a1da65c84"
+    }
+  ],
+  "comparisons": [
+    {
+      "model": "kanana2-3b",
+      "comparison": "lighteval_full_vs_aligned_harness_full",
+      "items": 1995,
+      "same_prediction": 1746,
+      "max_abs_logprob_diff": 5.875,
+      "exact_scores": false,
+      "prediction_parity": false
+    },
+    {
+      "model": "kanana2-3b",
+      "comparison": "base_letter_vs_pr4420_letter",
+      "items": 1739,
+      "same_prediction": 1739,
+      "max_abs_logprob_diff": 0.0,
+      "exact_scores": true,
+      "prediction_parity": true
+    },
+    {
+      "model": "kanana2-3b",
+      "comparison": "base_full_vs_pr4420_full",
+      "items": 1739,
+      "same_prediction": 1739,
+      "max_abs_logprob_diff": 0.0,
+      "exact_scores": true,
+      "prediction_parity": true
+    },
+    {
+      "model": "qwen38-27b",
+      "comparison": "lighteval_full_vs_aligned_harness_full",
+      "items": 1995,
+      "same_prediction": 1943,
+      "max_abs_logprob_diff": 10.75,
+      "exact_scores": false,
+      "prediction_parity": false
+    },
+    {
+      "model": "qwen38-27b",
+      "comparison": "base_letter_vs_pr4420_letter",
+      "items": 1739,
+      "same_prediction": 1720,
+      "max_abs_logprob_diff": 0.90625,
+      "exact_scores": false,
+      "prediction_parity": false
+    },
+    {
+      "model": "qwen38-27b",
+      "comparison": "base_full_vs_pr4420_full",
+      "items": 1739,
+      "same_prediction": 1739,
+      "max_abs_logprob_diff": 0.0,
+      "exact_scores": true,
+      "prediction_parity": true
+    }
+  ],
+  "effects": [
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 54,
+      "wrong_to_correct": 20,
+      "correct_to_wrong": 9
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 0,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 54,
+      "wrong_to_correct": 20,
+      "correct_to_wrong": 9
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 10,
+      "wrong_to_correct": 1,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 84,
+      "wrong_to_correct": 16,
+      "correct_to_wrong": 17
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 0,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 84,
+      "wrong_to_correct": 16,
+      "correct_to_wrong": 17
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 16,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 994,
+      "wrong_to_correct": 161,
+      "correct_to_wrong": 427
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 834,
+      "wrong_to_correct": 143,
+      "correct_to_wrong": 387
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 160,
+      "wrong_to_correct": 18,
+      "correct_to_wrong": 40
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 36,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 999,
+      "wrong_to_correct": 160,
+      "correct_to_wrong": 438
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 834,
+      "wrong_to_correct": 143,
+      "correct_to_wrong": 387
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 165,
+      "wrong_to_correct": 17,
+      "correct_to_wrong": 51
+    },
+    {
+      "model": "kanana2-3b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 38,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 1
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 104,
+      "wrong_to_correct": 54,
+      "correct_to_wrong": 22
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 19,
+      "wrong_to_correct": 6,
+      "correct_to_wrong": 6
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 85,
+      "wrong_to_correct": 48,
+      "correct_to_wrong": 16
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "pr4420_letter",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 43,
+      "wrong_to_correct": 43,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 80,
+      "wrong_to_correct": 36,
+      "correct_to_wrong": 15
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 0,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 80,
+      "wrong_to_correct": 36,
+      "correct_to_wrong": 15
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_full",
+      "to": "pr4420_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 30,
+      "wrong_to_correct": 20,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 312,
+      "wrong_to_correct": 68,
+      "correct_to_wrong": 142
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 238,
+      "wrong_to_correct": 59,
+      "correct_to_wrong": 108
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 74,
+      "wrong_to_correct": 9,
+      "correct_to_wrong": 34
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "base_letter",
+      "to": "base_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 18,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 0
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "all",
+      "items": 1995,
+      "prediction_changed": 319,
+      "wrong_to_correct": 71,
+      "correct_to_wrong": 156
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "four_choice",
+      "items": 1739,
+      "prediction_changed": 236,
+      "wrong_to_correct": 57,
+      "correct_to_wrong": 106
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "five_choice",
+      "items": 256,
+      "prediction_changed": 83,
+      "wrong_to_correct": 14,
+      "correct_to_wrong": 50
+    },
+    {
+      "model": "qwen38-27b",
+      "from": "pr4420_letter",
+      "to": "pr4420_full",
+      "stratum": "gold_e",
+      "items": 49,
+      "prediction_changed": 23,
+      "wrong_to_correct": 0,
+      "correct_to_wrong": 23
+    }
+  ]
+}

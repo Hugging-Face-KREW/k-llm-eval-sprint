@@ -1,0 +1,56 @@
+{
+  "complete": false,
+  "diagnostic_replay": true,
+  "state": "STOPPED",
+  "stopped_utc": "2026-11-20T12:19:08Z",
+  "completed_outputs": 3510,
+  "planned_outputs": 5985,
+  "counts": {
+    "aligned_harness_full": 1995,
+    "base_letter": 1515,
+    "pr4420_letter": 0
+  },
+  "failure": {
+    "phase": "before",
+    "condition": "base_letter",
+    "index": 1515,
+    "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#27",
+    "traceback": "Traceback (most recent call last):\n  File \"/workspace/transformers-bf16-20261120/diagnostics/root-cause-20261120/replay_transformers.py\", line 109, in worker\n    result = backend.score(tasks, row, condition, protocol)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/transformers-bf16-20261120/code/transformers_click.py\", line 233, in score\n    audited = audit.finish(scores)\n              ^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/transformers-bf16-20261120/code/transformers_click.py\", line 100, in finish\n    require(\n  File \"/workspace/transformers-bf16-20261120/code/polyglot_core.py\", line 50, in require\n    raise ValueError(message)\nValueError: Native score differs from audited continuation positions\n",
+    "settings": {
+      "training_modules": 0,
+      "parameter_dtypes": {
+        "torch.bfloat16": 1184
+      },
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cudnn_enabled": true,
+      "deterministic_algorithms": false,
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "bf16_reduced_reduction": true,
+      "cublas_workspace": null,
+      "generation_temperature": 1.0,
+      "attention": "eager"
+    }
+  },
+  "original_result_files_unchanged": true,
+  "aligned_replay_vs_original": {
+    "items": 1995,
+    "same_prediction": 1990,
+    "same_scores": 1497,
+    "original_correct": 1404.0,
+    "replay_correct": 1402.0,
+    "max_score_diff": 4.625
+  },
+  "fresh_process_inspection": {
+    "captured_items": 15,
+    "changed_layer_traces": 0,
+    "failed_trace_scores": 0,
+    "audit_tests": 12,
+    "audit_errors": 0,
+    "slice_vs_full_logsoftmax_max_diff": 0.0
+  },
+  "cause_confirmed": false,
+  "next_diagnostic_run": "/workspace/transformers-bf16-20261120/diagnostics/root-cause-20261120/replay-recorded",
+  "next_diagnostic_change": "Only read-only failure evidence capture added; native scorer and original validation retained."
+}

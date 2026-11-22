@@ -1,0 +1,15 @@
+{
+  "full_outputs_verified": 23940,
+  "conditions_verified": 12,
+  "qwen_four_choice_letter_score_difference_count": 1658,
+  "prediction_difference_position_counts": {
+    "before_resume": 11,
+    "after_resume": 8
+  },
+  "score_difference_position_counts": {
+    "before_resume": 1238,
+    "after_resume": 420
+  },
+  "resume_zero_based_index": 1495,
+  "causal_explanation": "Not established. Inputs and native scoring passed; run-to-run differences remain."
+}

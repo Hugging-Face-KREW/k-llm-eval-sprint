@@ -1,0 +1,246 @@
+{
+  "state": "COMPLETE",
+  "completed_utc": "2026-11-20T13:18:07Z",
+  "total_outputs": 5985,
+  "metrics": {
+    "aligned_harness_full": {
+      "items": 1995,
+      "correct": 1396,
+      "accuracy": 0.699749373433584,
+      "file_sha256": "2e3737b32570900484a9a8de210836744f53fb7ad3d10b77a3f5608e05e1b44d"
+    },
+    "base_letter": {
+      "items": 1995,
+      "correct": 1450,
+      "accuracy": 0.7268170426065163,
+      "file_sha256": "b9c109d1c5da675b29999b98850cda56f4eadf0808b66032463c58d192efe110"
+    },
+    "pr4420_letter": {
+      "items": 1995,
+      "correct": 1480,
+      "accuracy": 0.7418546365914787,
+      "file_sha256": "37e08be43b26b22e0e7afc809245c5802988075dea4b0ec6d3443e75f4327f3c"
+    }
+  },
+  "four_choice_comparison": {
+    "items": 1739,
+    "prediction_differences": 6,
+    "score_differences": 416
+  },
+  "by_process_boundary": {
+    "same_process": {
+      "items": 1300,
+      "prediction_differences": 0,
+      "score_differences": 0
+    },
+    "after_reload": {
+      "items": 439,
+      "prediction_differences": 6,
+      "score_differences": 416
+    }
+  },
+  "traces": [
+    {
+      "index": 0,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#0",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#1",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 2,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#2",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 3,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#3",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 173,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_Kedu.json#2",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 381,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_Kedu.json#12",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 428,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_Kedu.json#59",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 483,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_Kedu.json#114",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 485,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_Kedu.json#116",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 583,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#28",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 786,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_PSE.json#140",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 927,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#41",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 991,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#105",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1171,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_Kedu.json#7",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1353,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#174",
+      "same_prediction": true,
+      "first_observed_last_token_difference": null,
+      "logits_max_diff": 0.0,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1589,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_TOPIK.json#33",
+      "same_prediction": false,
+      "first_observed_last_token_difference": "model.language_model.layers.18",
+      "logits_max_diff": 0.1796875,
+      "max_score_diff": 0.0625
+    },
+    {
+      "index": 1641,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_TOPIK.json#85",
+      "same_prediction": true,
+      "first_observed_last_token_difference": "model.language_model.layers.18",
+      "logits_max_diff": 0.1875,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1684,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_TOPIK.json#128",
+      "same_prediction": false,
+      "first_observed_last_token_difference": "model.language_model.layers.18",
+      "logits_max_diff": 0.453125,
+      "max_score_diff": 0.0625
+    },
+    {
+      "index": 1696,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_TOPIK.json#140",
+      "same_prediction": false,
+      "first_observed_last_token_difference": "model.language_model.layers.18",
+      "logits_max_diff": 0.203125,
+      "max_score_diff": 0.125
+    },
+    {
+      "index": 1850,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#77",
+      "same_prediction": true,
+      "first_observed_last_token_difference": "model.language_model.layers.19",
+      "logits_max_diff": 0.177734375,
+      "max_score_diff": 0.0
+    },
+    {
+      "index": 1939,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#5",
+      "same_prediction": false,
+      "first_observed_last_token_difference": "model.language_model.layers.19",
+      "logits_max_diff": 1.970703125,
+      "max_score_diff": 0.75
+    },
+    {
+      "index": 1957,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#23",
+      "same_prediction": true,
+      "first_observed_last_token_difference": "model.language_model.layers.18",
+      "logits_max_diff": 0.15625,
+      "max_score_diff": 0.0625
+    },
+    {
+      "index": 1982,
+      "source_key": "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#48",
+      "same_prediction": false,
+      "first_observed_last_token_difference": "model.language_model.layers.19",
+      "logits_max_diff": 0.21875,
+      "max_score_diff": 0.125
+    }
+  ],
+  "existing_LE_vs_replayed_HF": {
+    "items": 1995,
+    "same_prediction": 1942,
+    "LE_correct": 1396,
+    "replayed_HF_correct": 1396,
+    "lighteval_rerun": false
+  },
+  "original_HF_vs_replayed_HF": {
+    "same_prediction": 1953
+  },
+  "all_row_hashes_and_native_metrics_verified": true,
+  "original_protocol_and_code_verified": true,
+  "diagnostic_runner_sha256": "ca0d4d5e151561968fd6444960d0c5fda211e21b9369835781630ebce91f4a28",
+  "original_results_unchanged": true,
+  "audit_failure_reproduced": false,
+  "specific_operator_cause_confirmed": false,
+  "original_19_cases_all_explained": false,
+  "interpretation": "Observed last-token hidden states and logits diverge before final scoring after process reload. Last-token-only traces cannot establish the earliest divergence across all sequence positions. Process reload is associated with differences in this replay; exact operator/state cause remains unknown."
+}

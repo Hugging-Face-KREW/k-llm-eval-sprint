@@ -1,0 +1,67 @@
+{
+  "model": "qwen38-27b",
+  "condition": "pr4420_letter",
+  "backend": "transformers",
+  "weight_dtype": "bfloat16",
+  "items": 1995,
+  "correct": 1481,
+  "acc": 0.7423558897243108,
+  "acc_norm": 0.7423558897243108,
+  "input_and_scoring_audit_passed": true,
+  "result_sha256": "cb9c30bdf354cd9ff9fe3d921ccbe594cafc06d53f01885bdb61c5286f273f11",
+  "strata": {
+    "four_choice": {
+      "items": 1739,
+      "correct": 1291,
+      "acc": 0.7423806785508913
+    },
+    "five_choice": {
+      "items": 256,
+      "correct": 190,
+      "acc": 0.7421875
+    },
+    "gold_e": {
+      "items": 49,
+      "correct": 43,
+      "acc": 0.8775510204081632
+    }
+  },
+  "aggregates": {
+    "source": {
+      "category_macro": 0.7674695707472833,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 993,
+        "acc": 0.7382899628252788
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 488,
+        "acc": 0.7507692307692307
+      }
+    },
+    "native": {
+      "category_macro": 0.7675731281638133,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 993,
+        "acc": 0.7382899628252788
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 488,
+        "acc": 0.7507692307692307
+      }
+    }
+  },
+  "audit": {
+    "logits_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "sum_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "max_native_batch_rows": 1,
+    "max_native_sequence_length": 1901
+  }
+}

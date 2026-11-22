@@ -1,0 +1,129 @@
+{
+  "temperature_applies_to_likelihood": false,
+  "sampling_used": false,
+  "cross_framework": {
+    "kanana2-3b-default": {
+      "items": 26,
+      "native_prediction_differences": 22,
+      "max_native_score_diff": 2.125,
+      "exact_native_direct_lighteval": 26,
+      "exact_native_direct_harness": 26,
+      "layout_interventions": [
+        {
+          "left": "batch_full",
+          "right": "single_padded_full",
+          "prediction_differences": 15
+        },
+        {
+          "left": "single_padded_full",
+          "right": "single_full",
+          "prediction_differences": 5
+        },
+        {
+          "left": "single_full",
+          "right": "single_omit",
+          "prediction_differences": 10
+        },
+        {
+          "left": "batch_full",
+          "right": "single_omit",
+          "prediction_differences": 22
+        }
+      ]
+    },
+    "kanana2-3b-fp32": {
+      "items": 26,
+      "native_prediction_differences": 0,
+      "max_native_score_diff": 0.0003337860107421875,
+      "exact_native_direct_lighteval": 26,
+      "exact_native_direct_harness": 26,
+      "layout_interventions": [
+        {
+          "left": "batch_full",
+          "right": "single_padded_full",
+          "prediction_differences": 0
+        },
+        {
+          "left": "single_padded_full",
+          "right": "single_full",
+          "prediction_differences": 0
+        },
+        {
+          "left": "single_full",
+          "right": "single_omit",
+          "prediction_differences": 0
+        },
+        {
+          "left": "batch_full",
+          "right": "single_omit",
+          "prediction_differences": 0
+        }
+      ]
+    },
+    "qwen38-27b-default": {
+      "items": 22,
+      "native_prediction_differences": 17,
+      "max_native_score_diff": 3.75,
+      "exact_native_direct_lighteval": 22,
+      "exact_native_direct_harness": 22,
+      "layout_interventions": [
+        {
+          "left": "batch_full",
+          "right": "single_padded_full",
+          "prediction_differences": 7
+        },
+        {
+          "left": "single_padded_full",
+          "right": "single_full",
+          "prediction_differences": 8
+        },
+        {
+          "left": "single_full",
+          "right": "single_omit",
+          "prediction_differences": 8
+        },
+        {
+          "left": "batch_full",
+          "right": "single_omit",
+          "prediction_differences": 17
+        }
+      ]
+    }
+  },
+  "qwen_repeat": {
+    "repeat-qwen38-27b-default.jsonl": {
+      "items": 23,
+      "evaluations": 138,
+      "different_scores": 0,
+      "errors": 0,
+      "rng_changed": 0
+    },
+    "stress-qwen38-27b-default.jsonl": {
+      "items": 23,
+      "evaluations": 230,
+      "different_scores": 0,
+      "errors": 0,
+      "rng_changed": 0
+    },
+    "exact-qwen38-27b-default.jsonl": {
+      "items": 23,
+      "evaluations": 138,
+      "different_scores": 0,
+      "errors": 0,
+      "rng_changed": 0
+    },
+    "repeat-qwen38-27b-strict.jsonl": {
+      "items": 23,
+      "evaluations": 138,
+      "different_scores": 0,
+      "errors": 0,
+      "rng_changed": 0
+    }
+  },
+  "strict_vs_default": {
+    "items": 23,
+    "identical_scores": 23
+  },
+  "second_cause_status": "Unconfirmed. Full original sequence replay with layer traces is running.",
+  "initial_evidence_archive_sha256": "13508202cbcb8bfb8fc181c244de607e92c38f9bcabe834a69620765db1e8578"
+}
