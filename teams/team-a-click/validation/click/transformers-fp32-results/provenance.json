@@ -1,0 +1,1918 @@
+{
+  "protocol_sha256": "c92b6d1dba493763542ac27c93dab09907eb8bc2b3735f873a1725b10058a51e",
+  "protocol_file_sha256": "8c48eb31377bbd18d3e4450b484bfb17b3e23d11bdd4c54cf067f17d1b6cc7fd",
+  "protocol": {
+    "schema": 2,
+    "models": {
+      "kanana2-3b": {
+        "repo": "kakaocorp/kanana-2-3b-instruct",
+        "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
+        "location": "/workspace/cache/huggingface/hub/models--kakaocorp--kanana-2-3b-instruct/snapshots/6a5d7889964c4c590299d16e309eabab1f73f8a9",
+        "max_lengths": {
+          "lighteval_full": 1564,
+          "aligned_harness_full": 1564,
+          "base_letter": 1484,
+          "pr4420_letter": 1525,
+          "base_full": 1524,
+          "pr4420_full": 1565
+        },
+        "token_hashes": {
+          "lighteval_full": "6ffbbcecfccea7c21e20eb4f6e2393c907e03ade6386bc81315fd23132861db3",
+          "aligned_harness_full": "6ffbbcecfccea7c21e20eb4f6e2393c907e03ade6386bc81315fd23132861db3",
+          "base_letter": "0f3c91932d555478c86f5fa9c71e45bbdb707ebc480cac334916124782e0bca6",
+          "pr4420_letter": "754ef47bdf4930eba4cf7266c0bc10adb4f7d9b3f19222dc4f9e5a53146fc2ed",
+          "base_full": "e5c1e4b05089c1b6c2a025f178bc416ea85bc369b4f856345645e4910d64bc6e",
+          "pr4420_full": "aa6dc1f385cc1c9d529fdb285c44ca766dc540ddddbbe523ff4b6bb038e3f95b"
+        },
+        "samples": {
+          "calibration": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#4"
+          ],
+          "validation": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#20",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_PSE.json#177",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_Kedu.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_Kedu.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#204",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#11",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#46",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#82",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_PSE.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#42",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#64",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#9"
+          ]
+        }
+      },
+      "qwen38-27b": {
+        "repo": "Qwen/Qwen3.8-27B",
+        "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+        "location": "/workspace/cache/huggingface/hub/models--Qwen--Qwen3.8-27B/snapshots/37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+        "max_lengths": {
+          "lighteval_full": 1954,
+          "aligned_harness_full": 1954,
+          "base_letter": 1852,
+          "pr4420_letter": 1902,
+          "base_full": 1905,
+          "pr4420_full": 1955
+        },
+        "token_hashes": {
+          "lighteval_full": "5cb5e4183a1055e6b8bf96938161bfe054dc187aa5b198b94ea2c90a826d3bb1",
+          "aligned_harness_full": "5cb5e4183a1055e6b8bf96938161bfe054dc187aa5b198b94ea2c90a826d3bb1",
+          "base_letter": "f25d5b7ab52e14cbfa9b98c274d83b84bb5982c21a95fc7becac8f852073fae1",
+          "pr4420_letter": "a01c86a2ee4d143a6e14ed4b8e4b937e672d96dd35ee786105a9726448fa41a0",
+          "base_full": "0fee1153725b445724cb86f43bc6a7f756c25e06909a15b6ee1b180c18377412",
+          "pr4420_full": "577b1ad5b4ebda28f4b121f5896118cae8336e399d702622debc25fca3f8ecb1"
+        },
+        "samples": {
+          "calibration": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#4"
+          ],
+          "validation": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#20",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_PSE.json#120",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_Kedu.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_Kedu.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#11",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#46",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#82",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_PSE.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#42",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#64",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#9"
+          ]
+        }
+      }
+    },
+    "context_limit": 2048,
+    "dtype": "float32",
+    "seed": 1234,
+    "num_items": 1995,
+    "conditions": [
+      "lighteval_full",
+      "aligned_harness_full",
+      "base_letter",
+      "pr4420_letter"
+    ],
+    "host": "tailab",
+    "image": "tailab:0.0.1",
+    "storage": "/mnt/sdb/hyeongrae-click-vllm-20261120/transformers-fp32-20261122",
+    "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
+    "original_inputs_sha256": "ceff8076b3580d61c61ebb70a4281fab3c21bbdb7102693b560591434cc30b1b",
+    "source_manifest_sha256": "e490f0bcced756cca21f8e39959e04a29ab87599e0694109e99b609a8fc4082d",
+    "versions": {
+      "torch": "2.14.0",
+      "vllm": "0.34.0",
+      "transformers": "5.20.1",
+      "lighteval": "0.13.1.dev0",
+      "lm_eval": "0.4.14.dev0",
+      "datasets": "5.2.0",
+      "tokenizers": "0.23.3"
+    },
+    "run_id": "transformers-fp32-20261122",
+    "backend": "transformers",
+    "attention_implementation": "eager",
+    "tf32": false,
+    "autocast": false,
+    "quantization": null,
+    "native_batch_size": 1,
+    "native_batch_semantics": {
+      "lighteval": "one document, all choices in one forward; right padding; includes final target token",
+      "harness": "one candidate per forward; omits final target token; logits_cache=False"
+    },
+    "scoring_dtype": "native logits dtype for log_softmax and sum; audit records actual dtype",
+    "pilot_policy": "Require exact canonical input and native scoring audits. Measure numerical and prediction parity separately; do not require cross-adapter parity to evaluate native behavior.",
+    "parent_vllm_protocol_sha256": "06fe060fad7a506befcb9258fad71911148d4dc62bec3f9cb75fcbb413267cbe",
+    "matrix_inputs_sha256": "c72b9086cb5ec78dd989b56b526809c5908bfd1218e29d33a2ffd91c5e201c8f",
+    "packages_sha256": "aa0fa6e8502926cbb19319c1bf9031bb3e925b124af5d6f0f778ba0a1963faf5",
+    "runner_files": {
+      "transformers_click.py": "fbab3a79651b6407b0ca2a6ec1ef3c1efcab4c1c9a34af73a8e60bf048f51504",
+      "transformers_fp32.py": "5b1898996b0a40de26ab52b08906b51ed166f572fc367dab33d05b08819eb5aa",
+      "transformers_run.py": "fa69ab8a66edf35552f52a31753b951eca1d3413157e640cc0097c55b941f59e",
+      "vllm_click.py": "82c5b18c5f5bba5b80f3693956c5f3b50e13a8d78f0e27f043d5c79ef2049054",
+      "vllm_run.py": "7a7a233e1eaa720c285a40ac6018d1e4bb29701eba999b6e2e2e825641e8aa8e",
+      "test_transformers_click.py": "f20a7f17d33184ae9888a12c0919456351acf754d4fce499ad912c87582db30f",
+      "test_transformers_fp32.py": "1a441502452dca957031d939b5e4d013335a3a420cc03e39a97c8058334a4681"
+    },
+    "model_manifest_sha256": {
+      "kanana2-3b": "6ece8f851873a1af0eedbecb8b5d811b25d499007bde97c7369ca15e36f5c998",
+      "qwen38-27b": "574ffd5d5fe26da98bd3d56147e028103feb27be2872f9fc0073947b55aa79f9"
+    },
+    "checkpoint_dtype": "bfloat16",
+    "weight_loading": "from_pretrained(dtype=torch.float32): lossless BF16->FP32 upcast; all parameters and scored logits FP32",
+    "float32_matmul_precision": "highest",
+    "container": "click-fp32-20261122",
+    "gpus": [
+      {
+        "cuda_index": 0,
+        "host_index": 0,
+        "uuid": "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d"
+      },
+      {
+        "cuda_index": 1,
+        "host_index": 1,
+        "uuid": "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+      }
+    ],
+    "placement": {
+      "kanana2-3b": {
+        "device": "cuda:0"
+      },
+      "qwen38-27b": {
+        "device_map": "sequential",
+        "max_memory": {
+          "0": "50GiB",
+          "1": "70GiB"
+        }
+      }
+    },
+    "model_files_verified_utc": "2026-11-21T17:04:28Z",
+    "parent_protocol_sha256": "27e3b7c2cd50a84fbd46c6619257c39044a5e1ba4e258dd6e621be1995083eb5",
+    "parent_protocol_file_sha256": "5c67bb272984a9a96f6d68992af701bfbc4d02fc40f9da028d0648b1dbaa6d47"
+  },
+  "report_script_sha256": "00df74bd1d2755fe7ade573f5d4a40b9b5d888948b39392ff755c174f52cf01a",
+  "packages_sha256": "aa0fa6e8502926cbb19319c1bf9031bb3e925b124af5d6f0f778ba0a1963faf5",
+  "source_manifest_sha256": "e490f0bcced756cca21f8e39959e04a29ab87599e0694109e99b609a8fc4082d",
+  "models": {
+    "kanana2-3b": {
+      "repo": "kakaocorp/kanana-2-3b-instruct",
+      "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
+      "files": {
+        "chat_template.jinja": {
+          "size": 10725,
+          "sha256": "b8ee6b31575eada17ebbe73d3f1ac65d3efde64f0a25ff922031dec7e1cae3e3"
+        },
+        "config.json": {
+          "size": 1534,
+          "sha256": "b20745cf6680cab720a708142b99d995455780d270783c9bbd7496443a8697a3"
+        },
+        "generation_config.json": {
+          "size": 147,
+          "sha256": "8fb800a4ed31f6042adf130656f096b03af97fc935d8e360e93c01353d42262e"
+        },
+        "model-00001-of-00002.safetensors": {
+          "size": 4962632064,
+          "sha256": "879fd56f37b7452f34208ea99be40ac2c8ebcd36db636fe953303a753314171d"
+        },
+        "model-00002-of-00002.safetensors": {
+          "size": 2055352808,
+          "sha256": "76d38f1e8aff33a43fe038888b9c041cec6d6cbfe735e3368bcea3536b11f186"
+        },
+        "model.safetensors.index.json": {
+          "size": 29273,
+          "sha256": "e00bf13af0ebcc3e0484b16a6dbf6fdb1251aaf5c29432257489aff8cf04c132"
+        },
+        "tokenizer.json": {
+          "size": 10057457,
+          "sha256": "1c4be9ecf77c926456fb82d4cf07ff1218a91907f3408f44895d2b01e0f2b5ab"
+        },
+        "tokenizer_config.json": {
+          "size": 50155,
+          "sha256": "1cdee8fcd4f6209e07e6d9966c8a3ff2d738830d79475193e94e448e153ae2d5"
+        }
+      }
+    },
+    "qwen38-27b": {
+      "repo": "Qwen/Qwen3.8-27B",
+      "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+      "files": {
+        "chat_template.jinja": {
+          "size": 9004,
+          "sha256": "af16f654968d47d09a6c604e00370b12dbc21f76456f59c9e98b82e84d9f6375"
+        },
+        "config.json": {
+          "size": 4312,
+          "sha256": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab"
+        },
+        "crc32.txt": {
+          "size": 238,
+          "sha256": "b42dd291f5f98b05807e458f5b47849969a9b3326acbf0c97d28b05826740b83"
+        },
+        "generation_config.json": {
+          "size": 202,
+          "sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e"
+        },
+        "merges.txt": {
+          "size": 3353259,
+          "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"
+        },
+        "model-00001-of-00018.safetensors": {
+          "size": 3966730552,
+          "sha256": "ba0ce20aae489ad196733da5064bcdf159a1fe84f53336648196e1ebb7751b1c"
+        },
+        "model-00002-of-00018.safetensors": {
+          "size": 3043080328,
+          "sha256": "06a148c01bfbe3faa14a5f184a7ff29a706f7ae1c8b2705d2058e26d17a001fb"
+        },
+        "model-00003-of-00018.safetensors": {
+          "size": 2542796952,
+          "sha256": "2e1bf62cbcd406eaa64b60d10353e1f0ef4039d0976e56f05cabe953454f9968"
+        },
+        "model-00004-of-00018.safetensors": {
+          "size": 3988973152,
+          "sha256": "511e34063187882659753c4d93f3859f93c019fd438d8813071921c81d9a3f1a"
+        },
+        "model-00005-of-00018.safetensors": {
+          "size": 2099339864,
+          "sha256": "635cb53446dc74f219740fc59e18b774f877b803b9722e289ca62575a6efa701"
+        },
+        "model-00006-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "0bc5214fac607f0e6cc92eec3789d4b8559410ef9fce66621ba8158e8410dae0"
+        },
+        "model-00007-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "80b0c49033e9a0d5762562aa12f4acdb7f54da586f3d0110f28c48d91cf07892"
+        },
+        "model-00008-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "7192c5b66185d3592927daabee1cc19e6f6e0ce75988ee20e824b624765fda79"
+        },
+        "model-00009-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "af3c48cc37af44f3db6ae0579baf019180d48d9c527caa0a1f03ff85813a56d8"
+        },
+        "model-00010-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "163490a76f3bea3a40855b7efc04ce6d27afaf1a34f0bbde495b9491f76457c9"
+        },
+        "model-00011-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "5f3ae1b948aeee39da77aec558e8236cd65fe4d7cb7686a76bb007acc563c6d8"
+        },
+        "model-00012-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "a3de1c7114677a8f5ac5c4892c90e8238ea5c1e2038c80e757dfc87c3902ca55"
+        },
+        "model-00013-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "06ab79a41f74c9c5cb734816feb0c7fc364104b227165ee7391231e1155aa02a"
+        },
+        "model-00014-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "4138ed94603065ba884bbcadedb04d7718bb40117e85e6f5c6fc5b9c05b7a85b"
+        },
+        "model-00015-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "69224e27b9de4e7dbf6fc936c6eaae08447bda3b80a6c31a871ab451173afd22"
+        },
+        "model-00016-of-00018.safetensors": {
+          "size": 3979564040,
+          "sha256": "73cb9a1089fb6155cb648609478d6633be8a5c7d9ca5a05bc8925ce8a553cefe"
+        },
+        "model-00017-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "beb51f01056142ac4984bd800507b0dd0fd18de57f8e9ef6ea41d1a3598983a8"
+        },
+        "model-00018-of-00018.safetensors": {
+          "size": 3392197344,
+          "sha256": "1d3479509e21494658f9b64d317f5ea8e55c4025d28c702d6c4d0b356ce8ea06"
+        },
+        "model.safetensors.index.json": {
+          "size": 112216,
+          "sha256": "77042094076611b69791a610065f28b7013b8c621795fa86ddccc8bac7d1b9df"
+        },
+        "preprocessor_config.json": {
+          "size": 390,
+          "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+        },
+        "tokenizer.json": {
+          "size": 12809320,
+          "sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
+        },
+        "tokenizer_config.json": {
+          "size": 9984,
+          "sha256": "207c03c41a06a9c3b0cc527d8a56115159c1eac6b59a4ffae85b646e773d074e"
+        },
+        "video_preprocessor_config.json": {
+          "size": 385,
+          "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13"
+        },
+        "vocab.json": {
+          "size": 6722759,
+          "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+        }
+      }
+    }
+  },
+  "result_sha256": {
+    "fp32/kanana2-3b/lighteval_full": "c57c364eeec399b915d6d77f60f64b2d8a69def1f4c324e9dcb194a02e29c8f7",
+    "bf16/kanana2-3b/lighteval_full": "bf4c95f3964b6f22b31de0b09093573e723dcdf73061ebc4b27a47098246448e",
+    "fp32/kanana2-3b/aligned_harness_full": "42f585ece02e28818a2e7fdab88d3e4cde9e49e09d767ff891163f3c9859a33d",
+    "bf16/kanana2-3b/aligned_harness_full": "5ee0815475de8cb1d2f04b8f8473cd85f28999f5863877bcd3a4e31b09de86c4",
+    "fp32/kanana2-3b/base_letter": "ec2cfbb1f2c9ac47bea50afc5b22adf450e381bc7374a01ec8e4001ae80c20be",
+    "bf16/kanana2-3b/base_letter": "8c731f2c67b6cdd4c631a68453ebfc5e9a52e9f62c8370a067127c4936627a69",
+    "fp32/kanana2-3b/pr4420_letter": "9c0de7b379d1e0a0a3e71339bf96b06828a8dd75493fb6f5b71d9329758a6d03",
+    "bf16/kanana2-3b/pr4420_letter": "f3564825a9b8c0bce017f2ae3f2352ea37c3c33cd8a6f4c728e0e3961507a2b5",
+    "fp32/qwen38-27b/lighteval_full": "d4c050dd0e4b69efcdc3369c320867188e358779647a98ea47431e6e408fa921",
+    "bf16/qwen38-27b/lighteval_full": "801d60db9a34be51155dd1a5da8d57aca2f1399ef85b74df6d530808516d0eeb",
+    "fp32/qwen38-27b/aligned_harness_full": "72421c1265bc75e4d8a7ef9370780f4f5ada00b4dad749120a5c0fa6f113f5a5",
+    "bf16/qwen38-27b/aligned_harness_full": "8ba44e29547b387caba65ea635b0403d288d65ef4b6edc15aa02a914bdc0b96f",
+    "fp32/qwen38-27b/base_letter": "9f31f67fbcda741caeb64ae17befa6fa1023e207c96df8a5d1f845958dc6d9c0",
+    "bf16/qwen38-27b/base_letter": "72ab1ca6326486dd5882a96227b85c32438dfb3cb3b5c9e2e1d38268d8237a5f",
+    "fp32/qwen38-27b/pr4420_letter": "7a161d07504843cfad38275c21cd616df5717ab3c1bd657186bd9e7e8d89dbd2",
+    "bf16/qwen38-27b/pr4420_letter": "cb9c30bdf354cd9ff9fe3d921ccbe594cafc06d53f01885bdb61c5286f273f11"
+  },
+  "steps": [
+    {
+      "step": "kanana2-3b-probe-lighteval",
+      "started_utc": "2026-11-21T17:04:47Z",
+      "elapsed_s": 51.8,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-probe-harness",
+      "started_utc": "2026-11-21T17:05:39Z",
+      "elapsed_s": 49.7,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-probe-lighteval",
+      "started_utc": "2026-11-21T17:06:29Z",
+      "elapsed_s": 64.3,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-probe-harness",
+      "started_utc": "2026-11-21T17:07:33Z",
+      "elapsed_s": 70.8,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-probe-lighteval",
+      "started_utc": "2026-11-21T17:11:22Z",
+      "elapsed_s": 45.0,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-probe-harness",
+      "started_utc": "2026-11-21T17:12:07Z",
+      "elapsed_s": 45.1,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-pilot-lighteval",
+      "started_utc": "2026-11-21T17:12:52Z",
+      "elapsed_s": 81.9,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-pilot-harness",
+      "started_utc": "2026-11-21T17:14:14Z",
+      "elapsed_s": 163.8,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-pilot-gate",
+      "started_utc": "2026-11-21T17:16:58Z",
+      "elapsed_s": 0.3,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-full-lighteval",
+      "started_utc": "2026-11-21T17:16:59Z",
+      "elapsed_s": 423.9,
+      "exit": 0
+    },
+    {
+      "step": "kanana2-3b-full-harness",
+      "started_utc": "2026-11-21T17:24:03Z",
+      "elapsed_s": 1485.7,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-probe-lighteval",
+      "started_utc": "2026-11-21T17:48:48Z",
+      "elapsed_s": 45.8,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-probe-harness",
+      "started_utc": "2026-11-21T17:49:34Z",
+      "elapsed_s": 45.2,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-pilot-lighteval",
+      "started_utc": "2026-11-21T17:50:19Z",
+      "elapsed_s": 353.2,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-pilot-harness",
+      "started_utc": "2026-11-21T17:56:13Z",
+      "elapsed_s": 1003.4,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-pilot-gate",
+      "started_utc": "2026-11-21T18:12:56Z",
+      "elapsed_s": 0.4,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-full-lighteval",
+      "started_utc": "2026-11-21T18:12:57Z",
+      "elapsed_s": 3526.1,
+      "exit": 0
+    },
+    {
+      "step": "qwen38-27b-full-harness",
+      "started_utc": "2026-11-21T19:11:43Z",
+      "elapsed_s": 11513.5,
+      "exit": 0
+    }
+  ],
+  "runtime": {
+    "kanana2-3b": [
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "probe",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T170537Z",
+        "load_s": 2.6,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "lighteval_full": 2
+        },
+        "seconds": {
+          "lighteval_full": 0.525
+        },
+        "peak_allocated_bytes": [
+          13783728640,
+          0
+        ],
+        "peak_reserved_bytes": [
+          14313062400,
+          0
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "probe",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T170626Z",
+        "load_s": 2.3,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "aligned_harness_full": 2,
+          "base_letter": 2,
+          "pr4420_letter": 2
+        },
+        "seconds": {
+          "aligned_harness_full": 0.721,
+          "base_letter": 0.403,
+          "pr4420_letter": 0.408
+        },
+        "peak_allocated_bytes": [
+          13061000192,
+          0
+        ],
+        "peak_reserved_bytes": [
+          13285457920,
+          0
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "pilot",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T171341Z",
+        "load_s": 2.7,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "lighteval_full": 124
+        },
+        "seconds": {
+          "lighteval_full": 31.884
+        },
+        "peak_allocated_bytes": [
+          20779901440,
+          0
+        ],
+        "peak_reserved_bytes": [
+          45789216768,
+          0
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "pilot",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T171501Z",
+        "load_s": 2.3,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "aligned_harness_full": 124,
+          "base_letter": 124,
+          "pr4420_letter": 124
+        },
+        "seconds": {
+          "aligned_harness_full": 39.757,
+          "base_letter": 37.015,
+          "pr4420_letter": 38.394
+        },
+        "peak_allocated_bytes": [
+          15159928832,
+          0
+        ],
+        "peak_reserved_bytes": [
+          22638755840,
+          0
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "full",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T171746Z",
+        "load_s": 2.7,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "lighteval_full": 1995
+        },
+        "seconds": {
+          "lighteval_full": 373.727
+        },
+        "peak_allocated_bytes": [
+          20779901440,
+          0
+        ],
+        "peak_reserved_bytes": [
+          68631396352,
+          0
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "kanana2-3b",
+          "--stage",
+          "full",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T172449Z",
+        "load_s": 2.2,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "": "cuda:0"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 12722546688
+        },
+        "parameter_dtypes": {
+          "torch.float32": 354
+        },
+        "buffer_dtypes": {
+          "torch.float32": 2
+        },
+        "items": {
+          "aligned_harness_full": 1995,
+          "base_letter": 1995,
+          "pr4420_letter": 1995
+        },
+        "seconds": {
+          "aligned_harness_full": 491.078,
+          "base_letter": 466.14,
+          "pr4420_letter": 474.485
+        },
+        "peak_allocated_bytes": [
+          15159928832,
+          0
+        ],
+        "peak_reserved_bytes": [
+          29571940352,
+          0
+        ]
+      }
+    ],
+    "qwen38-27b": [
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "probe",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T170728Z",
+        "load_s": 15.1,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "lighteval_full": 2
+        },
+        "seconds": {
+          "lighteval_full": 3.173
+        },
+        "peak_allocated_bytes": [
+          50763112960,
+          63324397056
+        ],
+        "peak_reserved_bytes": [
+          52311359488,
+          64606961664
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "probe",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T170832Z",
+        "load_s": 14.0,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "aligned_harness_full": 2,
+          "base_letter": 2,
+          "pr4420_letter": 2
+        },
+        "seconds": {
+          "aligned_harness_full": 4.524,
+          "base_letter": 2.758,
+          "pr4420_letter": 2.801
+        },
+        "peak_allocated_bytes": [
+          48887918080,
+          61792740864
+        ],
+        "peak_reserved_bytes": [
+          49404706816,
+          61985521664
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "pilot",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T175118Z",
+        "load_s": 13.9,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "lighteval_full": 124
+        },
+        "seconds": {
+          "lighteval_full": 292.881
+        },
+        "peak_allocated_bytes": [
+          67499969024,
+          72554485248
+        ],
+        "peak_reserved_bytes": [
+          98457092096,
+          100768153600
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "pilot",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T175712Z",
+        "load_s": 13.3,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "aligned_harness_full": 124,
+          "base_letter": 124,
+          "pr4420_letter": 124
+        },
+        "seconds": {
+          "aligned_harness_full": 323.337,
+          "base_letter": 305.688,
+          "pr4420_letter": 313.263
+        },
+        "peak_allocated_bytes": [
+          53898903040,
+          63634071040
+        ],
+        "peak_reserved_bytes": [
+          71760347136,
+          69451382784
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "full",
+          "--engine",
+          "lighteval"
+        ],
+        "started_utc": "20261121T181355Z",
+        "load_s": 12.7,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "lighteval_full": 1995
+        },
+        "seconds": {
+          "lighteval_full": 3463.435
+        },
+        "peak_allocated_bytes": [
+          67499969024,
+          72554485248
+        ],
+        "peak_reserved_bytes": [
+          97762934784,
+          98220113920
+        ]
+      },
+      {
+        "argv": [
+          "/workspace/transformers-fp32-20261122/code/transformers_fp32.py",
+          "run",
+          "--model",
+          "qwen38-27b",
+          "--stage",
+          "full",
+          "--engine",
+          "harness"
+        ],
+        "started_utc": "20261121T191242Z",
+        "load_s": 14.2,
+        "cuda_uuids": [
+          "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+          "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+        ],
+        "adapter_device": "cuda:0",
+        "device_map": {
+          "model.visual": "0",
+          "model.language_model.embed_tokens": "0",
+          "model.language_model.layers.0": "0",
+          "model.language_model.layers.1": "0",
+          "model.language_model.layers.2": "0",
+          "model.language_model.layers.3": "0",
+          "model.language_model.layers.4": "0",
+          "model.language_model.layers.5": "0",
+          "model.language_model.layers.6": "0",
+          "model.language_model.layers.7": "0",
+          "model.language_model.layers.8": "0",
+          "model.language_model.layers.9": "0",
+          "model.language_model.layers.10": "0",
+          "model.language_model.layers.11": "0",
+          "model.language_model.layers.12": "0",
+          "model.language_model.layers.13": "0",
+          "model.language_model.layers.14": "0",
+          "model.language_model.layers.15": "0",
+          "model.language_model.layers.16": "0",
+          "model.language_model.layers.17": "0",
+          "model.language_model.layers.18": "0",
+          "model.language_model.layers.19": "0",
+          "model.language_model.layers.20": "0",
+          "model.language_model.layers.21": "0",
+          "model.language_model.layers.22": "0",
+          "model.language_model.layers.23": "0",
+          "model.language_model.layers.24": "0",
+          "model.language_model.layers.25": "0",
+          "model.language_model.layers.26": "0",
+          "model.language_model.layers.27": "1",
+          "model.language_model.layers.28": "1",
+          "model.language_model.layers.29": "1",
+          "model.language_model.layers.30": "1",
+          "model.language_model.layers.31": "1",
+          "model.language_model.layers.32": "1",
+          "model.language_model.layers.33": "1",
+          "model.language_model.layers.34": "1",
+          "model.language_model.layers.35": "1",
+          "model.language_model.layers.36": "1",
+          "model.language_model.layers.37": "1",
+          "model.language_model.layers.38": "1",
+          "model.language_model.layers.39": "1",
+          "model.language_model.layers.40": "1",
+          "model.language_model.layers.41": "1",
+          "model.language_model.layers.42": "1",
+          "model.language_model.layers.43": "1",
+          "model.language_model.layers.44": "1",
+          "model.language_model.layers.45": "1",
+          "model.language_model.layers.46": "1",
+          "model.language_model.layers.47": "1",
+          "model.language_model.layers.48": "1",
+          "model.language_model.layers.49": "1",
+          "model.language_model.layers.50": "1",
+          "model.language_model.layers.51": "1",
+          "model.language_model.layers.52": "1",
+          "model.language_model.layers.53": "1",
+          "model.language_model.layers.54": "1",
+          "model.language_model.layers.55": "1",
+          "model.language_model.layers.56": "1",
+          "model.language_model.layers.57": "1",
+          "model.language_model.layers.58": "1",
+          "model.language_model.layers.59": "1",
+          "model.language_model.layers.60": "1",
+          "model.language_model.layers.61": "1",
+          "model.language_model.layers.62": "1",
+          "model.language_model.layers.63": "1",
+          "model.language_model.norm": "1",
+          "model.language_model.rotary_emb": "1",
+          "lm_head": "1"
+        },
+        "parameter_bytes_by_device": {
+          "cuda:0": 48057587008,
+          "cuda:1": 61369327232
+        },
+        "parameter_dtypes": {
+          "torch.float32": 1184
+        },
+        "buffer_dtypes": {
+          "torch.float32": 4
+        },
+        "items": {
+          "aligned_harness_full": 1995,
+          "base_letter": 1995,
+          "pr4420_letter": 1995
+        },
+        "seconds": {
+          "aligned_harness_full": 3952.44,
+          "base_letter": 3717.482,
+          "pr4420_letter": 3773.9
+        },
+        "peak_allocated_bytes": [
+          53898903040,
+          63636459008
+        ],
+        "peak_reserved_bytes": [
+          93763665920,
+          76791414784
+        ]
+      }
+    ]
+  },
+  "container": {
+    "name": "click-fp32-20261122",
+    "id": "c3eb5ea55e6cc7db761e3243e8552a2a84fec3aa99c264ad60a4593248794914",
+    "created": "2026-11-21T17:02:47.480296528Z",
+    "image": "tailab:0.0.1",
+    "image_id": "sha256:512b50ba045fd9834c0876c06279824db294a1318c545560279b82392c9ab2cd",
+    "host_config": {
+      "ReadonlyRootfs": true,
+      "ShmSize": 4294967296,
+      "Binds": [
+        "/mnt/sdb/hyeongrae-click-vllm-20261120:/workspace"
+      ],
+      "Mounts": null,
+      "Tmpfs": {
+        "/run": ""
+      },
+      "LogConfig": {
+        "Type": "local",
+        "Config": {
+          "max-file": "2",
+          "max-size": "10m"
+        }
+      },
+      "NetworkMode": "bridge",
+      "IpcMode": "private",
+      "Privileged": false,
+      "DeviceRequests": [
+        {
+          "Driver": "",
+          "Count": 0,
+          "DeviceIDs": [
+            "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+            "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+          ],
+          "Capabilities": [
+            [
+              "gpu"
+            ]
+          ],
+          "Options": {}
+        }
+      ]
+    },
+    "entrypoint": [
+      "bash"
+    ],
+    "cmd": [
+      "-lc",
+      "mkdir -p /workspace/tmp /workspace/cache /workspace/logs /workspace/code /workspace/sources /workspace/results /workspace/environment; exec sleep infinity"
+    ],
+    "working_dir": "/workspace",
+    "env": [
+      "CUDA_CACHE_PATH=/workspace/cache/cuda",
+      "TMPDIR=/workspace/tmp",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "HF_HOME=/workspace/cache/huggingface",
+      "UV_CACHE_DIR=/workspace/cache/uv",
+      "UV_PYTHON_INSTALL_DIR=/workspace/python",
+      "VLLM_CACHE_ROOT=/workspace/cache/vllm",
+      "VLLM_NO_USAGE_STATS=1",
+      "XDG_CACHE_HOME=/workspace/cache",
+      "PIP_CACHE_DIR=/workspace/cache/pip",
+      "TORCH_HOME=/workspace/cache/torch",
+      "TRITON_CACHE_DIR=/workspace/cache/triton",
+      "DO_NOT_TRACK=1"
+    ],
+    "differences_from_click-vllm-20261120": {
+      "Mounts": {
+        "click-vllm-20261120": [
+          {
+            "Type": "tmpfs",
+            "Target": "/run"
+          }
+        ],
+        "click-fp32-20261122": null
+      },
+      "Tmpfs": {
+        "click-vllm-20261120": null,
+        "click-fp32-20261122": {
+          "/run": ""
+        }
+      },
+      "DeviceRequests": {
+        "click-vllm-20261120": [
+          {
+            "Driver": "",
+            "Count": 0,
+            "DeviceIDs": [
+              "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+            ],
+            "Capabilities": [
+              [
+                "gpu"
+              ]
+            ],
+            "Options": {}
+          }
+        ],
+        "click-fp32-20261122": [
+          {
+            "Driver": "",
+            "Count": 0,
+            "DeviceIDs": [
+              "GPU-ce8035fc-8017-2110-4d02-346079b8ab7d",
+              "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa"
+            ],
+            "Capabilities": [
+              [
+                "gpu"
+              ]
+            ],
+            "Options": {}
+          }
+        ]
+      },
+      "Env": {
+        "click-vllm-20261120": [
+          "XDG_CACHE_HOME=/workspace/cache",
+          "PIP_CACHE_DIR=/workspace/cache/pip",
+          "TORCH_HOME=/workspace/cache/torch",
+          "TRITON_CACHE_DIR=/workspace/cache/triton",
+          "CUDA_CACHE_PATH=/workspace/cache/cuda",
+          "TMPDIR=/workspace/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "HF_HOME=/workspace/cache/huggingface",
+          "UV_CACHE_DIR=/workspace/cache/uv",
+          "UV_PYTHON_INSTALL_DIR=/workspace/python",
+          "VLLM_CACHE_ROOT=/workspace/cache/vllm",
+          "VLLM_NO_USAGE_STATS=1",
+          "DO_NOT_TRACK=1",
+          "PATH=/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NVARCH=x86_64",
+          "NVIDIA_REQUIRE_CUDA=cuda>=12.9 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=vapps,driver>=535,driver<536 brand=vpc,driver>=535,driver<536 brand=vcs,driver>=535,driver<536 brand=vws,driver>=535,driver<536 brand=cloudgaming,driver>=535,driver<536 brand=unknown,driver>=550,driver<551 brand=grid,driver>=550,driver<551 brand=tesla,driver>=550,driver<551 brand=nvidia,driver>=550,driver<551 brand=quadro,driver>=550,driver<551 brand=quadrortx,driver>=550,driver<551 brand=nvidiartx,driver>=550,driver<551 brand=vapps,driver>=550,driver<551 brand=vpc,driver>=550,driver<551 brand=vcs,driver>=550,driver<551 brand=vws,driver>=550,driver<551 brand=cloudgaming,driver>=550,driver<551 brand=unknown,driver>=560,driver<561 brand=grid,driver>=560,driver<561 brand=tesla,driver>=560,driver<561 brand=nvidia,driver>=560,driver<561 brand=quadro,driver>=560,driver<561 brand=quadrortx,driver>=560,driver<561 brand=nvidiartx,driver>=560,driver<561 brand=vapps,driver>=560,driver<561 brand=vpc,driver>=560,driver<561 brand=vcs,driver>=560,driver<561 brand=vws,driver>=560,driver<561 brand=cloudgaming,driver>=560,driver<561 brand=unknown,driver>=565,driver<566 brand=grid,driver>=565,driver<566 brand=tesla,driver>=565,driver<566 brand=nvidia,driver>=565,driver<566 brand=quadro,driver>=565,driver<566 brand=quadrortx,driver>=565,driver<566 brand=nvidiartx,driver>=565,driver<566 brand=vapps,driver>=565,driver<566 brand=vpc,driver>=565,driver<566 brand=vcs,driver>=565,driver<566 brand=vws,driver>=565,driver<566 brand=cloudgaming,driver>=565,driver<566 brand=unknown,driver>=570,driver<571 brand=grid,driver>=570,driver<571 brand=tesla,driver>=570,driver<571 brand=nvidia,driver>=570,driver<571 brand=quadro,driver>=570,driver<571 brand=quadrortx,driver>=570,driver<571 brand=nvidiartx,driver>=570,driver<571 brand=vapps,driver>=570,driver<571 brand=vpc,driver>=570,driver<571 brand=vcs,driver>=570,driver<571 brand=vws,driver>=570,driver<571 brand=cloudgaming,driver>=570,driver<571",
+          "NV_CUDA_CUDART_VERSION=12.9.79-1",
+          "CUDA_VERSION=12.9.1",
+          "LD_LIBRARY_PATH=/usr/local/cuda/lib64",
+          "NVIDIA_VISIBLE_DEVICES=all",
+          "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+          "NV_CUDA_LIB_VERSION=12.9.1-1",
+          "NV_NVTX_VERSION=12.9.79-1",
+          "NV_LIBNPP_VERSION=12.4.1.87-1",
+          "NV_LIBNPP_PACKAGE=libnpp-12-9=12.4.1.87-1",
+          "NV_LIBCUSPARSE_VERSION=12.5.10.65-1",
+          "NV_LIBCUBLAS_PACKAGE_NAME=libcublas-12-9",
+          "NV_LIBCUBLAS_VERSION=12.9.1.4-1",
+          "NV_LIBCUBLAS_PACKAGE=libcublas-12-9=12.9.1.4-1",
+          "NV_LIBNCCL_PACKAGE_NAME=libnccl2",
+          "NV_LIBNCCL_PACKAGE_VERSION=2.27.3-1",
+          "NCCL_VERSION=2.27.3-1",
+          "NV_LIBNCCL_PACKAGE=libnccl2=2.27.3-1+cuda12.9",
+          "NVIDIA_PRODUCT_NAME=CUDA",
+          "NV_CUDA_CUDART_DEV_VERSION=12.9.79-1",
+          "NV_NVML_DEV_VERSION=12.9.79-1",
+          "NV_LIBCUSPARSE_DEV_VERSION=12.5.10.65-1",
+          "NV_LIBNPP_DEV_VERSION=12.4.1.87-1",
+          "NV_LIBNPP_DEV_PACKAGE=libnpp-dev-12-9=12.4.1.87-1",
+          "NV_LIBCUBLAS_DEV_VERSION=12.9.1.4-1",
+          "NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-12-9",
+          "NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-12-9=12.9.1.4-1",
+          "NV_CUDA_NSIGHT_COMPUTE_VERSION=12.9.1-1",
+          "NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-12-9=12.9.1-1",
+          "NV_NVPROF_VERSION=12.9.79-1",
+          "NV_NVPROF_DEV_PACKAGE=cuda-nvprof-12-9=12.9.79-1",
+          "NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev",
+          "NV_LIBNCCL_DEV_PACKAGE_VERSION=2.27.3-1",
+          "NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.27.3-1+cuda12.9",
+          "LIBRARY_PATH=/usr/local/cuda/lib64/stubs",
+          "NV_CUDNN_VERSION=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_NAME=libcudnn9-cuda-12",
+          "NV_CUDNN_PACKAGE=libcudnn9-cuda-12=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_DEV=libcudnn9-dev-cuda-12=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_DEV_HEADERS=libcudnn9-headers-cuda-12=9.10.2.21-1"
+        ],
+        "click-fp32-20261122": [
+          "CUDA_CACHE_PATH=/workspace/cache/cuda",
+          "TMPDIR=/workspace/tmp",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "HF_HOME=/workspace/cache/huggingface",
+          "UV_CACHE_DIR=/workspace/cache/uv",
+          "UV_PYTHON_INSTALL_DIR=/workspace/python",
+          "VLLM_CACHE_ROOT=/workspace/cache/vllm",
+          "VLLM_NO_USAGE_STATS=1",
+          "XDG_CACHE_HOME=/workspace/cache",
+          "PIP_CACHE_DIR=/workspace/cache/pip",
+          "TORCH_HOME=/workspace/cache/torch",
+          "TRITON_CACHE_DIR=/workspace/cache/triton",
+          "DO_NOT_TRACK=1",
+          "PATH=/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NVARCH=x86_64",
+          "NVIDIA_REQUIRE_CUDA=cuda>=12.9 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=vapps,driver>=535,driver<536 brand=vpc,driver>=535,driver<536 brand=vcs,driver>=535,driver<536 brand=vws,driver>=535,driver<536 brand=cloudgaming,driver>=535,driver<536 brand=unknown,driver>=550,driver<551 brand=grid,driver>=550,driver<551 brand=tesla,driver>=550,driver<551 brand=nvidia,driver>=550,driver<551 brand=quadro,driver>=550,driver<551 brand=quadrortx,driver>=550,driver<551 brand=nvidiartx,driver>=550,driver<551 brand=vapps,driver>=550,driver<551 brand=vpc,driver>=550,driver<551 brand=vcs,driver>=550,driver<551 brand=vws,driver>=550,driver<551 brand=cloudgaming,driver>=550,driver<551 brand=unknown,driver>=560,driver<561 brand=grid,driver>=560,driver<561 brand=tesla,driver>=560,driver<561 brand=nvidia,driver>=560,driver<561 brand=quadro,driver>=560,driver<561 brand=quadrortx,driver>=560,driver<561 brand=nvidiartx,driver>=560,driver<561 brand=vapps,driver>=560,driver<561 brand=vpc,driver>=560,driver<561 brand=vcs,driver>=560,driver<561 brand=vws,driver>=560,driver<561 brand=cloudgaming,driver>=560,driver<561 brand=unknown,driver>=565,driver<566 brand=grid,driver>=565,driver<566 brand=tesla,driver>=565,driver<566 brand=nvidia,driver>=565,driver<566 brand=quadro,driver>=565,driver<566 brand=quadrortx,driver>=565,driver<566 brand=nvidiartx,driver>=565,driver<566 brand=vapps,driver>=565,driver<566 brand=vpc,driver>=565,driver<566 brand=vcs,driver>=565,driver<566 brand=vws,driver>=565,driver<566 brand=cloudgaming,driver>=565,driver<566 brand=unknown,driver>=570,driver<571 brand=grid,driver>=570,driver<571 brand=tesla,driver>=570,driver<571 brand=nvidia,driver>=570,driver<571 brand=quadro,driver>=570,driver<571 brand=quadrortx,driver>=570,driver<571 brand=nvidiartx,driver>=570,driver<571 brand=vapps,driver>=570,driver<571 brand=vpc,driver>=570,driver<571 brand=vcs,driver>=570,driver<571 brand=vws,driver>=570,driver<571 brand=cloudgaming,driver>=570,driver<571",
+          "NV_CUDA_CUDART_VERSION=12.9.79-1",
+          "CUDA_VERSION=12.9.1",
+          "LD_LIBRARY_PATH=/usr/local/cuda/lib64",
+          "NVIDIA_VISIBLE_DEVICES=all",
+          "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+          "NV_CUDA_LIB_VERSION=12.9.1-1",
+          "NV_NVTX_VERSION=12.9.79-1",
+          "NV_LIBNPP_VERSION=12.4.1.87-1",
+          "NV_LIBNPP_PACKAGE=libnpp-12-9=12.4.1.87-1",
+          "NV_LIBCUSPARSE_VERSION=12.5.10.65-1",
+          "NV_LIBCUBLAS_PACKAGE_NAME=libcublas-12-9",
+          "NV_LIBCUBLAS_VERSION=12.9.1.4-1",
+          "NV_LIBCUBLAS_PACKAGE=libcublas-12-9=12.9.1.4-1",
+          "NV_LIBNCCL_PACKAGE_NAME=libnccl2",
+          "NV_LIBNCCL_PACKAGE_VERSION=2.27.3-1",
+          "NCCL_VERSION=2.27.3-1",
+          "NV_LIBNCCL_PACKAGE=libnccl2=2.27.3-1+cuda12.9",
+          "NVIDIA_PRODUCT_NAME=CUDA",
+          "NV_CUDA_CUDART_DEV_VERSION=12.9.79-1",
+          "NV_NVML_DEV_VERSION=12.9.79-1",
+          "NV_LIBCUSPARSE_DEV_VERSION=12.5.10.65-1",
+          "NV_LIBNPP_DEV_VERSION=12.4.1.87-1",
+          "NV_LIBNPP_DEV_PACKAGE=libnpp-dev-12-9=12.4.1.87-1",
+          "NV_LIBCUBLAS_DEV_VERSION=12.9.1.4-1",
+          "NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-12-9",
+          "NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-12-9=12.9.1.4-1",
+          "NV_CUDA_NSIGHT_COMPUTE_VERSION=12.9.1-1",
+          "NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-12-9=12.9.1-1",
+          "NV_NVPROF_VERSION=12.9.79-1",
+          "NV_NVPROF_DEV_PACKAGE=cuda-nvprof-12-9=12.9.79-1",
+          "NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev",
+          "NV_LIBNCCL_DEV_PACKAGE_VERSION=2.27.3-1",
+          "NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.27.3-1+cuda12.9",
+          "LIBRARY_PATH=/usr/local/cuda/lib64/stubs",
+          "NV_CUDNN_VERSION=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_NAME=libcudnn9-cuda-12",
+          "NV_CUDNN_PACKAGE=libcudnn9-cuda-12=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_DEV=libcudnn9-dev-cuda-12=9.10.2.21-1",
+          "NV_CUDNN_PACKAGE_DEV_HEADERS=libcudnn9-headers-cuda-12=9.10.2.21-1"
+        ]
+      }
+    },
+    "note": "/run tmpfs given with --tmpfs (HostConfig.Tmpfs) instead of --mount (HostConfig.Mounts); /proc/mounts options identical: rw,nosuid,nodev,noexec,relatime,mode=755",
+    "gpu_mapping": {
+      "nvidia_smi_L": [
+        "GPU 0: NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition (UUID: GPU-ce8035fc-8017-2110-4d02-346079b8ab7d)",
+        "GPU 1: NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition (UUID: GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa)"
+      ],
+      "torch": {
+        "cuda:0": "ce8035fc-8017-2110-4d02-346079b8ab7d (host GPU 0)",
+        "cuda:1": "4d10fa0e-f11b-ca93-a51d-bea42af0dfaa (host GPU 1)"
+      }
+    }
+  },
+  "restarts": []
+}

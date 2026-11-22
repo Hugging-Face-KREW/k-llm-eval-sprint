@@ -1,0 +1,7 @@
+model,comparison,items,same_prediction,max_abs_logprob_diff,exact_scores,prediction_parity
+kanana2-3b,lighteval_full_vs_aligned_harness_full,1995,1746,5.875,False,False
+kanana2-3b,base_letter_vs_pr4420_letter,1739,1739,0.0,True,True
+kanana2-3b,base_full_vs_pr4420_full,1739,1739,0.0,True,True
+qwen38-27b,lighteval_full_vs_aligned_harness_full,1995,1943,10.75,False,False
+qwen38-27b,base_letter_vs_pr4420_letter,1739,1720,0.90625,False,False
+qwen38-27b,base_full_vs_pr4420_full,1739,1739,0.0,True,True
