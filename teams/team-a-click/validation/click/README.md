@@ -1,5 +1,8 @@
 # CLIcK 데이터와 프롬프트 검증
 
+2026-11-22: 최신 모델 **Kanana-2-3B-Instruct·Qwen3.8-27B**도 FP32에서 Lighteval ↔ 입력 정렬 harness 예측이 1,995/1,995 일치했습니다.
+[FP32 결과](transformers-fp32-results/SUMMARY.md)와 [BF16 결과·원인 진단](transformers-bf16-results/SUMMARY.md)을 확인하세요.
+
 2026-11-12: **lm-evaluation-harness**로 Polyglot-Ko 1.3B·12.8B의 태스크 버전 × 채점 방식 8개 전체 평가를 완료했습니다.
 [통합 비교와 조건별 상세 보고서](polyglot-matrix-results/README.md)에서 결과·평가 조건·검증 범위를 확인할 수 있습니다.
 8개 결과는 모두 lm-evaluation-harness 결과이며, Lighteval 수치는 이전 실행 참고값으로 따로 표시합니다.
