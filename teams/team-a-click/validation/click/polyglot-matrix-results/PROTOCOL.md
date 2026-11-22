@@ -86,7 +86,8 @@ full 조건은 후보 문자열을 `A. 보기 원문`으로 바꾸고 정답 라
 /workspace/bin/native-env bash /workspace/code/teams/team-a-click/validation/click/polyglot_matrix_run.sh
 ```
 
-이는 실행 기록입니다. 이 보고서 PR에는 평가 실행기가 포함되지 않으므로 위 명령만으로 새 환경에서 재실행할 수 있는 패키지는 아닙니다. 원문·토큰·문항별 로그는 비공개 검증 자료로 보존합니다.
+이는 당시 실행 기록입니다. 후속으로 공개한 [재현 안내와 실행 코드](../POLYGLOT.md)에서 새 환경의 준비·검증·실행 명령을 확인할 수 있습니다.
+공개 과정의 GPU·실행 경로 설정 변경은 [코드 이력](../polyglot-code-provenance.json)에 기록했습니다. 원문·토큰·문항별 로그는 비공개 검증 자료로 보존합니다.
 
 ## 해석의 한계
 

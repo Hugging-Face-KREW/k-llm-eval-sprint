@@ -1,0 +1,146 @@
+{
+  "status": "COMPLETE",
+  "recorded_at_kst": "2026-11-12T02:35:59.131832+09:00",
+  "new_gpu_inference_started": true,
+  "completed_model_conditions": 8,
+  "required_model_conditions": 8,
+  "code_sha256": "25889d47475a56f5e7d3852f364839fefe342359e32dd042c792905b67000e6b",
+  "old_runner_sha256": "0824359c8bbe2f9943bf92d5059990a4b92c8d0e58451b1f174eccc8aef99f57",
+  "samples": {
+    "calibration": 55,
+    "validation": 72
+  },
+  "local_environment": {
+    "python": "3.14.8",
+    "torch": "2.14.1",
+    "transformers": "5.20.0",
+    "device": "cpu"
+  },
+  "remote_command": [
+    "/workspace/bin/native-env",
+    "bash",
+    "/workspace/code/teams/team-a-click/validation/click/polyglot_matrix_run.sh"
+  ],
+  "remote_output": "/workspace/results-matrix",
+  "remote_logs": "/workspace/logs/matrix-task_3ce01f897c7f",
+  "remaining": [],
+  "bundle_sha256": "4b92e760537f42390673b485aadedd4fc3a5bb5ffd9b1dd697a1ccbdf6477a6f",
+  "bundle_bytes": 16172,
+  "tests": {
+    "combined_passed": 141,
+    "final_matrix_passed": 21
+  },
+  "local_preflight_status": "PASS",
+  "cpu_smoke": {
+    "status": "PASS",
+    "device": "cpu",
+    "items_per_condition": 8,
+    "conditions": 4,
+    "max_abs_diff": 0.0
+  },
+  "remote_tests_passed": 141,
+  "started_at_kst": "2026-11-11T20:16:52.008364+09:00",
+  "supervisor_pid": 5522,
+  "runner_pid": 5528,
+  "gpu_smoke": {
+    "status": "PASS",
+    "device": "cuda",
+    "items_per_condition": 8,
+    "conditions": 4,
+    "max_abs_diff": 0
+  },
+  "first_completed_inference": {
+    "model": "1.3b",
+    "condition": "base_letter",
+    "stage": "pilot",
+    "engine": "native",
+    "completed": 1,
+    "expected": 127,
+    "at_kst": "2026-11-11T20:18:27.701316+09:00",
+    "pid": 5899
+  },
+  "progress": {
+    "1.3b": {
+      "base_letter": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 573,
+        "correct_norm": 573
+      },
+      "pr4420_letter": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 568,
+        "correct_norm": 568
+      },
+      "base_full": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 596,
+        "correct_norm": 659
+      },
+      "pr4420_full": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 595,
+        "correct_norm": 654
+      }
+    },
+    "12.8b": {
+      "base_letter": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 477,
+        "correct_norm": 477
+      },
+      "pr4420_letter": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 478,
+        "correct_norm": 478
+      },
+      "base_full": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 488,
+        "correct_norm": 633
+      },
+      "pr4420_full": {
+        "pilot_gate": "PASS",
+        "full_status": "COMPLETE",
+        "full_rows": 1995,
+        "correct": 487,
+        "correct_norm": 631
+      }
+    }
+  },
+  "last_observed_at": "2026-11-11T17:31:41.100115+00:00",
+  "first_12_8b_inference": {
+    "at_kst": "2026-11-11T20:58:45.704184+09:00",
+    "condition": "base_letter",
+    "engine": "native",
+    "stage": "pilot",
+    "completed": 1,
+    "expected": 127,
+    "pid": 6727
+  },
+  "connection_interruptions": [
+    {
+      "last_observed_before": "2026-11-11T13:09:25.861576+00:00",
+      "type": "network loss then ordinary SSH login without shared ControlPath",
+      "shared_connection_restored_at": "2026-11-11T15:50:41.308235+00:00",
+      "evaluation_restarted": false,
+      "original_processes_and_locks_verified": true
+    }
+  ],
+  "ended_at_kst": "2026-11-12T02:31:41.100115+09:00",
+  "exit_code": 0,
+  "retrieval_sha256": "ca6d9ce2af8aa096b4bf97411e3e7a3d05c838feb4cf8ffb2e64a38c56fa6782"
+}
