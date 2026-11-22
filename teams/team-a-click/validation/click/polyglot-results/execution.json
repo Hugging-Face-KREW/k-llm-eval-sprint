@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "scope": "CLIcK Polyglot-Ko 1.3B and 12.8B; native Python API parity, single prompt and original option order",
+  "started_at_utc": "2026-11-11T05:13:38.555060+00:00",
+  "finished_at_utc": "2026-11-11T08:28:15.477646+00:00",
+  "elapsed_seconds_including_downloads_and_setup": 11676.922586,
+  "exit_code": 0,
+  "command": [
+    "/workspace/bin/native-env",
+    "bash",
+    "/workspace/code/teams/team-a-click/validation/click/polyglot_run.sh"
+  ],
+  "environment": {
+    "python": "3.12.16",
+    "packages": {
+      "torch": "2.14.1+cu126",
+      "transformers": "5.20.1",
+      "tokenizers": "0.23.3",
+      "datasets": "5.1.0",
+      "huggingface-hub": "1.33.0",
+      "accelerate": "1.15.0",
+      "numpy": "2.5.4",
+      "lighteval": "0.13.1.dev0",
+      "lm-eval": "0.4.14.dev0"
+    },
+    "cuda": {
+      "name": "NVIDIA A100X",
+      "total_memory": 85094825984,
+      "uuid": "3695dff3-f973-9d01-4829-e3b3730748b6",
+      "device_count": 1,
+      "runtime": "12.6"
+    }
+  },
+  "image": "tailab:0.0.1",
+  "image_id": "sha256:512b50ba045fd9834c0876c06279824db294a1318c545560279b82392c9ab2cd",
+  "gpu_host_index": 3,
+  "gpu_visible_count": 1,
+  "code_bundle_sha256": "b2ac45216edc4848aedc83d1f6eb1be0c8502443d9bdea031859e32ca05df4f0",
+  "unit_tests": {
+    "counts_by_file": {
+      "test_polyglot": 24,
+      "test_provenance": 20,
+      "test_click": 76
+    },
+    "total": 120,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "gpu_random_smoke": {
+    "status": "PASS",
+    "purpose": "Random tiny GPTNeoX adapter smoke; not Polyglot accuracy or a calibration gate",
+    "device": "cuda",
+    "items": 4,
+    "max_abs_diff": 0.0,
+    "prepared_sha256": "d0d6be389cb63bbab794bf03049efda7ec65012644421e4e225a402acc0c1d0c"
+  },
+  "dataset_revision": "d61627859645b5e6edc03fd9f835735d8226fa4e",
+  "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
+  "runner_sha256": "0824359c8bbe2f9943bf92d5059990a4b92c8d0e58451b1f174eccc8aef99f57",
+  "prepared_sha256": "d0d6be389cb63bbab794bf03049efda7ec65012644421e4e225a402acc0c1d0c",
+  "pilot_items_per_engine_per_model": 124,
+  "calibration_items": 55,
+  "held_out_items": 69,
+  "full_items_per_engine_per_model": 1995,
+  "constraints": {
+    "host_global_environment_or_image_changed": false,
+    "other_containers_modified": false,
+    "other_gpus_exposed": false,
+    "shared_tracked_files_modified": false,
+    "runner_logic_modified": false,
+    "tolerance_widened": false,
+    "quantization_or_dtype_or_batch_changed": false,
+    "failed_rows_skipped": false,
+    "source_patch": "Only approved metrics_sample.py model_name -> search compatibility patch"
+  },
+  "retrieved_files": 34,
+  "retrieved_file_hashes_verified": true,
+  "private_artifact_archive_sha256": "988c915b104733b42c1b851e9de1c59f648488e411952aa64d2aab0e2d9c8e68",
+  "published_files": {
+    "1.3b": {
+      "summary.json": "c360a8fe34da3163b7b80d37af49f0ef2db30d4a1757afef2109f6b951e40bec",
+      "categories.csv": "cefc4c7b8d758ae280cb8ed194abcad6ff62fd918b599e775e4ef0d84ffbf00a",
+      "report.md": "d15f9eda0e1a3523e0fdfdb393171d27f4078967e5e09fd610533918e91c5be6"
+    },
+    "12.8b": {
+      "summary.json": "aaf6aa68e38817a247d1425baf3fc8f8506f9d8d51b8afebfe4c63fa8d67e03d",
+      "categories.csv": "3b518fafca22dfa9d9dd761c17a2018fdac532686e07a679d1ceb01bf30cdc2f",
+      "report.md": "56c3faf329bf4ad2b8fc69451aca4fcff5661dea3ad5a7b6e10f8b08d885a1fb"
+    }
+  },
+  "local_report_regeneration": "Both full reports regenerated with the checked-out runner and passed; all 34 retrieved file hashes match the remote inventory.",
+  "raw_inputs_included": false
+}

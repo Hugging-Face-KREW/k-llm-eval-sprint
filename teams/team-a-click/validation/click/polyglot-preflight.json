@@ -1,0 +1,76 @@
+{
+  "created_at": "2026-11-11T05:08:19.510453+00:00",
+  "dataset_revision": "d61627859645b5e6edc03fd9f835735d8226fa4e",
+  "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
+  "runner_sha256": "0824359c8bbe2f9943bf92d5059990a4b92c8d0e58451b1f174eccc8aef99f57",
+  "sources": {
+    "lighteval": {
+      "revision": "efb7e657802dd0d760473ffa9307063928ce4b41",
+      "patch_sha256": "f9b30d1cdc310c980ce6c7cf73ab28ce533bf71282a0c2489e264a820cdf537b",
+      "python_tree_sha256": "d4c4ee48b29e1b702f9a5f857a99d1f7626b03c0d17ea9d217d9c1db06c6f897"
+    },
+    "harness": {
+      "revision": "7a7b48afa7c294a5992008053bd1ec0042906c6d",
+      "patch_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "python_tree_sha256": "00227cdf1894f9a392fa1aa0d474ee3c2f27581c9ca6cdcdc49f4f10ab533a92"
+    }
+  },
+  "settings": {
+    "dtype": "float32",
+    "batch_size": 1,
+    "batch_unit": "native configuration: Lighteval 1 document (4/5 candidates), harness/reference 1 candidate",
+    "attention": "eager",
+    "tf32": false,
+    "max_length": 2048,
+    "chat_template": false,
+    "add_special_tokens": false,
+    "fewshots": 0,
+    "length_normalization": false,
+    "seed": 1234,
+    "prompt_version": "click_harness_layout_v3",
+    "quantization": null
+  },
+  "models": {
+    "1.3b": {
+      "repo": "EleutherAI/polyglot-ko-1.3b",
+      "revision": "557e162cf6e944fdbae05bab2e45d066a125eacb"
+    },
+    "12.8b": {
+      "repo": "EleutherAI/polyglot-ko-12.8b",
+      "revision": "09dfc839067bf44e7f52976eca8adbc17f04e1b0"
+    }
+  },
+  "items": 1995,
+  "preflight": {
+    "1.3b": {
+      "maximum_tokens": 1896,
+      "over_context": 0,
+      "joint_separate_differences": 0
+    },
+    "12.8b": {
+      "maximum_tokens": 1896,
+      "over_context": 0,
+      "joint_separate_differences": 0
+    }
+  },
+  "native_input_comparison": "PASS",
+  "model_evaluation": "NOT_RUN",
+  "pilot_counts": {
+    "calibration": 55,
+    "validation": 69
+  },
+  "random_model_smoke": {
+    "status": "PASS",
+    "purpose": "Random tiny GPTNeoX adapter smoke; not Polyglot accuracy or a calibration gate",
+    "device": "cpu",
+    "items": 4,
+    "max_abs_diff": 0.0,
+    "prepared_sha256": "9f5b60d7639f7e29092bae727e607af8d7475a238a9149ae15409a38574c2590"
+  },
+  "unit_tests": {
+    "passed": 120,
+    "click": 76,
+    "provenance": 20,
+    "polyglot": 24
+  }
+}

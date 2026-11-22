@@ -1,0 +1,221 @@
+{
+  "status": "PASS",
+  "categories": {
+    "economy": {
+      "items": 59,
+      "lighteval_correct": 23,
+      "harness_correct": 23,
+      "lighteval_accuracy": 0.3898305084745763,
+      "harness_accuracy": 0.3898305084745763,
+      "same_prediction": 59,
+      "max_abs_diff": 7.05718994140625e-05
+    },
+    "functional": {
+      "items": 133,
+      "lighteval_correct": 21,
+      "harness_correct": 21,
+      "lighteval_accuracy": 0.15789473684210525,
+      "harness_accuracy": 0.15789473684210525,
+      "same_prediction": 133,
+      "max_abs_diff": 0.0001888275146484375
+    },
+    "geography": {
+      "items": 131,
+      "lighteval_correct": 47,
+      "harness_correct": 47,
+      "lighteval_accuracy": 0.35877862595419846,
+      "harness_accuracy": 0.35877862595419846,
+      "same_prediction": 131,
+      "max_abs_diff": 0.00010967254638671875
+    },
+    "grammar": {
+      "items": 232,
+      "lighteval_correct": 50,
+      "harness_correct": 50,
+      "lighteval_accuracy": 0.21551724137931033,
+      "harness_accuracy": 0.21551724137931033,
+      "same_prediction": 232,
+      "max_abs_diff": 0.0001544952392578125
+    },
+    "history": {
+      "items": 280,
+      "lighteval_correct": 65,
+      "harness_correct": 65,
+      "lighteval_accuracy": 0.23214285714285715,
+      "harness_accuracy": 0.23214285714285715,
+      "same_prediction": 280,
+      "max_abs_diff": 0.0001735687255859375
+    },
+    "law": {
+      "items": 219,
+      "lighteval_correct": 67,
+      "harness_correct": 67,
+      "lighteval_accuracy": 0.3059360730593607,
+      "harness_accuracy": 0.3059360730593607,
+      "same_prediction": 219,
+      "max_abs_diff": 0.0001811981201171875
+    },
+    "politics": {
+      "items": 84,
+      "lighteval_correct": 33,
+      "harness_correct": 33,
+      "lighteval_accuracy": 0.39285714285714285,
+      "harness_accuracy": 0.39285714285714285,
+      "same_prediction": 84,
+      "max_abs_diff": 4.57763671875e-05
+    },
+    "popular": {
+      "items": 41,
+      "lighteval_correct": 15,
+      "harness_correct": 15,
+      "lighteval_accuracy": 0.36585365853658536,
+      "harness_accuracy": 0.36585365853658536,
+      "same_prediction": 41,
+      "max_abs_diff": 6.580352783203125e-05
+    },
+    "society": {
+      "items": 309,
+      "lighteval_correct": 138,
+      "harness_correct": 138,
+      "lighteval_accuracy": 0.44660194174757284,
+      "harness_accuracy": 0.44660194174757284,
+      "same_prediction": 309,
+      "max_abs_diff": 0.000110626220703125
+    },
+    "textual": {
+      "items": 285,
+      "lighteval_correct": 63,
+      "harness_correct": 63,
+      "lighteval_accuracy": 0.22105263157894736,
+      "harness_accuracy": 0.22105263157894736,
+      "same_prediction": 285,
+      "max_abs_diff": 0.000141143798828125
+    },
+    "tradition": {
+      "items": 222,
+      "lighteval_correct": 77,
+      "harness_correct": 77,
+      "lighteval_accuracy": 0.34684684684684686,
+      "harness_accuracy": 0.34684684684684686,
+      "same_prediction": 222,
+      "max_abs_diff": 0.000118255615234375
+    }
+  },
+  "aggregates": {
+    "all_micro": {
+      "items": 1995,
+      "lighteval_correct": 599,
+      "harness_correct": 599,
+      "lighteval_accuracy": 0.30025062656641605,
+      "harness_accuracy": 0.30025062656641605,
+      "same_prediction": 1995,
+      "max_abs_diff": 0.0001888275146484375
+    },
+    "culture_micro": {
+      "items": 1345,
+      "lighteval_correct": 465,
+      "harness_correct": 465,
+      "lighteval_accuracy": 0.34572490706319703,
+      "harness_accuracy": 0.34572490706319703,
+      "same_prediction": 1345,
+      "max_abs_diff": 0.0001811981201171875
+    },
+    "language_micro": {
+      "items": 650,
+      "lighteval_correct": 134,
+      "harness_correct": 134,
+      "lighteval_accuracy": 0.20615384615384616,
+      "harness_accuracy": 0.20615384615384616,
+      "same_prediction": 650,
+      "max_abs_diff": 0.0001888275146484375
+    },
+    "category_macro": {
+      "lighteval_accuracy": 0.3121192967654094,
+      "harness_accuracy": 0.3121192967654094
+    }
+  },
+  "mismatches": [],
+  "model": {
+    "repo": "EleutherAI/polyglot-ko-1.3b",
+    "revision": "557e162cf6e944fdbae05bab2e45d066a125eacb"
+  },
+  "dataset_revision": "d61627859645b5e6edc03fd9f835735d8226fa4e",
+  "settings": {
+    "dtype": "float32",
+    "batch_size": 1,
+    "batch_unit": "native configuration: Lighteval 1 document (4/5 candidates), harness/reference 1 candidate",
+    "attention": "eager",
+    "tf32": false,
+    "max_length": 2048,
+    "chat_template": false,
+    "add_special_tokens": false,
+    "fewshots": 0,
+    "length_normalization": false,
+    "seed": 1234,
+    "prompt_version": "click_harness_layout_v3",
+    "quantization": null
+  },
+  "sources": {
+    "lighteval": {
+      "revision": "efb7e657802dd0d760473ffa9307063928ce4b41",
+      "patch_sha256": "c164188bd05f80f7988e81946d4844a289d1da2ad4459bd21cf7d19b4ee405e5",
+      "python_tree_sha256": "d4c4ee48b29e1b702f9a5f857a99d1f7626b03c0d17ea9d217d9c1db06c6f897"
+    },
+    "harness": {
+      "revision": "7a7b48afa7c294a5992008053bd1ec0042906c6d",
+      "patch_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "python_tree_sha256": "00227cdf1894f9a392fa1aa0d474ee3c2f27581c9ca6cdcdc49f4f10ab533a92"
+    }
+  },
+  "runner_sha256": "0824359c8bbe2f9943bf92d5059990a4b92c8d0e58451b1f174eccc8aef99f57",
+  "preflight": {
+    "maximum_tokens": 1896,
+    "over_context": 0,
+    "joint_separate_differences": 0
+  },
+  "protocol": {
+    "prepared_sha256": "d0d6be389cb63bbab794bf03049efda7ec65012644421e4e225a402acc0c1d0c",
+    "environment": {
+      "python": "3.12.16",
+      "packages": {
+        "torch": "2.14.1+cu126",
+        "transformers": "5.20.1",
+        "tokenizers": "0.23.3",
+        "datasets": "5.1.0",
+        "huggingface-hub": "1.33.0",
+        "accelerate": "1.15.0",
+        "numpy": "2.5.4",
+        "lighteval": "0.13.1.dev0",
+        "lm-eval": "0.4.14.dev0"
+      },
+      "cuda": {
+        "name": "NVIDIA A100X",
+        "total_memory": 85094825984,
+        "uuid": "3695dff3-f973-9d01-4829-e3b3730748b6",
+        "device_count": 1,
+        "runtime": "12.6"
+      }
+    },
+    "model": {
+      "repo": "EleutherAI/polyglot-ko-1.3b",
+      "revision": "557e162cf6e944fdbae05bab2e45d066a125eacb"
+    }
+  },
+  "tolerance": {
+    "status": "PASS",
+    "atol": 0.00020599365234375,
+    "rtol": 0,
+    "calibration_max_abs_diff": 0.000102996826171875,
+    "validation_failures": [],
+    "protocol_sha256": "7474c3abf24e826282d4e1ea02fbde2104f35cddf93a9dc94bf1821a5ae21c43",
+    "pilot_files": {
+      "pilot-lighteval.jsonl": "9a3aa121595d75f8435f719210dd26a9a60d35495e1735bc6d1b6e853fe2de48",
+      "pilot-harness.jsonl": "442132d551f32f4022b29ae639a6935aad4d21bcf4d1cc9a614a2d3d1b459479",
+      "pilot-reference.jsonl": "442132d551f32f4022b29ae639a6935aad4d21bcf4d1cc9a614a2d3d1b459479"
+    }
+  },
+  "result_files": {
+    "full-lighteval.jsonl": "5966c1b3312ca1abf4ab151b2834afe914009cd0a901217c60c86bc9445774c1",
+    "full-harness.jsonl": "c2a8c9b4ebfee915690072ba595b8a0c26bf80ced3c7b101b69132249a4cc679"
+  }
+}
