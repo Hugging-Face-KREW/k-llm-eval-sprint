@@ -1,0 +1,529 @@
+{
+  "protocol": {
+    "schema": 2,
+    "models": {
+      "kanana2-3b": {
+        "repo": "kakaocorp/kanana-2-3b-instruct",
+        "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
+        "location": "/workspace/cache/huggingface/hub/models--kakaocorp--kanana-2-3b-instruct/snapshots/6a5d7889964c4c590299d16e309eabab1f73f8a9",
+        "max_lengths": {
+          "lighteval_full": 1564,
+          "aligned_harness_full": 1564,
+          "base_letter": 1484,
+          "pr4420_letter": 1525,
+          "base_full": 1524,
+          "pr4420_full": 1565
+        },
+        "token_hashes": {
+          "lighteval_full": "6ffbbcecfccea7c21e20eb4f6e2393c907e03ade6386bc81315fd23132861db3",
+          "aligned_harness_full": "6ffbbcecfccea7c21e20eb4f6e2393c907e03ade6386bc81315fd23132861db3",
+          "base_letter": "0f3c91932d555478c86f5fa9c71e45bbdb707ebc480cac334916124782e0bca6",
+          "pr4420_letter": "754ef47bdf4930eba4cf7266c0bc10adb4f7d9b3f19222dc4f9e5a53146fc2ed",
+          "base_full": "e5c1e4b05089c1b6c2a025f178bc416ea85bc369b4f856345645e4910d64bc6e",
+          "pr4420_full": "aa6dc1f385cc1c9d529fdb285c44ca766dc540ddddbbe523ff4b6bb038e3f95b"
+        },
+        "samples": {
+          "calibration": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#4"
+          ],
+          "validation": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#20",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_PSE.json#177",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_Kedu.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_Kedu.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#204",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#11",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#46",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#82",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_PSE.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#42",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#64",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#9"
+          ]
+        }
+      },
+      "qwen38-27b": {
+        "repo": "Qwen/Qwen3.8-27B",
+        "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+        "location": "/workspace/cache/huggingface/hub/models--Qwen--Qwen3.8-27B/snapshots/37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+        "max_lengths": {
+          "lighteval_full": 1954,
+          "aligned_harness_full": 1954,
+          "base_letter": 1852,
+          "pr4420_letter": 1902,
+          "base_full": 1905,
+          "pr4420_full": 1955
+        },
+        "token_hashes": {
+          "lighteval_full": "5cb5e4183a1055e6b8bf96938161bfe054dc187aa5b198b94ea2c90a826d3bb1",
+          "aligned_harness_full": "5cb5e4183a1055e6b8bf96938161bfe054dc187aa5b198b94ea2c90a826d3bb1",
+          "base_letter": "f25d5b7ab52e14cbfa9b98c274d83b84bb5982c21a95fc7becac8f852073fae1",
+          "pr4420_letter": "a01c86a2ee4d143a6e14ed4b8e4b937e672d96dd35ee786105a9726448fa41a0",
+          "base_full": "0fee1153725b445724cb86f43bc6a7f756c25e06909a15b6ee1b180c18377412",
+          "pr4420_full": "577b1ad5b4ebda28f4b121f5896118cae8336e399d702622debc25fca3f8ecb1"
+        },
+        "samples": {
+          "calibration": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#4",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#2",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#3",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#4"
+          ],
+          "validation": [
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Economy/Economy_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#20",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Geography/Geography_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_KHB.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean History/History_PSE.json#120",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Law/Law_PSAT.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Politics/Politics_Kedu.json#1",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Popular/Popular_Kedu.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Society/Society_Kedu.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_KIIP.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Culture/Korean Tradition/Tradition_Kedu.json#24",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#11",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#46",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#82",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Functional/Functional_PSE.json#0",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#42",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Grammar/Grammar_CSAT.json#9",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#5",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#6",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#64",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#7",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#8",
+            "d61627859645b5e6edc03fd9f835735d8226fa4e:Dataset/Language/Textual/Textual_CSAT.json#9"
+          ]
+        }
+      }
+    },
+    "context_limit": 2048,
+    "dtype": "bfloat16",
+    "seed": 1234,
+    "num_items": 1995,
+    "conditions": [
+      "lighteval_full",
+      "aligned_harness_full",
+      "base_letter",
+      "pr4420_letter",
+      "base_full",
+      "pr4420_full"
+    ],
+    "host": "tailab",
+    "host_gpu_index": 1,
+    "gpu_uuid": "GPU-4d10fa0e-f11b-ca93-a51d-bea42af0dfaa",
+    "image": "tailab:0.0.1",
+    "storage": "/mnt/sdb/hyeongrae-click-vllm-20261120/transformers-bf16-20261120",
+    "manifest_sha256": "688cdd12edbcf2bda348058ad1b01a5de605a9dbbacd714bd61b392387e7c446",
+    "original_inputs_sha256": "ceff8076b3580d61c61ebb70a4281fab3c21bbdb7102693b560591434cc30b1b",
+    "source_manifest_sha256": "e490f0bcced756cca21f8e39959e04a29ab87599e0694109e99b609a8fc4082d",
+    "versions": {
+      "torch": "2.14.0",
+      "vllm": "0.34.0",
+      "transformers": "5.20.1",
+      "lighteval": "0.13.1.dev0",
+      "lm_eval": "0.4.14.dev0",
+      "datasets": "5.2.0",
+      "tokenizers": "0.23.3"
+    },
+    "run_id": "transformers-bf16-20261120",
+    "backend": "transformers",
+    "attention_implementation": "eager",
+    "tf32": false,
+    "autocast": false,
+    "quantization": null,
+    "native_batch_size": 1,
+    "native_batch_semantics": {
+      "lighteval": "one document, all choices in one forward; right padding; includes final target token",
+      "harness": "one candidate per forward; omits final target token; logits_cache=False"
+    },
+    "scoring_dtype": "native logits dtype for log_softmax and sum; audit records actual dtype",
+    "pilot_policy": "Require exact canonical input and native scoring audits. Measure numerical and prediction parity separately; do not require cross-adapter parity to evaluate native behavior.",
+    "parent_vllm_protocol_sha256": "06fe060fad7a506befcb9258fad71911148d4dc62bec3f9cb75fcbb413267cbe",
+    "matrix_inputs_sha256": "c72b9086cb5ec78dd989b56b526809c5908bfd1218e29d33a2ffd91c5e201c8f",
+    "packages_sha256": "aa0fa6e8502926cbb19319c1bf9031bb3e925b124af5d6f0f778ba0a1963faf5",
+    "runner_files": {
+      "transformers_click.py": "fbab3a79651b6407b0ca2a6ec1ef3c1efcab4c1c9a34af73a8e60bf048f51504",
+      "transformers_run.py": "fa69ab8a66edf35552f52a31753b951eca1d3413157e640cc0097c55b941f59e",
+      "transformers_report.py": "3c0a6e21046c2dcbdd1e810df43c6d9a2a2ad6091003a5375339f8b5677e533c",
+      "test_transformers_click.py": "f20a7f17d33184ae9888a12c0919456351acf754d4fce499ad912c87582db30f",
+      "vllm_click.py": "82c5b18c5f5bba5b80f3693956c5f3b50e13a8d78f0e27f043d5c79ef2049054",
+      "vllm_run.py": "7a7a233e1eaa720c285a40ac6018d1e4bb29701eba999b6e2e2e825641e8aa8e"
+    },
+    "model_manifest_sha256": {
+      "kanana2-3b": "6ece8f851873a1af0eedbecb8b5d811b25d499007bde97c7369ca15e36f5c998",
+      "qwen38-27b": "574ffd5d5fe26da98bd3d56147e028103feb27be2872f9fc0073947b55aa79f9"
+    }
+  },
+  "packages_sha256": "aa0fa6e8502926cbb19319c1bf9031bb3e925b124af5d6f0f778ba0a1963faf5",
+  "models": {
+    "kanana2-3b": {
+      "repo": "kakaocorp/kanana-2-3b-instruct",
+      "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
+      "files": {
+        "chat_template.jinja": {
+          "size": 10725,
+          "sha256": "b8ee6b31575eada17ebbe73d3f1ac65d3efde64f0a25ff922031dec7e1cae3e3"
+        },
+        "config.json": {
+          "size": 1534,
+          "sha256": "b20745cf6680cab720a708142b99d995455780d270783c9bbd7496443a8697a3"
+        },
+        "generation_config.json": {
+          "size": 147,
+          "sha256": "8fb800a4ed31f6042adf130656f096b03af97fc935d8e360e93c01353d42262e"
+        },
+        "model-00001-of-00002.safetensors": {
+          "size": 4962632064,
+          "sha256": "879fd56f37b7452f34208ea99be40ac2c8ebcd36db636fe953303a753314171d"
+        },
+        "model-00002-of-00002.safetensors": {
+          "size": 2055352808,
+          "sha256": "76d38f1e8aff33a43fe038888b9c041cec6d6cbfe735e3368bcea3536b11f186"
+        },
+        "model.safetensors.index.json": {
+          "size": 29273,
+          "sha256": "e00bf13af0ebcc3e0484b16a6dbf6fdb1251aaf5c29432257489aff8cf04c132"
+        },
+        "tokenizer.json": {
+          "size": 10057457,
+          "sha256": "1c4be9ecf77c926456fb82d4cf07ff1218a91907f3408f44895d2b01e0f2b5ab"
+        },
+        "tokenizer_config.json": {
+          "size": 50155,
+          "sha256": "1cdee8fcd4f6209e07e6d9966c8a3ff2d738830d79475193e94e448e153ae2d5"
+        }
+      }
+    },
+    "qwen38-27b": {
+      "repo": "Qwen/Qwen3.8-27B",
+      "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0",
+      "files": {
+        "chat_template.jinja": {
+          "size": 9004,
+          "sha256": "af16f654968d47d09a6c604e00370b12dbc21f76456f59c9e98b82e84d9f6375"
+        },
+        "config.json": {
+          "size": 4312,
+          "sha256": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab"
+        },
+        "crc32.txt": {
+          "size": 238,
+          "sha256": "b42dd291f5f98b05807e458f5b47849969a9b3326acbf0c97d28b05826740b83"
+        },
+        "generation_config.json": {
+          "size": 202,
+          "sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e"
+        },
+        "merges.txt": {
+          "size": 3353259,
+          "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"
+        },
+        "model-00001-of-00018.safetensors": {
+          "size": 3966730552,
+          "sha256": "ba0ce20aae489ad196733da5064bcdf159a1fe84f53336648196e1ebb7751b1c"
+        },
+        "model-00002-of-00018.safetensors": {
+          "size": 3043080328,
+          "sha256": "06a148c01bfbe3faa14a5f184a7ff29a706f7ae1c8b2705d2058e26d17a001fb"
+        },
+        "model-00003-of-00018.safetensors": {
+          "size": 2542796952,
+          "sha256": "2e1bf62cbcd406eaa64b60d10353e1f0ef4039d0976e56f05cabe953454f9968"
+        },
+        "model-00004-of-00018.safetensors": {
+          "size": 3988973152,
+          "sha256": "511e34063187882659753c4d93f3859f93c019fd438d8813071921c81d9a3f1a"
+        },
+        "model-00005-of-00018.safetensors": {
+          "size": 2099339864,
+          "sha256": "635cb53446dc74f219740fc59e18b774f877b803b9722e289ca62575a6efa701"
+        },
+        "model-00006-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "0bc5214fac607f0e6cc92eec3789d4b8559410ef9fce66621ba8158e8410dae0"
+        },
+        "model-00007-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "80b0c49033e9a0d5762562aa12f4acdb7f54da586f3d0110f28c48d91cf07892"
+        },
+        "model-00008-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "7192c5b66185d3592927daabee1cc19e6f6e0ce75988ee20e824b624765fda79"
+        },
+        "model-00009-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "af3c48cc37af44f3db6ae0579baf019180d48d9c527caa0a1f03ff85813a56d8"
+        },
+        "model-00010-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "163490a76f3bea3a40855b7efc04ce6d27afaf1a34f0bbde495b9491f76457c9"
+        },
+        "model-00011-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "5f3ae1b948aeee39da77aec558e8236cd65fe4d7cb7686a76bb007acc563c6d8"
+        },
+        "model-00012-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "a3de1c7114677a8f5ac5c4892c90e8238ea5c1e2038c80e757dfc87c3902ca55"
+        },
+        "model-00013-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "06ab79a41f74c9c5cb734816feb0c7fc364104b227165ee7391231e1155aa02a"
+        },
+        "model-00014-of-00018.safetensors": {
+          "size": 3979553696,
+          "sha256": "4138ed94603065ba884bbcadedb04d7718bb40117e85e6f5c6fc5b9c05b7a85b"
+        },
+        "model-00015-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "69224e27b9de4e7dbf6fc936c6eaae08447bda3b80a6c31a871ab451173afd22"
+        },
+        "model-00016-of-00018.safetensors": {
+          "size": 3979564040,
+          "sha256": "73cb9a1089fb6155cb648609478d6633be8a5c7d9ca5a05bc8925ce8a553cefe"
+        },
+        "model-00017-of-00018.safetensors": {
+          "size": 2108759344,
+          "sha256": "beb51f01056142ac4984bd800507b0dd0fd18de57f8e9ef6ea41d1a3598983a8"
+        },
+        "model-00018-of-00018.safetensors": {
+          "size": 3392197344,
+          "sha256": "1d3479509e21494658f9b64d317f5ea8e55c4025d28c702d6c4d0b356ce8ea06"
+        },
+        "model.safetensors.index.json": {
+          "size": 112216,
+          "sha256": "77042094076611b69791a610065f28b7013b8c621795fa86ddccc8bac7d1b9df"
+        },
+        "preprocessor_config.json": {
+          "size": 390,
+          "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+        },
+        "tokenizer.json": {
+          "size": 12809320,
+          "sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
+        },
+        "tokenizer_config.json": {
+          "size": 9984,
+          "sha256": "207c03c41a06a9c3b0cc527d8a56115159c1eac6b59a4ffae85b646e773d074e"
+        },
+        "video_preprocessor_config.json": {
+          "size": 385,
+          "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13"
+        },
+        "vocab.json": {
+          "size": 6722759,
+          "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+        }
+      }
+    }
+  }
+}

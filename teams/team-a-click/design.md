@@ -1,5 +1,8 @@
 # CLIcK 평가 태스크 설계
 
+> **2026-11-13 현황:** Polyglot 평가는 완료됐습니다. 실제 PR·리뷰 상태와 남은 작업은
+> [현재 상태](STATUS.md)에 정리했으며, 아래 설계·역할 배정의 제안과 구분합니다.
+
 > **5주차 구현 기록:** 데이터 검사·추적 연결(D01–D03)과 프롬프트 입력 테스트(U01–U07)는
 > [implementation-report.md](implementation-report.md)에 정리했습니다. 아래 역할 배정의 제안 상태와 실제 검증 결과를 구분합니다.
 
@@ -234,8 +237,19 @@ correct = 1 if predicted_index == gold_index else 0
 **`A:` 뒤 공백과 채점 후보 형식(알파벳만 ↔ ` A. 보기 내용`)은 여전히 다르다.**
 공백뿐인 지문 처리와 ID 기반 분야 선택도 그대로다.
 
-**비교 기준 하네스: 미정.** 실제 비교에 쓸 하네스 기준(분석한 `d6de816` 원본, #4420 적용본,
-팀 보완 패치 중 무엇을 쓸지)은 아직 정하지 않았다. 정해지면 revision·패치 해시를 이 절에 기록한다.
+**2026-11-11 Polyglot 비교 기준:** #4420 적용 소스 `7a7b48afa7c294a5992008053bd1ec0042906c6d`를 사용했다.
+기존 태스크 파일은 수정하지 않고 별도 `ConfigurableTask`에서 후보 전체 문자열·라벨 뒤 공백·분야별 파일을
+Lighteval v3에 맞췄다. 비교 adapter와 소스 해시는
+[실행 문서](validation/click/POLYGLOT.md) 및 [모델별 결과](validation/click/polyglot-results/README.md)에 기록했다.
+이 선택은 이번 Polyglot 실험의 기준이며 다른 담당자의 전체 실험 기준 확정을 뜻하지 않는다.
+
+**2026-11-11 추가 실험:** 김형래 요청으로 기존 오류 버전과 #4420 적용본을 각각
+원래 알파벳 채점·전체 보기 문자열 채점으로 평가하는 2×2 비교를 수행했다.
+이 실험에서는 각 버전의 원래 프롬프트·ID 분야 필터를 유지하고 후보 형식의 영향만 분리한다.
+두 Polyglot 모델 × 네 조건의 [추가 실험계획](validation/click/POLYGLOT_MATRIX.md)을 기준으로
+별도 실행기·출력 폴더를 사용했다. 2026-11-12 두 모델의 8개 조합을 모두 완료했으며
+[최종 비교 보고서](validation/click/polyglot-matrix-results/README.md)에 native Python API 평가 결과와
+검증·회수 증빙을 기록했다. 위 정렬 비교의 결과는 보존한다.
 
 근거: 팀 `analysis.md` §6, [문화 코드][harness-culture]·[언어 코드][harness-language]. 보완한 참고 구현은 패치·commit을 기록하고, 원래 하네스 결과와 별도로 저장한다. 차이를 단순히 ‘버그 수정으로 정답률이 개선됨’이라고 해석하지 않는다.
 
@@ -293,6 +307,11 @@ M01은 두 도구의 채점 함수를 복사해 호출하지 않고, 모델 출�
 
 ### 6.4 기록과 완료 조건
 
+**2026-11-11 실행 상태:** 이번 작업 범위인 Polyglot 1.3B·12.8B는 A100X 한 대에서 FP32/eager로
+파일럿과 전체 비교를 통과했다. 정확도는 각각 30.03%, 25.01%이며, 각 모델의 두 도구 간 예측 불일치는 0건이다.
+Qwen·Kanana 실행 상태는 이번 작업에서 확인하지 않았다. Polyglot 결과를 네 모델 전체 계획 완료로 해석하지 않는다.
+Native Python API 검증 범위와 M02의 길이 검사 범위는 [최종 보고서](validation/click/polyglot-results/README.md)에 명시했다.
+
 실행 기록에는 데이터·모델·토크나이저·두 도구의 revision, 패치 해시, 실제 명령·설정, 프롬프트 버전, 특수 토큰·정밀도·백엔드·배치·문맥 한도·seed·캐시 사용 여부를 남긴다. 문항별로 키·정답·후보 점수·예측·정오·잘림 여부를 보존하고, 토큰·입력 로그는 로컬 검증용으로 관리한다. 설정이 다른 실행 간 캐시가 재사용되지 않게 구분한다.
 
 **합격 조건:** 문항 집합·입력·정답·채점·집계가 정확하고, 전체 평가에서 설명되지 않은 점수·예측 불일치가 0건이어야 한다. 예측 100% 일치를 목표로 하되, 재계산으로 확인된 수치 차이의 예외는 건수·영향·근거를 별도로 보고한다. 점수가 가깝다는 이유만으로 수치 오차라고 판단하지 않는다.
@@ -321,7 +340,7 @@ M01은 두 도구의 채점 함수를 복사해 호출하지 않고, 모델 출�
 
 ---
 
-**근거 자료:** 팀의 CLIcK `analysis.md` §3–9, [이슈 본문][click-issue], [관련 팀 PR #24][team-pr], [논문][paper], [데이터][dataset], [저자 채점 방식 답변][author-scoring], [Lighteval 태스크 가이드][le-custom]·[설정 API][le-tasks]·[Doc][le-doc]·[지표 API][le-metrics]. 이슈·PR 댓글의 실시간 승인 상태와 실제 모델 검증 결과는 이번 수정에 포함하지 않았다.
+**근거 자료:** 팀의 CLIcK `analysis.md` §3–9, [이슈 본문][click-issue], [관련 팀 PR #24][team-pr], [논문][paper], [데이터][dataset], [저자 채점 방식 답변][author-scoring], [Lighteval 태스크 가이드][le-custom]·[설정 API][le-tasks]·[Doc][le-doc]·[지표 API][le-metrics]. 이슈·PR 댓글의 실시간 승인 상태는 이번 수정에서 확인하지 않았다. Polyglot 실제 검증 결과는 별도 최종 보고서에 추가했다.
 
 [click-issue]: https://github.com/huggingface/lighteval/issues/1437
 [team-pr]: https://github.com/Hugging-Face-KREW/k-llm-eval-sprint/pull/24

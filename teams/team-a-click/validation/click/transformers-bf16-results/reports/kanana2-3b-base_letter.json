@@ -1,0 +1,67 @@
+{
+  "model": "kanana2-3b",
+  "condition": "base_letter",
+  "backend": "transformers",
+  "weight_dtype": "bfloat16",
+  "items": 1995,
+  "correct": 1042,
+  "acc": 0.5223057644110276,
+  "acc_norm": 0.5223057644110276,
+  "input_and_scoring_audit_passed": true,
+  "result_sha256": "8c731f2c67b6cdd4c631a68453ebfc5e9a52e9f62c8370a067127c4936627a69",
+  "strata": {
+    "four_choice": {
+      "items": 1739,
+      "correct": 983,
+      "acc": 0.5652673950546291
+    },
+    "five_choice": {
+      "items": 256,
+      "correct": 59,
+      "acc": 0.23046875
+    },
+    "gold_e": {
+      "items": 49,
+      "correct": 0,
+      "acc": 0.0
+    }
+  },
+  "aggregates": {
+    "source": {
+      "category_macro": 0.5492992321063718,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 752,
+        "acc": 0.5591078066914498
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 290,
+        "acc": 0.4461538461538462
+      }
+    },
+    "native": {
+      "category_macro": 0.5493921349426109,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 752,
+        "acc": 0.5591078066914498
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 290,
+        "acc": 0.4461538461538462
+      }
+    }
+  },
+  "audit": {
+    "logits_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "sum_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "max_native_batch_rows": 1,
+    "max_native_sequence_length": 1483
+  }
+}

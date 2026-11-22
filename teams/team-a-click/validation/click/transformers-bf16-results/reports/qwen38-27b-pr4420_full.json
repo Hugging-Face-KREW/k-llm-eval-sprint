@@ -1,0 +1,67 @@
+{
+  "model": "qwen38-27b",
+  "condition": "pr4420_full",
+  "backend": "transformers",
+  "weight_dtype": "bfloat16",
+  "items": 1995,
+  "correct": 1396,
+  "acc": 0.699749373433584,
+  "acc_norm": 0.6887218045112782,
+  "input_and_scoring_audit_passed": true,
+  "result_sha256": "11cde5746e31acf7dcd4d3021c28b401c59538a81a57a0458344874a1da65c84",
+  "strata": {
+    "four_choice": {
+      "items": 1739,
+      "correct": 1242,
+      "acc": 0.714203565267395
+    },
+    "five_choice": {
+      "items": 256,
+      "correct": 154,
+      "acc": 0.6015625
+    },
+    "gold_e": {
+      "items": 49,
+      "correct": 20,
+      "acc": 0.40816326530612246
+    }
+  },
+  "aggregates": {
+    "source": {
+      "category_macro": 0.7219420202880422,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 944,
+        "acc": 0.7018587360594796
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 452,
+        "acc": 0.6953846153846154
+      }
+    },
+    "native": {
+      "category_macro": 0.7222439139850009,
+      "culture_micro": {
+        "items": 1345,
+        "correct": 944,
+        "acc": 0.7018587360594796
+      },
+      "language_micro": {
+        "items": 650,
+        "correct": 452,
+        "acc": 0.6953846153846154
+      }
+    }
+  },
+  "audit": {
+    "logits_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "sum_dtypes": {
+      "torch.bfloat16": 1995
+    },
+    "max_native_batch_rows": 1,
+    "max_native_sequence_length": 1954
+  }
+}
