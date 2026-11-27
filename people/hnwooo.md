@@ -17,3 +17,4 @@ WSL 환경에서 Lighteval 설치 및 ARC-Easy 평가 실행, 운영 저장소 �
 | 3 | HRM8K 평가 프로토타입을 실행하며 프롬프트와 채점 방식의 차이를 살펴봤습니다. | |
 | 4 | 정답 추출 과정에서 발생하는 오류 사례를 만들고, 여러 채점 방식의 결과를 비교했습니다. | |
 | 5 | GSM8K 50문항 평가 결과를 분석하고, HRM8K 태스크 PR의 코드와 테스트를 검토한 후 리뷰를 남겼습니다. | [PR #4](https://github.com/Hugging-Face-KREW/lighteval/pull/4) |
+| 6 | HRM8K 채점 오류 사례와 평가 결과를 정리하고, 최종 발표자료 제작 및 개인 KPT 회고를 작성했습니다. | [업스트림 PR #1513](https://github.com/huggingface/lighteval/pull/1513) |
